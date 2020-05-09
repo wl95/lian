@@ -1,0 +1,360 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>待确认工单</title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<link href="../css/mui.min.css" rel="stylesheet" />
+		<link href="../css/mui.picker.min.css" rel="stylesheet" />
+		<link href="../fonts/iconfont/iconfont.css" rel="stylesheet" />
+		<link href="../css/ipark.css" rel="stylesheet" />
+		<style>
+			html,body {
+				height: 100%;
+			}
+			.mui-input-group .mui-input-row {
+				height: auto;
+				padding: 0 15px;
+				margin-bottom: 0px;
+			}
+			.mui-input-row span {
+				line-height: 50px;
+			}
+			.mui-input-row .action-span {
+				padding-left: 27px;
+			}
+			#remark{width: 92%;display: inline-block;word-wrap: break-word;line-height: 20px;margin-top:11px;}
+			#photoList img{
+				display: inline-block;
+				width: 60px;
+				height: 60px;
+				float: left;
+				margin: 10px 10px 10px 0;
+			}
+			.iconfont.icon-space{
+				color:#686868;
+				vertical-align: middle;
+				padding-left: 0px;
+				padding-right: 6px;
+			}
+			.mui-content .sheetText.onlyRead{
+				color:#282828;
+			}
+			.mui-input-group .mui-input-row:nth-last-child(4),
+			.mui-input-group .mui-input-row:nth-last-child(2){
+				margin-top: 10px;
+			}
+			.mui-input-row .mui-textarea{
+		    	color:#282828;
+			    height: 120px;
+			    display: inline-block;
+			    margin: 10px 0px 0px;
+			    font-size: 13px;
+			}
+			.mui-input-row .textnum-tip{
+				font-size: 13px;
+			    color: #9E9E9E;
+			    line-height: 25px;
+			    height: 25px;
+			    text-align: right;
+			    clear: both;
+			    margin-bottom: 20px;
+			}
+			.mui-input-row .textnum.error{
+				color:#F17368;
+			}
+			#callPhone{
+				position: absolute;
+				color:#009E96;
+				font-size:22px;
+				right: 0;
+			}
+			.writeOption{
+				color:#009E96 !important;
+			}
+			.mui-navigate-right:after, .mui-push-right:after {
+			    color: #009E96;
+			}
+		</style>
+	</head>
+
+	<body>
+		<header class="mui-bar mui-bar-nav">
+			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+			<h1 class="mui-title">待确认工单</h1>
+		</header>
+		<div class="mui-content my-sheet">
+			<div id='backdrop'></div>
+			<div class="mui-content-padded" style="margin:0;">
+				<form class="mui-input-group" onsubmit="return false;">
+					<div class="mui-row mui-input-row">
+						<div class="mui-row split-line">
+							<label class="title-label"><span class="iconfont icon-space">&#xe67b;</span>类型</label>
+							<div class="mui-col-sm-70t mui-col-xs-12 sheetText onlyRead">
+								<span id="sheetType"></span>
+					      	</div>
+					    </div>
+					</div>
+					<div class="mui-row mui-input-row">
+						<div class="mui-row split-line">
+							<label class="title-label"><span class="iconfont icon-space">&#xe66d;</span>截止</label>
+							<div class="mui-col-sm-20t mui-col-xs-12 sheetText onlyRead">
+								<span id='endTime'><span>
+					      	</div>
+					    </div>
+					</div>
+					<div class="mui-row mui-input-row">
+						<div class="mui-row split-line">
+							<label class="title-label"><span class="iconfont icon-space">&#xe665;</span>区域</label>
+							<div class="mui-col-sm-70t mui-col-xs-12 sheetText onlyRead" id='showAreaPicker'>
+								<input type="hidden" name="areaValue" />
+								<span class="" id="areaText"></span>
+					      	</div>
+					    </div>
+					</div>
+					<div class="mui-row mui-input-row">
+						<div class="mui-row split-line">
+							<label class="title-label"><span class="iconfont icon-space">&#xe67e;</span>动作</label>
+							<div class="mui-col-sm-70t mui-col-xs-12 action-span-zcfz sheetText onlyRead" >
+								<input type="hidden" name="actionValue" />
+								<span class="" id="actionText"></span>
+					      	</div>
+					    </div>
+					</div>
+					<div class="mui-row mui-input-row" style="display: none;">
+						<div class="mui-row split-line">
+							<label class="title-label"><span class="iconfont icon-space">&#xe67c;</span>照片</label>
+							<div class="mui-col-sm-70t mui-col-xs-12">
+								<div class="mui-img-list mui-limit-width" id="photoList"></div>
+							</div>
+						</div>
+					</div>
+					<div class="mui-row mui-input-row">
+						<label class="title-label"><span class="iconfont icon-space">&#xe67a;</span>说明</label>
+						<div class="mui-col-sm-70t mui-col-xs-12 sheetText onlyRead">
+							<span id='remark'><span>
+				      	</div>
+					</div>
+					<div class="mui-row mui-input-row">
+						<div class="mui-row split-line">
+							<label class="title-label"><span class="iconfont icon-space">&#xe683;</span>班组长</label>
+							<div class="mui-col-sm-70t mui-col-xs-12 sheetText onlyRead">
+								<input type="hidden" id="bzzPhone" value=""/>
+								<span id="bzzName"></span>
+								<span class="iconfont icon-space" id="callPhone">&#xe68d;</span>
+					      	</div>
+					    </div>
+					</div>
+					<div class="mui-row mui-input-row">
+						<label class="title-label"><span class="iconfont icon-space">&#xe675;</span>拒绝原因</label>
+						<div class="mui-col-sm-70t mui-col-xs-12 sheetText onlyRead">
+							<span id='rejectionReason' style="margin-top: 1px;display: inline-block;"><span>
+				      	</div>
+					</div>
+					<div class="mui-row mui-input-row">
+						<div class="mui-row split-line">
+							<label class="title-label"><span class="iconfont icon-space writeOption">&#xe680;</span>重新指派</label>
+							<div class="mui-col-sm-70t mui-col-xs-12 sheetText" id='showUserPicker'>
+								<input type="hidden" name="assignValue" />
+								<span class="mui-navigate-right" id="assignText">请选择班组长</span>
+					      	</div>
+					   </div>
+					</div>
+					<div class="mui-row mui-input-row">
+						<label class="title-label"><span class="iconfont icon-space">&#xe67a;</span>我的意见</label>
+				      	<div class="mui-col-sm-70t mui-col-xs-12 sheetText">
+							<textarea class="mui-textarea" name="auditRecommendations" rows="10" maxlength="250" placeholder="请填写你的意见（不超过250个字）"></textarea>
+							<p class="textnum-tip"><span class="textnum">0</span>/250</p>
+				      	</div>
+					</div>
+				</form>
+				<div class="mui-row mui-button-row" style="margin: 15px 0 20px;">
+					<button type="button" class="mui-btn mui-btn-primary newBtnSmall unactive" id="redirectToSheetReject">提交</button>
+					<button type="button" class="mui-btn mui-btn-primary newBtnSmall" id="redirectToSheetConfirm">废弃</button>
+				</div>
+			</div>
+		</div>
+		<script src="../js/mui.min.js"></script>
+		<script src="../js/mui.picker.min.js"></script>
+		<script type="text/javascript" src="../js/jquery-1.8.0.min.js" ></script>
+		<script src="../js/app.js"></script>
+		<script src="../js/util.js"></script>
+		<script type="text/javascript">
+			(function($, doc) {
+				$.init();
+				var sheetId = "";
+				window.addEventListener('editSheetWithNewId',function(event){
+    				sheetId = event.detail.sheetId;
+    				getWoInfo(sheetId);
+				});
+	
+				$.plusReady(function(){
+					var self = plus.webview.currentWebview();
+    				sheetId = self.sheetId;
+					getWoInfo(sheetId);
+				});
+				function getWoInfo(sheetId){
+    				Util.ajax({
+						url: 'workorderManage/getWorkorderInfo',
+						data: {id:sheetId},
+						success: function(data){
+							//班组长名称与phone
+							jQuery("#bzzName").text(data.designatedPersonName);
+							jQuery("#bzzPhone").val(data.bzzphone);
+							getAssignMemberList(sheetId);
+							jQuery("#photoList").parents('.mui-input-row').show();
+							var woinfo = data;
+							sheetId = woinfo.id;
+							jQuery("#sheetType").html(woinfo.woTypeStr);
+							jQuery("#endTime").html(woinfo.endTime);  
+							jQuery("#maintActionName").text(woinfo.maintActionName);
+							jQuery('#remark').html(woinfo.remark);
+							jQuery("#actionText")[0].innerText = data.maintActionName;
+							jQuery("#areaText").text(data.areaName || "暂未添加");
+							if(null != data.rejectionReason && data.rejectionReason.length>0){
+								jQuery("#rejectionReason").text(data.rejectionReason);
+							}else{
+								jQuery("#rejectionReason").text("未填写拒绝原因。");
+							}
+							//照片相关逻辑
+							if ((null != data.images) && (data.images.length > 0)) {
+								var imageArr = data.images;
+								for (var i = 0; i < imageArr.length; i++) {
+									var mediumSrc = "",src = app.configures.URL + "/iPark/APIs/maintGuide/getImageByPath?imagePath=" + imageArr[i].path;
+									if(imageArr[i].resourceMinimal){
+										src = app.configures.URL + "/iPark/APIs/maintGuide/getImageByPath?imagePath=" + imageArr[i].resourceMinimal;
+										mediumSrc = app.configures.URL + "/iPark/APIs/maintGuide/getImageByPath?imagePath=" + imageArr[i].resourceMedium;
+									}
+									jQuery("#photoList").append("<img class='mui-img-upload' data-src='"+mediumSrc+"' src='" + src + "'/>");
+								}
+							} else {
+								jQuery("#photoList").append("<p style='color:#282828;margin-bottom:0px;font-size:14px'>无</p>");
+							}
+							jQuery(".mui-img-upload").on("click", function () {
+								var src = jQuery(this).data('src');
+								(src == "") && (src = jQuery(this).attr('src'))
+								var result = "<img src='" + src + "'/>";
+								jQuery("#backdrop").attr('class', 'mui-backdrop').html(result).show();
+							});
+							jQuery("#backdrop").on("click", function () {
+								jQuery("#backdrop").attr('class', '').html('').hide();
+							});
+						}
+					});
+				}
+				
+				document.getElementById("redirectToSheetConfirm").addEventListener('tap', function() {
+					var str = '确认工单编号：'+sheetId+' 被驳回，确认后此工单将废弃！';
+					mui.confirm(str, '废弃', ['否', '是'], function(e) {
+						if (e.index == 1) {
+							var url = 'workorderManage/discardWO?id='+sheetId+'&status="TD"';
+							Util.ajax({
+								url: url,
+								type: 'put',
+								success: function(data){
+									$.openWindow({
+									    url: './actionResult.html', 
+									    id:'actionResult',
+									    extras:{
+									    	actionId: '4'
+									    }
+									});
+									self.close();
+								}
+							});
+						}
+					});
+				});
+				
+				document.getElementById("redirectToSheetReject").addEventListener('tap', function() {
+					var userId = $("[name='assignValue']")[0].value;		
+					if(!userId){
+						$.alert("指派人员不能为空");
+						return;
+					};
+					var str = '确认重新指派工单：'+sheetId+'吗？';
+					mui.confirm(str, '确认', ['否', '是'], function(e) {
+						if (e.index == 1) {
+							var url = 'workorderManage/anewReturnWo?id='+sheetId+'&status="TD"';
+							Util.ajax({
+								url: url,
+								type: 'put',
+								success: function(data){
+									var url = 'workorderManage/distributeWO?userId='+userId+'&id='+sheetId+'&status="BA"';
+									Util.ajax({
+										url: url,
+										type: 'put',
+										success: function(data){
+											var view = plus.webview.getWebviewById("actionResult");
+											if(view){
+												$.fire(view,"newActionId",{
+							                        actionId: '3'
+							                    });
+												view.show();
+											}else{
+												$.openWindow({
+												    url: './actionResult.html', 
+												    id:'actionResult',
+												    extras:{
+												    	actionId: '3'
+												    }
+												});
+											}
+										}
+									});
+								}
+							});
+						}
+					});
+				});
+				
+				//对textarea绑定输入文字长度检查
+				jQuery("[name='auditRecommendations']").on("input",function(){
+					var number = jQuery(this).val().length;
+					if(number == 250){
+						jQuery('.textnum-tip .textnum').addClass('error').text(number);
+					}else{
+						jQuery('.textnum-tip .textnum').removeClass('error').text(number);
+					}
+				})
+				
+				//拨号
+				jQuery("#callPhone").on('click',function(){
+					window.location.href = "tel:"+jQuery("#bzzPhone").val();
+				});
+				
+				//获取班组长的信息列表
+				function getAssignMemberList(sheetId){
+					Util.ajax({
+						data:{
+							woId : sheetId
+						},
+						url: '/workorderManage/getProjectPersonnel',
+						success: function(data){
+							var memberData = [], userPicker = new $.PopPicker();
+							
+							for (var i = 0,len = data.length;i<len;i++) {
+								memberData.push({
+									value: data[i].userId,
+									text: data[i].name
+								});
+							}
+							userPicker.setData(memberData);
+							var showUserPickerButton = doc.getElementById('showUserPicker');
+							showUserPickerButton.addEventListener('tap', function(event) {
+								userPicker.show(function(items) {
+									if(items[0].text==undefined){
+										$("[name='assignValue']")[0].value = '';
+									}else{
+										$("[name='assignValue']")[0].value = items[0].value;
+										$("#assignText")[0].innerText = items[0].text;
+									}
+								});
+							}, false);
+						}
+					});
+				}
+			})(mui, document);
+		</script>
+	</body>
+</html>

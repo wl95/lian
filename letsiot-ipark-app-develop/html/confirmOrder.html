@@ -1,0 +1,662 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<title>待确认</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+	<meta name="apple-mobile-web-app-capable" content="yes">
+	<meta name="apple-mobile-web-app-status-bar-style" content="black">
+	<link rel="stylesheet" href="../fonts/iconfont/iconfont.css" />
+	<link rel="stylesheet" href="../css/mui.min.css" />
+	<link rel="stylesheet" href="../css/ipark.css" />
+	<link rel="stylesheet" href="../css/base.css">
+	<link href="../css/mui.picker.min.css" rel="stylesheet" />
+	<script src="../js/mui.min.js"></script>
+	<script src="../js/mui.picker.min.js"></script>
+	<script type="text/javascript" src="../js/vue.min.js"></script>
+	<script type="text/javascript" src="../js/jquery-1.8.0.min.js"></script>
+	<style type="text/css">
+		html,
+		body {
+			width: 100%;
+			height: 100%;
+			overflow: hidden;
+		}
+
+		.mui-col-xs-6 {
+			float: left;
+		}
+
+		.mui-pull-top-pocket {
+			top: 54px !important;
+		}
+
+		.mui-icon.emptyFilter {
+			position: absolute;
+			right: 0;
+			font-size: 20px;
+			padding: 0 10px;
+		}
+
+		#cont {
+			width: 100%;
+			height: auto;
+		}
+
+		.mui-bar-nav~.mui-content .mui-slider.mui-fullscreen {
+			top: 65px;
+		}
+
+		.padd-search {
+			padding: 10px;
+		}
+
+		/* .heightAbsolutely,
+		.allocatedList {
+			height: 100%;
+		} */
+
+		/*灰色底*/
+		.background-gray {
+			background-color: #e9ecf1;
+		}
+
+		.allocated-item {
+			padding: 10px;
+			font-size: 18px;
+			margin-top: 20px;
+			background: #FFF;
+
+		}
+
+		.mui-segmented-control.mui-segmented-control-inverted .mui-control-item.mui-active {
+			color: #009e96;
+		}
+
+		.background-green {
+			background-color: #009e96 !important;
+		}
+
+		.workersSinglerow {
+			font-size: 14px;
+			color: #cccccc;
+			list-style: none;
+			padding: 0;
+		}
+
+		.assignedPersonnel {
+			padding: 20px;
+			background-color: #FFF;
+		}
+
+		.allocated-sublime {
+			margin: 30px auto;
+			width: 50%;
+			text-align: center;
+			color: #ffffff;
+			background: rgba(0, 204, 153, 1);
+			line-height: 45px;
+			border-radius: 4px;
+			font-size: 18px;
+		}
+
+		.allocated-item .people {
+			padding: 0;
+			color: rgba(0, 204, 153, 1);
+		}
+
+		.mui-navigate-right {
+			padding: 0 !important;
+			line-height: 2;
+		}
+
+		.mui-navigate-right:after,
+		.mui-push-right:after {
+			color: #ccc !important;
+		}
+
+		/* 工单详情  时间线*/
+		.timeBar {
+			padding: 5vw 0 2vw 9vw;
+
+		}
+
+		.timeBar .line {
+			width: 100%;
+			height: 1px;
+			margin-top: 10px;
+			margin-left: 6px;
+			background-color: #cccccc;
+		}
+
+		.timeBar .title {
+			padding-top: 10px;
+
+		}
+
+		.timeBar .circular {
+			color: #ccc;
+			font-size: 80px;
+		}
+
+		.time {
+			padding-top: 2px;
+			font-size: 10px;
+		}
+
+
+		#scroll1,
+		#scroll2 {
+			overflow-y: scroll;
+			overflow-x: hidden;
+		}
+
+		.feedbackTime {
+			margin-top: 10px;
+			color: #797979;
+			font-size: 14px;
+			margin-bottom: 10px;
+		}
+
+		.cont,
+		.completedProgress {
+			color: #797979;
+			
+			margin-bottom: 20px;
+		}
+
+		.back {
+			background-color: #ffffff;
+			color: #00CC99;
+		}
+
+		.mui-progressbar {
+			border-radius: 50px;
+			display: inline-block;
+			width: 75%;
+			height: 8px;
+			border-radius: 20px;
+			background: #ccc;
+		}
+
+		.mui-progressbar span {
+			background-color: #00CC99;
+		}
+
+		.number {
+			margin-top: -35px;
+			margin-left: 145px;
+			color: #00CC99;
+		}
+
+		.progressbar2 {
+			width: 100%;
+		}
+
+		.completeInstructions {
+			padding: 10px 10px 30px 10px;
+			border-bottom: 1px solid #ccc;
+		}
+
+		.completeInstructions span {
+			color: #ccc;
+		}
+
+		.content {
+			width: 100%;
+			background-color: #FFF;
+			border-radius: 5px;
+		}
+
+		.completed {
+			padding: 10px 10px 30px 10px;
+			margin-bottom: 20px;
+			margin-top: 10px;
+		}
+
+		/* 自适应 */
+		@media screen and (min-width: 320px) {
+			.change {
+				width: 33%;
+			}
+			.mui-progressbar{
+				width:70%!important;
+			}
+		}
+
+		.gray {
+			color: #ccc !important;
+		}
+
+		.im-icon {
+			width: 100%;
+			height: 100%;
+			padding-top: 10px;
+		}
+
+		.txt-img-plus {
+			width: 20vw;
+			margin-left: 15px;
+		}
+		.mui-slider-indicator.mui-segmented-control {
+			background-color: #fff;
+		}
+		/* .mui-bar-nav~.mui-content .mui-slider.mui-fullscreen {
+		    top: 0;
+		} */
+		.imgs{
+			display: none;
+		}
+		.change span{
+			font-size: 15px;
+		}
+		
+		@media screen and (width: 768px)  {
+		
+		.content-img{
+			padding-left: 20px;
+		}
+		} 
+		@media screen and (min-width: 1024px) and (max-width:1280px) {
+		
+		.content-img{
+			padding-left: 30px;
+		}
+		} 
+	</style>
+</head>
+
+<body style="position:relative;z-index:100000">
+	<header class="mui-bar mui-bar-nav">
+		<input type="hidden" name="typeValue" value="" />
+		<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+		<h1 id="title" class="mui-title"><span id="typeText"></span>工单</h1>
+	</header>
+	<div id="coted" class="mui-content">
+		<div id="slider" class="mui-slider mui-fullscreen heightAbsolutely ">
+			<div id="sliderSegmentedControl"
+				class="mui-slider-indicator mui-segmented-control mui-segmented-control-inverted">
+				<a class="mui-control-item tabStyle mui-active" href="#item1mobile">
+					确认工单
+				</a>
+				<a class="mui-control-item tabStyle" href="#item2mobile">
+					工单详情
+				</a>
+			</div>
+			<div id="sliderProgressBar" class="mui-slider-progress-bar mui-col-xs-6 background-green">
+				<div class="bottomStrip"></div>
+			</div>
+			<div class="mui-slider-group bottomStyle">
+				<div id="item1mobile" class="mui-slider-item mui-control-content mui-active">
+					<div id="scroll1" class="mui-content mui-scroll-wrapper">
+						<div class="mui-scroll content1 list-content heightAbsolutely">
+							<div class="itemContent">
+								<div class="allocatedList">
+									<div class="allocated-item">
+										<div class="title">{{confirm.maintActionName}}</div>
+										<div class="feedbackTime">
+											<span>反馈时间:</span>
+											<span>{{confirm.backTime}}</span>
+										</div>
+										<div class="mui-row cont">
+											<div class="mui-col-sm-4 change">
+												<span>用工费:</span>
+												<span>{{confirm.human}}</span>
+											</div>
+											<div class="mui-col-sm-4 change">
+												<span>机械费:</span>
+												<span>{{confirm.machine}}</span>
+											</div>
+											<div class="mui-col-sm-4 change">
+												<span>材料费:</span>
+												<span>{{confirm.material}}</span>
+											</div>
+										</div>
+										
+									</div>
+									<div class="content-img">
+										
+											<div class="banner-img"  v-for="(item,index) in imgList" :key="index"><img :src="item"/></div>
+										
+										<!-- <div class="banner-img"><img src="../images/144x144.png" /></div>
+										<div class="banner-img"><img src="../images/144x144.png" /></div>
+										<div class="banner-img"><img src="../images/144x144.png" /></div>
+										<div class="banner-img"><img src="../images/144x144.png" /></div>
+										<div class="banner-img"><img src="../images/144x144.png" /></div>
+										<div class="banner-img"><img src="../images/144x144.png" /></div>
+										<div class="banner-img"><img src="../images/144x144.png" /></div>
+										<div class="banner-img"><img src="../images/144x144.png" /></div>
+										<div class="banner-img"><img src="../images/144x144.png" /></div> -->
+									</div>
+									<div class="allocated-sublime adopt">通过</div>
+									<div class="allocated-sublime back">驳回</div>
+								</div>
+							</div>
+
+						</div>
+					</div>
+				</div>
+				<div id="item2mobile" class="mui-slider-item mui-control-content">
+					<div id="scroll2" class="mui-content  mui-scroll-wrapper">
+						<div class="mui-scroll content2 list-content heightAbsolutely">
+							<div class="itemContent">
+								<div class="timeBar">
+									<div class="mui-row">
+										<div class="mui-col-xs-3">
+											<div class="mui-row">
+												<div class="mui-col-xs-1 circular">&bull;</div>
+												<div class="mui-col-xs-11">
+													<div class="line"></div>
+												</div>
+											</div>
+											<div class="title">已分配</div>
+											<div class="time">2019-08-21 18:00</div>
+										</div>
+										<div class="mui-col-xs-3">
+											<div class="mui-row">
+												<div class="mui-col-xs-1 circular">&bull;</div>
+												<div class="mui-col-xs-11">
+													<div class="line lineUp"></div>
+												</div>
+											</div>
+											<div class="title">已处理</div>
+											<div class="time">2019-08-21 18:00</div>
+
+										</div>
+										<div class="mui-col-xs-3">
+											<div class="mui-row">
+												<div class="mui-col-xs-1 circular">&bull;</div>
+												<div class="mui-col-xs-11">
+													<div class="line"></div>
+												</div>
+											</div>
+											<div class="title">已反馈</div>
+											<div class="time">2019-08-21 18:00</div>
+										</div>
+										<div class="mui-col-xs-3">
+											<div class="circular gray">&bull;</div>
+											<div class="title">待确认</div>
+										</div>
+									</div>
+								</div>
+								<div class="dataStatis">
+									<div :class="labor.length==0?'imgs':''">
+									<div class="dataStatis-item">
+										<div class="dataStatis-item-title">用工统计</div>
+										<div v-for="(item,index) in labor" :key="index">
+											<div class="dataStatis-item-content flexaj">
+												<div class="content-left">
+													<span class="left-title">{{item.costName}}:{{item.specification}}</span>
+													<span class="left-s">{{item.price}}</span>
+												</div>
+												<div class="content-right flexaj">
+													<span class="right-money money-red">{{item.job}}</span>
+												</div>
+											</div>
+										</div>
+									</div>
+									</div>
+									<div :class="overtime.length==0?'imgs':''">
+										<div class="dataStatis-item">
+											<div class="dataStatis-item-title">加班统计</div>
+											<div v-for="(item,index) in overtime" :key="index">
+												<div class="dataStatis-item-content flexaj">
+													<div class="content-left">
+														<span class="left-title">{{item.costName}}:{{item.specification}}</span>
+														<span class="left-s">{{item.price}}</span>
+													</div>
+													<div class="content-right flexaj">
+														<span class="right-money money-red">{{item.job}}</span>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+									<div :class="mechanical.length==0?'imgs':''">
+										<div class="dataStatis-item">
+											<div class="dataStatis-item-title">机械统计</div>	
+										<div v-for="(item,index) in mechanical" :key="index">
+											<div class="dataStatis-item-content">
+												<div class="content-top flexaj">
+													<span class="left-title">{{item.costName}}:{{item.specification}}</span>
+													<span class="right-money money-red">{{item.price}}</span>
+												</div>
+												<div class="content-bottom flexaj">
+													<span class="left-title">{{item.job}}</span>
+													<!-- <span class="left-s">含油</span> -->
+												</div>
+											</div>
+										</div>
+										</div>	
+									</div>
+									<div :class="material.length==0?'imgs':''">
+										<div class="dataStatis-item">
+											<div class="dataStatis-item-title">材料统计</div>
+											<div v-for="(item,index) in material" :key="index">
+												<div class="dataStatis-item-content">
+													<div class="content-top flexaj">
+														<span class="left-title">{{item.costName}}:{{item.specification}}</span>
+														<span class="right-money money-red">{{item.price}}</span>
+													</div>
+													<div class="content-bottom flexaj">
+														<span class="left-title">{{item.job}}</span>
+														<!-- <span class="left-s">易耗</span> -->
+													</div>
+												</div>
+											</div>
+											
+										
+										</div>
+									</div>
+								
+									<div class="content">
+									
+										<div class="content-img">
+											<div class="banner-img"  v-for="(item,index) in imgList" :key="index"><img :src="item"/></div>
+											
+										 
+										  <!-- <div class="banner-img"><img src="../images/144x144.png" /></div>
+											<div class="banner-img"><img src="../images/144x144.png" /></div>
+											<div class="banner-img"><img src="../images/144x144.png" /></div> -->
+										</div>
+										<div class="completeInstructions">
+											<span>完成说明</span>
+											<div>{{confirm.auditRecommendations}}</div>
+										</div>
+										<div class="completed">
+											<span>完成进度:</span>
+											<div id="demo2" class="mui-progressbar progressbar2 ">
+												<span></span>
+											</div>
+											<div class="number"></div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+
+			</div>
+		</div>
+	</div>
+
+	</div>
+	<script>
+		
+		mui.plusReady(function () {
+		       	var view = plus.webview.getWebviewById("confirmOrder");
+				var id = view.workid;//获得参数
+				//通过
+				mui("body").on('tap', '.adopt', function () {
+					confirm('yes','')
+				});
+				//拒绝
+				mui("body").on('tap', '.back', function () {
+					 var btnArray = ['取消', '确定'];
+					mui.prompt('请输入您的建议:', '', '', btnArray, function(e) {
+						if (e.index == 1) {
+							//获取输入框的内容
+							// info.innerText = e.value;
+							confirm('no',e.value);
+							console.log(e.value);
+						} else {
+							//info.innerText = '你点了取消按钮';
+						}
+						
+					})
+				});
+			});
+		//detailAjx();
+		laborStatistics();
+		var vue = new Vue({
+			    el: '#coted',
+			    data: {
+			        confirm: [],
+					//图片数组
+					imgList:[],
+					//imgList:["../images/144x144.png","../images/144x144.png","../images/144x144.png","../images/144x144.png","../images/144x144.png","../images/144x144.png"],
+					labor:[],//用工统计
+					overtime:[],//加班统计
+					maintGuideBook:'',//作业指导书
+					mechanical:[],//机械统计
+					material:[],//材料统计
+			    },
+			    methods: {
+				
+			    },
+			    beforeCreate:function() {
+			      
+			    },
+			    created:function() {
+			       
+			    },
+			    beforeMount:function() {
+			     
+			    },
+			    mounted:function() {
+			
+			    },
+			
+			   
+			    beforeUpdate:function() {
+			       
+			    },
+			    updated:function() {
+			    },
+			    beforeDestroy:function() {
+			
+			    },
+			    destroyed:function() {
+			
+			    }
+			});
+		
+		//确认工单提交
+		function confirm(result,idea){
+			$.ajax({
+				    url: 
+				    'http://ipark.bplusiot.com/iPark/APIs/workorderManage/affirmWO',
+				    type: 'put',
+				    data: {
+				        id:"3405148433630208", //：{"id" : 工单编号,"result" : 提交/拒绝 yes/no,"rejectionReason" : 审核意见}
+						result:result,
+						rejectionReason:idea,
+				    },
+				    dataType: "json",
+				    success: function (data) {
+				        console.log(5555555);
+				        mui.toast("提交成功");
+				        console.log(JSON.stringify(data));
+				    },
+				    error: function (e) {
+						 mui.toast("提交失败");
+				        console.log(JSON.stringify(e)); 
+				    }
+				});
+		}
+		
+		
+		//获取工单详情
+		// function detailAjx(){
+		// 	$.ajax({
+		// 		url: 'http://ipark.bplusiot.com/iPark/APIs/workorderManage/getWorkorderInfo',
+		// 		type: 'post',
+		// 		data: {
+		// 			woId:"3403829750212608" ,//工单编号
+		// 		},
+		// 		dataType: "json",
+		// 		success: function(data) {
+		// 			console.log(5555555);
+		// 			console.log(JSON.stringify(data));
+		// 			vue.confirm=data;
+		// 			if(data.images.length==0){
+		// 				$(".content-img").addClass("imgs")
+		// 			}else{
+		// 				vue.imgList=data.images;
+		// 			}
+					
+		// 		},
+		// 		error: function(e) {
+		// 			console.log(JSON.stringify(e));
+		// 		}
+		// 	});
+		// }
+		
+		//获取工单详情
+		function laborStatistics(){
+			$.ajax({
+				url: 'http://ipark.bplusiot.com/iPark/APIs/workorderManage/getWorkorderFeedback',
+				type: 'post',
+				data: {
+					woId:"3405148433630208" ,//工单编号 3403829750212608
+				},
+				dataType: "json",
+				success: function(data) {
+					console.log("zzzzz");
+					console.log(JSON.stringify(data));
+					vue.confirm=data;
+					if(data.images.length==0){
+						$(".content-img").addClass("imgs")
+					}else{
+						vue.imgList=data.images;
+					}
+					var list=data.costList;
+					console.log(JSON.stringify(list));
+					for(var i=0;i<list.length;i++){
+						//console.log(list[i])
+						if(list[i].type==0){
+							//用工
+							vue.labor.push(list[i])	
+						}else if(list[i].type==1){
+							//加班
+							vue.overtime.push(list[i])
+						}else if(list[i].type==2){
+							//机械
+							vue.mechanical.push(list[i]);
+						}else{
+							//材料
+							vue.material.push(list[i]);
+						}
+					}
+					gress(data.completion)
+				},
+				error: function(e) {
+					console.log(JSON.stringify(e));
+				}
+			});
+		}
+		//进度条  9-27 林春燕确认详情显示100%;确认工单不显示
+		//var nu = 100;
+		function gress(nu){
+			mui("#demo2").progressbar({
+				progress: nu
+			}).show();
+			$('.number').html(nu + "%");
+		}
+		
+	</script>
+</body>
+
+</html>

@@ -1,0 +1,222 @@
+<!doctype html>
+<html>
+
+<head>
+	<meta charset="UTF-8">
+	<title>版本更新</title>
+	<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+	<link href="../css/mui.min.css" rel="stylesheet" />
+	<link href="../css/mui.picker.min.css" rel="stylesheet" />
+	<link href="../fonts/iconfont/iconfont.css" rel="stylesheet" />
+	<link href="../css/ipark.css" rel="stylesheet" />
+	<style>
+		html,body{
+				height: 100%;
+			}
+			form.mui-input-group {
+				padding: 15px 0 10px 0;
+			    font-size: 16px;
+			}
+			.mui-content {
+				height: 100%;
+    		}
+    		.mui-app-icon{
+    			margin:14% 0 12% 0;
+    			text-align: center;
+    		}
+    		.mui-app-icon img{
+    			width: 20%;
+    			border-radius:15% ;
+    		}
+    		.mui-app-icon p{
+    			color:#262626;
+    			line-height: 30px;
+    			font-size: 15px;
+    		}
+    		.mui-version-detail{
+    			width: 100%;
+    			background-color: #ffffff;
+    		}
+    		.mui-version-detail p{
+    			height: 40px;
+    			line-height: 40px;
+    			font-size: 16px;
+    			padding: 0 20px;
+    			color: #262626;
+    			margin: 0;
+    			border-bottom: 1px solid #f3f3f3;
+    		}
+    		.mui-version-content{
+    			padding: 12px 20px;
+    			line-height: 1.5;
+    			color: #282828;
+    			font-size: 14px;
+			}
+			.si-update-btn {
+				background-color: #009E96;
+				border-radius: 5px;
+				width: 280px;
+				height: 50px;
+				color: #ffffff;
+				font-size: 16px;
+				margin-top: 20px;
+			}
+			.si-sub-span {
+				color: #686868;
+				margin-right: 30px;
+				font-size: 16px;
+			}
+			.si-content {
+				float: right;
+				width: 240px;
+			}
+		</style>
+</head>
+
+<body>
+	<header class="mui-bar mui-bar-nav">
+		<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+		<h1 class="mui-title">APP版本</h1>
+	</header>
+	<div class="mui-content">
+		<div class="mui-app-icon">
+			<img src="../images/144x144.png" />
+			<p>珀安园林 V (<span class="app-version">0.0.1</span>)</p>
+			<button class="si-update-btn">立 即 更 新</button>
+		</div>
+		<div class="mui-version-detail">
+			<p><span class="si-sub-span">最新版本</span>V (<span class="new-version">0.0.1</span>)</p>
+			<div class="mui-version-content" style="overflow: hidden;">
+				<!-- <span class="si-sub-span">版本介绍</span> -->
+                <!-- <span class="newVersionContent">珀安园林养护app; + '关键是的评论发奖品收到发神经坡附近'</span> -->
+                <div class="si-sub-span" style="width: 64px; float: left;">版本介绍</div>
+                <div class="newVersionContent">珀安园林养护app;</div>
+			</div>
+			</div>
+		</div>
+	</div>
+	<script type="text/javascript" src="../js/jquery-1.8.0.min.js"></script>
+	<script src="../js/mui.min.js"></script>
+	<script src="../js/mui.picker.min.js"></script>
+	<script src="../js/util.js"></script>
+	<script src="../js/app.js"></script>
+	<script type="text/javascript">
+		(function ($, doc) {
+			$.init();
+			window.addEventListener('resetPage', function (event) {
+				plus.webview.currentWebview().reload();
+			});
+			$.plusReady(function () {
+				var versionType = "ios";
+				var versionUrl = app.configures.URL + '/iPark/APIs/app/checkVersion?type=' + versionType;
+				//app当前版本
+				var currentVersion = plus.runtime.version;
+				plus.runtime.getProperty(plus.runtime.appid, function (inf) {
+					currentVersion = inf.version;
+					jQuery('.app-version').text(currentVersion);
+				});
+
+				$.ajax(versionUrl, {
+					dataType: 'json', //服务器返回json格式数据
+					type: 'get', //HTTP请求类型
+					timeout: 10000, //超时时间设置为10秒；
+					headers: {
+						'Content-Type': 'application/json'
+					},
+					success: function (data) {
+						console.log(JSON.stringify(data));
+						var version = '0.0.1';
+						var content = '暂无更新，已是最新版本!';
+						//获取到app的版本信息
+						if (data && data.version) {
+							version = data.version;
+						}
+						// 隐藏立即升级按钮
+						if (currentVersion == version) {
+							jQuery('.si-update-btn').hide();
+						}
+						content = data.remark.replace(/\r\n/g, '<br/>');
+						jQuery('.new-version').text(version);
+						jQuery('.newVersionContent').html(content);
+					},
+				});
+
+				$('body').on('tap', '.si-update-btn', function () {
+					var versionType = "ios";
+					if (mui.os.ios) { //判断是否为IOS
+						versionType = "ios";
+					} else {
+						versionType = "android";
+					}
+					$.ajax(versionUrl, {
+						dataType: 'json', //服务器返回json格式数据
+						type: 'get', //HTTP请求类型
+						timeout: 10000, //超时时间设置为10秒；
+						headers: {
+							'Content-Type': 'application/json'
+						},
+						success: function (data) {
+							console.log(JSON.stringify(data));
+							var version = '0.0.1';
+							var content = '暂无更新，已是最新版本!';
+							//获取到app的版本信息
+							if (data && data.version) {
+								version = data.version;
+							}
+							if (currentVersion == version) {
+								content = "<div class='noUpdate'><img src='../images/no-update.png'/><br/><p class='tips'>" + content +
+									"</p></div>";
+								mui.alert(content, ' ', '好的', function () {}, 'div');
+							} else {
+								//当前版本与最新版本不一致
+								if (data && data.remark) {
+									content = "<div class='aaa'>" + data.remark.replace(/\r\n/g, '<br/>') + "</div>";
+								}
+								mui.confirm(content, "V" + version + ' 新功能介绍', ['稍后再说', '立即升级'], function (e) {
+									if (e.index == 1) {
+										if (versionType == "ios") {
+											document.location.href =
+												"itms-services://?action=download-manifest&url=https://gitee.com/lijuapp/app/raw/master/ipark.plist";
+										} else {
+											var dtask = plus.downloader.createDownload('http://101.132.42.153:18081/app/android/ipark.apk', {},
+												function (d, status) {
+													if (status == 200) {
+														clearInterval(i);
+														mui('body').progressbar().hide();
+														plus.nativeUI.closeWaiting();
+														mui.toast("正在准备环境，请稍后！");
+														var path = d.filename; //_downloads yijietong.apk
+														plus.runtime.install(path); // 安装下载的apk文件
+													} else {
+														mui.toast('Download failed:' + status);
+													}
+												});
+											dtask.start();
+											var w = plus.nativeUI.showWaiting("正下载安装包...");
+											mui('body').progressbar({
+												progress: 0
+											}).show();
+											var i = setInterval(function () {
+												var totalSize = dtask.totalSize;
+												var downloadedSize = dtask.downloadedSize;
+												if (downloadedSize != 0) {
+													var progress = parseInt(downloadedSize / totalSize * 100);
+													mui('body').progressbar().setProgress(progress);
+												}
+											}, 100); //1000为1秒钟
+										}
+									}
+								}, 'div');
+							}
+						},
+						error: function (xhr, type, errorThrown) {
+							mui.toast("网络异常，请稍后重试！");
+						}
+					});
+				});
+			});
+		})(mui, document);
+	</script>
+</body>
+
+</html>

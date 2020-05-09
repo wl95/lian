@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<title>重大事项列表</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+		<link rel="stylesheet" href="../css/mui.min.css">
+		<link href="../css/ipark.css" rel="stylesheet" />
+		<style type="text/css">
+			body{
+				background: none;
+			}
+		</style>
+	</head>
+
+	<body>
+		<header class="mui-bar mui-bar-nav">
+			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+			<h1 id="title" class="mui-title">重大事项</h1>
+		</header>
+		<div class="mui-content"></div>
+		<script src="../js/mui.min.js"></script>
+		<script>
+		mui.plusReady(function(){
+			window.addEventListener('resetPage',function(event){
+				plus.webview.currentWebview().reload();
+			});
+			mui.init({
+				gestureConfig:{
+					doubletap:true
+				},
+				subpages:[{
+					url:'matterList_chat.html',
+					id:'matterList_chat',
+					styles:{
+						top: '64px',
+						bottom: '0px',
+					}
+				}]
+			});
+			var contentWebview = null;
+			document.querySelector('header').addEventListener('doubletap',function () {
+				if(contentWebview==null){
+					contentWebview = plus.webview.currentWebview().children()[0];
+				}
+				contentWebview.evalJS("mui('#pullrefresh').pullRefresh().scrollTo(0,0,100)");
+			});
+			//点击标题展开、收起工单选择栏
+			document.getElementById('title').addEventListener("tap",function(){
+				var view = plus.webview.getWebviewById("filterTool");
+				if(jQuery(".iconfont","#title").attr('class').indexOf('down') > -1){
+					jQuery(".iconfont","#title").removeClass('icon-down').addClass('icon-up');
+					mui.fire(view,'showType',{});
+					view.setStyle({height: '242px'});
+					view.show();
+				}else{
+					jQuery(".iconfont","#title").removeClass('icon-up').addClass('icon-down');
+					var view = plus.webview.getWebviewById("filterTool");
+					view && view.hide();
+				}	
+			},false);
+		});
+		</script>
+	</body>
+</html>

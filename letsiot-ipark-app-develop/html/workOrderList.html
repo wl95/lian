@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html xmlns:v-on="http://www.w3.org/1999/xhtml">
+	<head>
+		<meta charset="utf-8">
+		<title>工单查看列表</title>
+		<meta name="viewport"
+			  content="width=device-width,initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, minimal-ui, user-scalable=no">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="format-detection" content="telephone=no">
+		<link rel="stylesheet" href="../fonts/iconfont/iconfont.css" />
+		<link rel="stylesheet" href="../css/mui.min.css" />
+		<link rel="stylesheet" href="../css/ipark.css" />
+		<link rel="stylesheet" href="../css/workOrderList.css" />
+		<script type="text/javascript" src="../js/vue.min.js"></script>
+		<script src="../js/mui.min.js"></script>
+		<script type="text/javascript" src="../js/jquery-1.8.0.min.js"></script>
+		
+		<style type="text/css">
+			.mui-col-xs-6 {
+				float: left;
+			}
+
+			.mui-pull-top-pocket {
+				top: 54px !important;
+			}
+
+			.mui-icon.emptyFilter {
+				position: absolute;
+				right: 0;
+				font-size: 20px;
+				padding: 0 10px;
+			}
+		</style>
+	</head>
+
+	<body style="position:relative;">
+		<header class="mui-bar mui-bar-nav">
+			<input type="hidden" name="typeValue" value="" />
+			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+			<h1 id="title" class="mui-title"><span id="typeText"></span>工单</h1>
+		</header>
+		<div id="cont" class="mui-content">
+			<div id="slider" class="mui-slider  heightAbsolutely ">
+				<div id="sliderSegmentedControl" class="back-white mui-segmented-control mui-segmented-control-inverted index-five">
+					<a id="dfp" class="mui-control-item tabStyle item1mobile" href="#item1mobile">
+						待分配
+					</a>
+					<a  id="confirm" class="mui-control-item tabStyle item2mobile" href="#item2mobile">
+						待确认
+					</a>
+					<a id="dhttest" class="mui-control-item tabStyle item3mobile" href="#item3mobile">
+						全部
+					</a>
+				</div>
+				<div id="sliderProgressBar" class="mui-slider-progress-bar mui-col-xs-4 background-green">
+					<div class="bottomStrip"></div>
+				</div>
+				<div class="mui-slider-group bottomStyle heightAbsolutely">
+					<div id="item1mobile" class="mui-slider-item mui-control-content mui-active">
+						<div class="content1 list-content heightAbsolutely">
+							<div class="itemContent">
+								<!-- 搜索框 -->
+								<div class="padd-search index-five search disp">
+									<div class="mui-input-row mui-search index-five sear-inpt">
+										<input id="item1-input" type="search" class="mui-input-clear" placeholder="搜索工单">
+									</div>
+									<div id="butt"><button class="butt">搜索</button></div>
+								</div>
+								<div id="scroll1" class="mui-content mui-scroll-wrapper postion-scroll">
+									<div class="mui-scroll">
+										<div class="allocatedList allocated">
+											<div v-for="(item,index) in whole" :key="index">
+												<div v-if="item.statusStr == '待分配'">
+													<div class="allocated-item mui-row margin-bott lineHeig-allocat"  v-on:tap="poin(index,item.id,item.statusStr)">
+														<div class="mui-col-xs-10">
+															<div class="workname" :workid="item.id">{{item.maintActionStr}}</div>
+															<div class="startTime color-gray">开始时间：<span>{{item.startTime}}</span></div>
+															<div class="endTime color-gray">结束时间：<span>{{item.endTime}}</span></div>
+														</div>
+														<div class="mui-col-xs-2 lineHeig-stat color-orange">
+															{{item.statusStr}}
+														</div>
+													</div>
+												</div>
+											</div>
+										</div>
+
+									</div>
+								</div>
+							</div>
+						</div>
+
+					</div>
+					<div id="item2mobile" class="mui-slider-item mui-control-content">
+						<div class="content2 list-content heightAbsolutely">
+							<div class="itemContent">
+								<!-- 搜索框 -->
+								<div class="padd-search index-five search disp">
+									<div class="mui-input-row mui-search index-five sear-inpt">
+										<input id="item2-input" type="search" class="mui-input-clear" placeholder="搜索工单">
+									</div>
+									<div id="butt2"><button class="butt">搜索</button></div>
+								</div>
+								<div id="scroll2" class="mui-content mui-scroll-wrapper postion-scroll">
+									<div class="mui-scroll">
+										<div class="allocatedList  confirmed">
+											<div v-for="(item,index) in whole" :key="index">
+												<div v-if="item.statusStr == '待确认'">
+													<div class="allocated-item mui-row margin-bott" v-on:tap="poin(index,item.id,item.statusStr)">
+														<div class="mui-col-xs-10">
+															<div class="workname padd-bott" :workid="item.id">{{item.maintActionStr}}</div>
+															<div class="color-gray">反馈时间：<span>{{item.backTime}}</span></div>
+														</div>
+														<div class="mui-col-xs-2 lineHeig-state color-orange" >
+														 {{item.statusStr}}
+														</div>
+													</div>
+												</div>
+											</div>
+										</div>
+
+									</div>
+								</div>
+
+							</div>
+						</div>
+
+					</div>
+					<div id="item3mobile" class="mui-slider-item mui-control-content">
+						<div class="content3 list-content heightAbsolutely">
+							<div id="scroll3" class="mui-content mui-scroll-wrapper postion-scroll">
+								<div class="mui-scroll">
+									<!-- 搜索框 -->
+									<div class="padd-search index-five search disp">
+										<div class="mui-input-row mui-search index-five sear-inpt">
+											<input id="item3-input" type="search" class="mui-input-clear" placeholder="搜索工单">
+										</div>
+										<div id="butt3"><button class="butt">搜索</button></div>
+									</div>
+									<div class="allocatedList  whole">
+										<div v-for="(item,index) in whole" :key="index">
+											
+											<div v-if="item.statusStr == '待确认'">
+												<div class="allocated-item mui-row margin-bott" v-on:tap="poin(index,item.id,item.statusStr)">
+													<div class="mui-col-xs-10">
+														<div class="workname padd-bott" :workid="item.id">{{item.maintActionStr}}</div>
+														<div class="color-gray">反馈时间：<span>{{item.backTime}}</span></div>
+													</div>
+													<div class="mui-col-xs-2 lineHeig-state color-orange">
+													 {{item.statusStr}} 
+													</div>
+												</div>
+											</div>
+											<div v-else-if="item.statusStr == '完成'">
+												<div class="allocated-item mui-row margin-bott" v-on:tap="poin(index,item.id,item.statusStr)">
+													<div class="mui-col-xs-10">
+														<div class="workname padd-bott" :workid="item.id">{{item.maintActionStr}}</div>
+														<div class="color-gray">确认时间：<span>{{item.backTime}}</span></div>
+													</div>
+													<div class="mui-col-xs-2 lineHeig-state color-gray">
+													已关闭
+													</div>
+												</div>
+											</div>
+											<div v-else>
+												<div class="allocated-item mui-row margin-bott lineHeig-allocat" v-on:tap="poin(index,item.id,item.statusStr)">
+													<div class="mui-col-xs-10">
+														<div class="workname" :workid="item.id">{{item.maintActionStr}}</div>
+														<div class="color-gray">开始时间：<span>{{item.startTime}}</span></div>
+														<div class="color-gray">结束时间：<span>{{item.endTime}}</span></div>
+													</div>
+													<div class="mui-col-xs-2 lineHeig-stat color-orange" >
+														{{item.statusStr}}
+													</div>
+												</div>
+											</div>
+										</div>
+									
+										
+
+
+									</div>
+
+								</div>
+							</div>
+						</div>
+
+					</div>
+				</div>
+			</div>
+
+		</div>
+		
+		<script src="../js/workOrder/workOrderList.js"></script>
+		<script>
+
+
+		</script>
+	</body>
+</html>

@@ -1,0 +1,93 @@
+#cont{
+				width:100%;
+				height:100vh;
+			}
+	#cont		 .mui-content{
+				   background-color: #e6f1f2;
+			}
+			.mui-bar-nav~.mui-content .mui-slider.mui-fullscreen{
+				top:64px;
+			}
+	#cont	.disp{
+				display: flex;
+			}
+
+	#cont	.butt{
+			/*width:15%;*/
+			z-index: 5;
+			margin-left: 10px;
+			color: #ffffff;
+			border: 1px solid #009688;
+			background-color: #009e96;
+
+			}
+	#cont	.search{
+			position: absolute;
+			background: #e6f1f2;
+			width: 100%;
+			margin-top: -3px;
+			}
+	#cont		.padd-search{
+				padding: 13px 10px 0 10px;
+			}
+	#cont		.heightAbsolutely{
+				height:100%;
+			}
+	#cont		.allocatedList{
+				width:100%;
+				height:100%;
+				margin-top:60px;
+				z-index: 0;
+			}
+	/* 	#cont .zIndex{
+				z-index:10;
+		} */
+	#cont		.padd-bott{
+				padding-bottom: 10px!important;
+			}
+	#cont		.margin-bott{
+				margin-bottom: 10px;
+			}
+			/*灰色底*/
+	#cont		.background-gray{
+				background-color: #e9ecf1;
+			}
+			/*灰色字体*/
+	#cont		.color-gray{
+				color:#a9a9a9;
+			}
+			/*橙色字体*/
+		#cont	.color-orange{
+				color: #FFC86C;
+			}
+			/* 绿色背景 */
+	#cont		.background-green{
+			background-color:#009e96!important;	
+			}
+			/* 白色背景 */
+	#cont		.back-white{
+				background: #fff;
+			}
+		#cont	.allocated-item{
+				padding:10px;
+				background:#FFF;
+			}
+		#cont	.mui-segmented-control.mui-segmented-control-inverted .mui-control-item.mui-active{
+				color:#009e96;
+			}
+		#cont	.lineHeig-allocat{
+				line-height: 1.5rem;
+			}
+		#cont	.lineHeig-stat{
+				line-height: 4.5rem;
+			}
+		#cont	.lineHeig-state{
+				line-height: 3rem;
+			}
+		#cont	.index-five{
+				z-index: 5;
+			}
+		#cont	.postion-scroll{
+				position: initial;
+			}
+			

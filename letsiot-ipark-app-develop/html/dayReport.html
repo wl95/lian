@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8" />
+    <title>提交日报</title>
+    <meta name="viewport"
+        content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+    <link href="../css/mui.min.css" rel="stylesheet" />
+    <link href="../css/mui.picker.min.css" rel="stylesheet" />
+   <link href="../fonts/iconfont/iconfont.css" rel="stylesheet" />
+    <link rel="stylesheet" href="../css/dailySub.css" />
+  <script type="text/javascript" src="../js/vue.min.js"></script>
+    <style>
+        html,
+        body {
+            width: 100%;
+            height: 100%;
+            color: #333;
+            overflow: hidden;
+        }
+
+        .mui-bar-nav {
+
+            background-color: #009E96
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+        }
+		.color-white{
+			color:#fff ;
+		}
+        .progress .form-right {
+            position: relative;
+        }
+
+        .progress_bg {
+            height: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            overflow: hidden;
+            background-color: #f2f2f2;
+        }
+
+        .progress_bar {
+            background: #5fb878;
+            width: 0;
+            height: 10px;
+            border-radius: 5px;
+        }
+
+        .progress_btn {
+            width: 20px;
+            height: 20px;
+            background: #5fb878;
+            border-radius: 50%;
+            position: absolute;
+            left: 0px;
+            margin-left: -10px;
+            top: -5px;
+            cursor: pointer;
+            border: 1px #ddd solid;
+            box-sizing: border-box;
+        }
+
+        .progress_btn:hover {
+            border-color: #f7b824;
+        }
+
+        .off {
+            margin-top: 17px;
+        }
+
+        .dailySub-wrap select,
+        .dailySub-wrap input,
+        .dailySub-wrap textarea {
+            margin-bottom: 0;
+        }
+    </style>
+</head>
+
+<body>
+    <header class="mui-bar mui-bar-nav padd">
+        <a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left color-white"></a>
+        <h1 class="mui-title color-white">系统自动日报详情</h1>
+    </header>
+    <div class="dailySub-wrap ">
+
+        <div class="statistics">
+			<div class="back-green">
+				<div class="totalCost-text">
+					<span>总费用</span>
+					<span>4,160.00</span>
+				</div>
+				<ul class="totalCost-eachItem">
+                <li>
+                    <span>用工费</span>
+                    <span>3,100.00</span>
+                </li>
+                <li>
+                    <span>机械费</span>
+                    <span>950.00</span>
+                </li>
+                <li>
+                    <span>用工费</span>
+                    <span>110.00</span>
+                </li>
+            </ul>
+			</div>
+		</div>
+        <div class="mui-scroll-wrapper" style="position: initial;margin-top:13rem;">
+			<div class="mui-scroll dailySub-scroll">
+				<div class="dataStatis">
+					<div class="dataStatis-item">
+						<div class="dataStatis-item-title">用工统计</div>
+						<div class="dataStatis-item-content flexaj">
+							<div class="content-left">
+								<span class="left-title">用工13人</span>
+								<span class="left-s">南门口扫雪</span>
+							</div>
+							<div class="content-right">
+								<span class="right-money money-red">1,300.00</span>
+							</div>
+						</div>
+					</div>
+					<div class="dataStatis-item">
+						<div class="dataStatis-item-title">加班统计</div>
+						<div class="dataStatis-item-content flexaj">
+							<div class="content-left">
+								<span class="left-title">用工13人</span>
+								<span class="left-s">南门口扫雪</span>
+							</div>
+							<div class="content-right">
+								<span class="right-money money-red">1,300.00</span>
+							</div>
+						</div>
+					</div>
+					<div class="dataStatis-item">
+						<div class="dataStatis-item-title">机械统计</div>
+						<div class="dataStatis-item-content">
+							<div class="content-top flexaj">
+								<span class="left-title">小余农用机械 割草机 C30:8个小时</span>
+								<span class="right-money money-red">800.00</span>
+							</div>
+							<div class="content-bottom flexaj">
+								<span class="left-title">花园中心广场草坪</span>
+								<span class="left-s">含油</span>
+							</div>
+						</div>
+						<div class="dataStatis-item-content">
+							<div class="content-top flexaj">
+								<span class="left-title">小余农用机械 割草机 C30:8个小时</span>
+								<span class="right-money money-red">800.00</span>
+							</div>
+							<div class="content-bottom flexaj">
+								<span class="left-title">花园中心广场草坪</span>
+								<span class="left-s">含油</span>
+							</div>
+						</div>
+					</div>
+				 <div class="dataStatis-item">
+						<div class="dataStatis-item-title">材料统计</div>
+						<div class="dataStatis-item-content">
+							<div class="content-top flexaj">
+								<span class="left-title">晴天日用百货 垃圾袋 中号:8个</span>
+								<span class="right-money money-red">30.00</span>
+							</div>
+							<div class="content-bottom flexaj">
+								<span class="left-title">花园中心广场</span>
+								<span class="left-s">易耗</span>
+							</div>
+						</div>
+						<div class="dataStatis-item-content">
+							<div class="content-top flexaj">
+								<span class="left-title">小王五金百货 铁丝 直径0.5: 20米</span>
+								<span class="right-money money-red">800.00</span>
+							</div>
+							<div class="content-bottom flexaj">
+								<span class="left-title">固定广场树枝</span>
+								<span class="left-s">易耗</span>
+							</div>
+						</div>
+					</div>	
+				</div>
+				<div class="banner-content">
+					<div class="content-img">
+						<div class="banner-img"><img src="../images/144x144.png" /></div>
+						<div class="banner-img"><img src="../images/144x144.png" /></div>
+						<div class="banner-img"><img src="../images/144x144.png" /></div>
+
+					</div>
+				</div>
+		</div>
+		
+    </div>
+    <script src="../js/mui.min.js"></script>
+    <script src="../js/mui.picker.min.js"></script>
+    <script type="text/javascript" src="../js/jquery-1.8.0.min.js"></script>
+    <!-- <script src="../js/app.js"></script> -->
+    <!-- <script src="../js/progressbar.js"></script> -->
+    <script type="text/javascript">
+		mui.plusReady(function () {//系统提交 'A'
+		       	var view = plus.webview.getWebviewById("monthSub");
+				var id = view.dayId;//获得参数
+				console.log(id);
+				var vue = new Vue({
+					    el: '#contes',
+					    data: {
+					       
+					    },
+					    methods: {
+						
+					    },
+					    beforeCreate:function() {
+					      
+					    },
+					    created:function() {
+					       
+					    },
+					    beforeMount:function() {
+					     
+					    },
+					    mounted:function() {
+					
+					    },
+					    beforeUpdate:function() {
+					       
+					    },
+					    updated:function() {
+					    },
+					    beforeDestroy:function() {
+					
+					    },
+					    destroyed:function() {
+					
+					    }
+					});
+				dayReport();
+				function dayReport(){
+					$.ajax({
+					    url:'http://ipark.bplusiot.com/iPark/APIs/daily/getdailyinfo',
+					    type: 'get',
+					    data: {
+							 dailyId:id
+					    },
+					    dataType: "json",
+					    success: function (data) {
+					        console.log(66666);
+							console.log(JSON.stringify(data.content));
+					    },
+					    error: function (e) {
+					        console.log(JSON.stringify(e));
+					    }
+					});
+				}
+				})
+    </script>
+</body>
+
+</html>

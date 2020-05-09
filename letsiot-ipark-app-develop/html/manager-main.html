@@ -1,0 +1,156 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<link href="../css/mui.min.css" rel="stylesheet" />
+		<link href="../css/ipark.css" rel="stylesheet" />
+		<style>
+			.mui-content {
+    			background-color: inherit;
+    		}
+			.mui-table-view-cell:active {
+			    background-color: #eee;
+			}
+			.mui-table-view-cell>a:not(.mui-btn).mui-active {
+			    background-color: transparent;
+			}
+			.mui-table-view-cell .rightContent .topText span{
+				color:#282828;
+			}
+			.mui-table-view:after,.mui-table-view:before{height: 0;}
+			.mui-table-view-chevron .mui-table-view-cell{padding-right:10px;}
+			.mui-table-view-cell>a:not(.mui-btn){
+				margin: 0;
+				padding: 0;
+				width: 100%;
+			}
+			.creatTable .mui-navigate-right:after, .mui-push-right:after {
+			    right: 0px;
+			}
+			.creatTable .rightContent {
+				margin-top: 0;
+				font-size: 14px;
+		    	width: calc(100% - 120px);
+		    	display: flex;
+		    	justify-content: center;
+		    	flex-direction: column;
+		    }
+		</style>
+	</head>
+
+	<body>
+		<header class="mui-bar mui-bar-nav">
+			<h1 class="mui-title">我的项目</h1>
+		</header>
+		<div class="mui-content">
+			<div class="iot-project-list">
+				<ul id="projectListUL" class="mui-table-view mui-table-view-chevron creatTable"></ul>
+			</div>
+		</div>
+		<script src="../js/mui.min.js"></script>
+		<script type="text/javascript" src="../js/jquery-1.8.0.min.js" ></script>
+		<script src="../js/app.js"></script>
+		<script type="text/javascript">
+			(function($, doc) {
+				mui.init({
+					keyEventBind: {
+						backbutton: false  //关闭back按键监听
+					}
+				});
+				$.ready(function(){
+					var url = app.configures.URL+'/iPark/APIs/project/selectByAll?page=0&size=1000';
+					$.ajax(url,{
+						dataType:'json',//服务器返回json格式数据
+						type:'get',//HTTP请求类型
+						timeout:10000,//超时时间设置为10秒；
+						headers:{'Content-Type':'application/json'},	              
+						success:function(data){
+							var table = document.body.querySelector('.mui-table-view');
+							for (var i = 0, len = data.content.length; i < len; i++) {
+								var li = document.createElement('li'),
+									tempData = data.content[i],
+									imgSrc = "../images/default.png";
+								li.className = 'mui-table-view-cell';
+									if('U'==tempData.woType){
+									li.className = 'mui-table-view-cell warn';
+								}
+								if(tempData.images && tempData.images[0]){
+									if(tempData.images[0].resourceMinimal.length > 0){
+										imgSrc = app.configures.API_URL + "/maintGuide/getImageByPath?imagePath=" + tempData.images[0].resourceMinimal;
+									}else if(tempData.images[0].path.length > 0){
+										imgSrc = app.configures.API_URL + "/maintGuide/getImageByPath?imagePath=" + tempData.images[0].path;
+									}
+								}
+								li.setAttribute('data-id', tempData.id);
+								li.setAttribute('data-projectName', tempData.projectName);
+								li.innerHTML='<a class="mui-navigate-right ">'
+									+'<div class="leftImg">'
+										+'<img src="'+imgSrc+'"/>'
+									+'</div>'
+									+'<div class="rightContent">'
+										+'<span>'+ tempData.projectName +'</span>'
+									+'</div>'
+								+'</a>';
+								table.appendChild(li);
+							}
+						},
+						error:function(xhr,type,errorThrown){
+							mui.toast("获取项目列表失败！");
+						}
+					});
+				});
+				$("body").on("tap",".iot-project-list ul li",function(){
+					var id = jQuery(this).data('id');
+					var projectName = jQuery(this).attr('data-projectName');
+					if(id != ''){
+						localStorage.setItem("IPARK_APP_PROJECTID", id);
+						var projectName = jQuery('.rightContent span',this).text();
+		 				if(projectName.length > 8){
+		 					localStorage.setItem("IPARK_APP_PROJECTNAME", projectName.substring(0,8)+"...");
+		 				}else{
+		 					localStorage.setItem("IPARK_APP_PROJECTNAME", projectName);
+		 				}
+						var index = localStorage.getItem("IPARK_APP_INDEX_PAGE");
+						if(index == 'managerIndex'){
+							$.openWindow({
+							   url: './manager-index.html', 
+							   id:'managerIndex'
+							});
+						}else if(index == 'adminIndex'){
+							$.openWindow({
+							   url: './admin-index.html', 
+							   id:'adminIndex'
+							});
+						}
+					}else{
+						mui.toast('项目异常，请重新选择')
+					}
+				});
+				$.plusReady(function(){
+					//首页返回键处理
+	                //处理逻辑：1秒内，连续两次按返回键，则退出应用；
+	                var first = null;
+	                plus.key.addEventListener('backbutton', function() {
+	                    //首次按键，提示‘再按一次退出应用’
+	                    if (!first) {
+	                        first = new Date().getTime();
+	                        mui.toast('再按一次退出应用');
+	                        setTimeout(function() {
+	                            first = null;
+	                        }, 1000);
+	                    } else {
+	                        if (new Date().getTime() - first < 1000) {
+	                            plus.runtime.quit();
+	                        }
+	                    }
+	                }, false);
+					plus.navigator.setStatusBarStyle("dark");
+				});
+			}(mui, document));
+		</script>
+	</body>
+
+</html>

@@ -1,0 +1,486 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>反馈工单</title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<link href="../css/mui.min.css" rel="stylesheet" />
+		<link href="../css/mui.picker.min.css" rel="stylesheet" />
+		<link href="../fonts/iconfont/iconfont.css" rel="stylesheet" />
+		<link href="../css/ipark.css" rel="stylesheet" />
+		<style>
+			html,body {
+				height: 100%;
+			}
+			.mui-input-group .mui-input-row {
+				height: auto;
+				padding:0px 15px;
+				margin-bottom: 0px;
+			}
+			.mui-content .sheetText.onlyRead{
+				color:#282828;
+			}
+			.mui-input-group .mui-input-row:nth-last-child(3){
+				margin-top: 10px;
+			}
+			.mui-img-list a{
+				float: left;
+				display: inline-block;
+				position: relative;
+				line-height:0;
+				margin: 10px 10px 10px 0;
+			}
+			.mui-img-list img{
+				display: inline-block;
+				width: 60px;
+				height: 60px;
+			}
+			img.mui-img-uni{
+				width: 23px;
+				height: 23px;
+				position: absolute;
+				right: 0px;
+			}
+			.mui-input-row .mui-input-row-Edit{width: 60%;}
+			.sheetType p{font-size: 16px;color:#4d4d4d;	line-height:20px;margin-bottom: 0;padding-right:10%;display: inline-block;}
+			#remark{width:94%;display: inline-block;word-wrap: break-word;line-height: 20px;margin-top: 15px;}
+			.mui-input-row .action-span {
+				padding-left: 27px;
+			}
+			.mui-navigate-right:after,
+			.mui-push-right:after{
+			 	color:#009E96;
+			 	font-size:20px;
+			 	right: 0px;
+			}
+			#photoList img{
+				display: inline-block;
+				width: 60px;
+				height: 60px;
+				margin: 10px 10px 10px 0;
+    			float: left;
+			}
+			.iconfont.icon-space{
+				color:#686868;
+				vertical-align: middle;
+				padding-left: 0px;
+				padding-right: 6px;
+			}
+			.writeOption{
+				color:#009E96 !important;
+			}
+			.mui-input-row .textnum-tip{
+				font-size: 13px;
+			    color: #9E9E9E;
+			    line-height: 13px;
+			    height: 13px;
+			    text-align: right;
+			    clear: both;
+			}
+			.mui-input-row .textnum.error{
+				color:#F17368;
+			}
+			.mui-input-group .mui-input {
+		        height: 30px;
+		        line-height: 30px;
+			}
+			.mui-input-row .mui-textarea {
+			    height: 120px;
+			    display: inline-block;
+			    margin: 10px 0px 10px;
+			    float: left;
+			}
+			.iot-unit-span{
+				padding-left: 5px;
+				color:#282828;
+				font-size: 14px;
+			}
+			.mui-content.my-sheet .title-label{
+				height: 50px;
+				line-height: 50px;
+			}
+			
+		</style>
+	</head>
+
+	<body>
+		<header class="mui-bar mui-bar-nav">
+			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+			<h1 class="mui-title">确认工单</h1>
+		</header>
+		<div class="mui-content my-sheet">
+			<div id='backdrop'></div>
+			<div class="mui-content-padded" style="margin: 0;">
+				<form class="mui-input-group" onsubmit="return false;">
+					<div class="mui-row mui-input-row">
+						<div class="mui-row split-line">
+							<label class="title-label">
+								<span class="iconfont icon-space">&#xe67b;</span>类型
+							</label>
+							<div class="mui-col-sm-70t mui-col-xs-12 sheetText">
+								<span id="sheetType"></span>
+					      	</div>
+					    </div>
+					</div>
+					<div class="mui-row mui-input-row">
+						<div class="mui-row split-line">
+							<label class="title-label">
+								<span class="iconfont icon-space">&#xe66d;</span>截止
+							</label>
+							<div class="mui-col-sm-20t mui-col-xs-12 sheetText">
+								<span id='endTime'><span>
+					      	</div>
+					    </div>
+					</div>
+					<div class="mui-row mui-input-row">
+						<div class="mui-row split-line">
+							<label class="title-label">
+								<span class="iconfont icon-space">&#xe665;</span>区域
+							</label>
+							<div class="mui-col-sm-70t mui-col-xs-12 sheetText" id='showAreaPicker'>
+								<input type="hidden" name="areaValue" />
+								<span class="" id="areaText">
+								</span>
+					      	</div>
+						</div>
+					</div>
+					<div class="mui-row mui-input-row">
+						<div class="mui-row split-line">
+							<label class="title-label">
+								<span class="iconfont icon-space">&#xe67e;</span>动作
+							</label>
+							<div class="mui-col-sm-70t mui-col-xs-12 action-span-zcfz sheetText" >
+								<input type="hidden" name="actionValue" />
+								<span class="" id="actionText"></span>
+					      	</div>
+					    </div>
+					</div>
+					<div class="mui-row mui-input-row" style="display: none;">
+						<div class="mui-row split-line">
+							<label class="title-label">
+								<span class="iconfont icon-space">&#xe67c;</span>照片
+							</label>
+							<div class="mui-col-sm-70t mui-col-xs-12">
+								<div class="mui-img-list mui-limit-width" id="photoList"></div>
+							</div>
+						</div>
+					</div>
+					<div class="mui-row mui-input-row">
+						<label class="title-label">
+							<span class="iconfont icon-space">&#xe67a;</span>说明
+						</label>
+						<div class="mui-col-sm-70t mui-col-xs-12 sheetText">
+							<span id='remark' class="sheetText onlyRead"><span>
+				      	</div>
+					</div>
+					<div class="mui-row mui-input-row">
+						<div class="mui-row split-line">
+							<label class="title-label">
+								<span class="iconfont icon-space writeOption">&#xe670;</span>用工
+							</label>
+							<div class="mui-col-sm-20t mui-col-xs-12 sheetType">
+								<input class="mui-input" type="number" name="estimateLabor" id="estimateLabor" style="padding: 0 5px;"/>
+					      	</div><span class="iot-unit-span">人</span>
+					  	</div>
+					</div>
+					<div class="mui-row mui-input-row">
+						<div class="mui-row split-line">
+							<label class="title-label">
+								<span class="iconfont icon-space writeOption">&#xe67c;</span>照片
+							</label>
+							<div class="mui-col-sm-70t mui-col-xs-12" id='showUserPicker'>
+								<div id="imgList" class="mui-img-list"><a href="javascript:;" class="imageup"><img src="../images/upload.png"/></a></div>
+					      	</div>
+					   </div>
+					</div>
+					<div class="mui-row mui-input-row">
+						<label class="title-label">
+							<span class="iconfont icon-space writeOption">&#xe67a;</span>反馈
+						</label>
+					    <div class="mui-col-sm-70t mui-col-xs-12 sheetText">
+							<textarea class="mui-textarea" name="remark" rows="10" maxlength="250" placeholder="请输入工单反馈（不超过250个字）"></textarea>
+							<p class="textnum-tip"><span class="textnum">0</span>/250</p>
+				      	</div>
+					</div>
+				</form>
+				</form>
+				<div class="mui-row mui-button-row" style="margin:15px 0 20px;">
+					<button type="button" class="mui-btn mui-btn-primary newBtn" id="submitBtn">确认</button>
+				</div>
+			</div>
+		</div>
+		<script src="../js/mui.min.js"></script>
+		<script src="../js/mui.picker.min.js"></script>
+		<script type="text/javascript" src="../js/jquery-1.8.0.min.js" ></script>
+		<script src="../js/app.js"></script>
+		<script src="../js/util.js"></script>
+		<script src="http://api.map.baidu.com/getscript?v=2.0&ak=A876b671f8466a2b8bcfbc202fe4bc73&services=&t=20180102152545"
+        type="text/javascript"></script>
+		<script type="text/javascript">
+			(function($, doc) {
+				$.init();
+				var sheetId = "";
+				
+				//对textarea绑定输入文字长度检查
+				jQuery("[name='remark']").on("input",function(){
+					checkWordNum();
+				})
+
+				window.addEventListener('assignSheetWithNewId',function(event){
+    				sheetId = event.detail.sheetId;
+    				getWoInfo(sheetId);
+				});
+				$.ready(function(){
+					document.getElementById('submitBtn').addEventListener('tap', function(event) {
+						var url = 'workorderManage/feedbackWO';
+						var dataIds = '';
+						jQuery("img.mui-img-upload","#imgList").each(function(i){
+							var id = jQuery(this).attr("id");
+							if(i != 0){ 
+								dataIds += ",";
+							}
+							dataIds += id;
+						});
+						var number = $("[name='estimateLabor']")[0].value;
+						var param = {
+							id:sheetId,
+	                        dataIds:dataIds,
+	                        numberEmployment:parseFloat(number),
+	                        backInfo:$("[name='remark']")[0].value,
+	                        status:'TC'
+						};
+						Util.ajax({
+							url: url,
+							type: 'post',
+							data: param,
+							success: function(data){
+								$.openWindow({
+								    url: './actionResult.html', 
+								    id:'actionResult',
+								    extras:{
+								    	actionId: '15'
+								    }
+								});
+								self.close();
+							}
+						});
+					});
+				});
+				
+				$.plusReady(function(){
+					mui("body").on("tap",".imageup",function(){
+		                page.imgUp();  
+		            });
+					var self = plus.webview.currentWebview();
+    				sheetId = self.sheetId;
+					getWoInfo(sheetId);
+				});
+				function getWoInfo(sheetId){
+					//alert(123);
+    				Util.ajax({
+						url: 'workorderManage/getWorkorderBackInfo',
+						data: {id:sheetId},
+						success: function(data){
+							//是否显示图片说明
+							photoList(sheetId);
+							jQuery("#photoList").parents('.mui-input-row').show();
+							var backInfos = data;
+							var woTypes='正常工单';
+							if('U' == backInfos.woType){
+								woTypes='紧急工单';
+							};
+							jQuery("#sheetType").html(woTypes);
+							jQuery("#areaText").text(data.areaName || "暂未添加");
+							$("#actionText")[0].innerText = data.maintActionName;
+							$("[name='remark']")[0].value = backInfos.backInfo;
+							jQuery("#remark").text(backInfos.remark);
+							checkWordNum();
+							$("[name='estimateLabor']")[0].value = backInfos.numberEmployment;
+							jQuery("#endTime").html(backInfos.endTime);
+							for(var i=0;i<backInfos.images.length;i++){
+								var imgId = backInfos.images[i].id;
+								var mediumSrc = "",src = app.configures.URL + "/iPark/APIs/maintGuide/getImageByPath?imagePath=" + backInfos.images[i].path;
+								if(backInfos.images[i].resourceMinimal){
+									src = app.configures.URL + "/iPark/APIs/maintGuide/getImageByPath?imagePath=" + backInfos.images[i].resourceMinimal;
+									mediumSrc = app.configures.URL + "/iPark/APIs/maintGuide/getImageByPath?imagePath=" + backInfos.images[i].resourceMedium;
+								}
+								var html = "<a class='imgItem' href='javascript:void(0);'><img class='mui-img-uni' src='../images/close.png'/><img class='mui-img-upload' id='"+imgId+"' data-src='"+mediumSrc+"' src='"+src+"'/></a>";
+								jQuery("#imgList").append(html);
+							}
+							check();//检查上传图片的个数
+							jQuery(".mui-img-upload").off();
+	                        jQuery(".mui-img-upload").on("click",function(){
+								var src = jQuery(this).data('src');
+								(src == "") && (src = jQuery(this).attr('src'))
+								var result = "<img src='"+src+"'/>";
+								jQuery("#backdrop").attr('class','mui-backdrop').html(result).show();
+							});
+							jQuery("#backdrop").off();
+							jQuery("#backdrop").on("click",function(){
+								jQuery("#backdrop").attr('class','').html('').hide();	
+							});
+							
+						}
+					});
+				}
+				
+				var page=null;  
+		        page={  
+		            imgUp:function(){  
+		                var m=this;  
+		                plus.nativeUI.actionSheet({cancel:"取消",buttons:[  
+		                    {title:"拍照"},  
+		                    {title:"从相册中选择"}  
+		                ]}, function(e){//1 是拍照  2 从相册中选择  
+		                    switch(e.index){  
+		                        case 1:appendByCamera();break;  
+		                        case 2:appendByGallery();break;  
+		                    }
+		                });
+		            }
+		        }
+		        
+		        function checkWordNum(){
+		        	var number = jQuery("[name='remark']").val().length;
+					if(number == 250){
+						jQuery('.textnum-tip .textnum').addClass('error').text(number);
+					}else{
+						jQuery('.textnum-tip .textnum').removeClass('error').text(number);
+					}
+		        }
+		          
+		        // 拍照添加文件
+		        function appendByCamera(){
+		            plus.camera.getCamera().captureImage(function(e){
+		                plus.io.resolveLocalFileSystemURL(e, function(entry) { 
+		                	var path = entry.toLocalURL(); 
+		                	baiduPosition(path);
+		                }, function(e) { 
+		                    mui.toast("读取拍照文件错误：" + e.message); 
+		                }); 
+		
+		            });    
+		        }
+		        // 从相册添加文件
+		        function appendByGallery(){
+		            plus.gallery.pick(function(path){
+		                //okdocument.getElementById("headimg").src = path;
+		                baiduPosition(path);
+		            });
+		        }
+	
+				var lng = 0;
+				var lat = 0;
+		        // 上传文件
+		        function upload(url){
+		        	var server =  app.configures.URL + "/iPark/APIs/resources/uploadimage?type=WBI&longitude="+lng+"&latitude="+lat;
+		            var wt=plus.nativeUI.showWaiting();
+		            var task=plus.uploader.createUpload(server,
+		                {method:"POST"},
+		                function(t,status){ //上传完成
+		                    if(status==200){
+		                    	var response = JSON.parse(t.responseText);
+		                    	var imgId = response.id;
+		                    	//console.log(JSON.stringify(response));
+		                    	var imgurl = app.configures.URL + "/iPark/APIs/maintGuide/getImageByPath?imagePath=" + response.resourceMinimal;
+		                    	var mediumImgUrl = app.configures.URL + "/iPark/APIs/maintGuide/getImageByPath?imagePath=" + response.resourceMedium;
+		                    	html = "<a class='imgItem' href='javascript:void(0);'><img class='mui-img-uni' src='../images/close.png'/><img class='mui-img-upload' id='"+imgId+"' data-src='"+mediumImgUrl+"' src='"+imgurl+"'/></a>";
+		                        jQuery("#imgList").append(html);
+		                        check();//检查上传图片的个数
+		                        wt.close(); //关闭等待提示按钮
+		                        jQuery(".mui-img-upload").off();
+		                        jQuery(".mui-img-upload").on("click",function(){
+									var src = jQuery(this).data('src');
+									var result = "<img src='"+src+"'/>";
+									jQuery("#backdrop").attr('class','mui-backdrop').html(result).show();
+								});
+								jQuery("#backdrop").off();
+								jQuery("#backdrop").on("click",function(){
+									jQuery("#backdrop").attr('class','').html('').hide();	
+								});
+		                    }else{
+		                        alert("上传失败："+status);
+		                        wt.close();//关闭等待提示按钮
+		                    }
+		                }
+		            );
+		            //添加其他参数
+		            task.addData("name","file");
+		            task.addFile(url,{key:"file"});
+		            task.start();
+		        }
+		        function check(){
+		        	var length = jQuery('#imgList').children('.imgItem').length;
+	                if(length >= 5){
+	                	jQuery('#imgList .imageup').hide();
+	                }else{
+	                	jQuery('#imgList .imageup').show();
+	                }
+		        }
+		        
+		        jQuery('body').on('tap','.mui-img-uni',function(){
+		        	jQuery(this).parent('.imgItem').remove();
+		        	check();//检查上传图片的个数
+		        });
+		        
+		        //获取经纬度
+				function baiduPosition(path){
+					plus.geolocation.getCurrentPosition(function(e){
+		        		lng = e.coords.longitude;
+					    lat = e.coords.latitude;
+					    upload(path);
+		        	}, function(e){
+				 		var geolocation = new BMap.Geolocation();
+					    geolocation.getCurrentPosition(function(r){
+					        if(this.getStatus() == BMAP_STATUS_SUCCESS){
+					        	lng = r.point.lng;
+					        	lat = r.point.lat;
+					        	upload(path);
+					        }else {
+					            mui.alert('获取位置失败,请确定您已开启定位服务');
+					        }
+					    },{enableHighAccuracy: true});
+			        },{enableHighAccuracy:true,coordsType:'bd09ll',timeout:6000,maximumAge:5000,provider:'baidu'});
+				    
+				}
+		        
+		        //获取图片说明
+				function photoList(sheetId) {
+					Util.ajax({
+						url: 'workorderManage/getWorkorderInfo',
+						data: {
+							id: sheetId
+						},
+						success: function (data) {
+							if ((null != data.images) && (data.images.length > 0)) {
+								var imageArr = data.images;
+								for (var i = 0; i < imageArr.length; i++) {
+									var mediumSrc = "",src = app.configures.URL + "/iPark/APIs/maintGuide/getImageByPath?imagePath=" + imageArr[i].path;
+									if(imageArr[i].resourceMinimal){
+										src = app.configures.URL + "/iPark/APIs/maintGuide/getImageByPath?imagePath=" + imageArr[i].resourceMinimal;
+										mediumSrc = app.configures.URL + "/iPark/APIs/maintGuide/getImageByPath?imagePath=" + imageArr[i].resourceMedium;
+									}
+									jQuery("#photoList").append("<img class='mui-img-upload' data-src='"+mediumSrc+"' src='" + src + "'/>");
+								}
+							} else {
+								jQuery("#photoList").append("<p style='color:#282828;margin-bottom: 0px;font-size:14px'>无</p>");
+	
+							}
+							jQuery(".mui-img-upload").on("click", function () {
+								var src = jQuery(this).data('src');
+								(src == "") && (src = jQuery(this).attr('src'))
+								var result = "<img src='" + src + "'/>";
+								jQuery("#backdrop").attr('class', 'mui-backdrop').html(result).show();
+							});
+	
+							jQuery("#backdrop").on("click", function () {
+								jQuery("#backdrop").attr('class', '').html('').hide();
+							});
+						}
+					});
+				}
+			})(mui, document);
+		</script>
+	</body>
+</html>

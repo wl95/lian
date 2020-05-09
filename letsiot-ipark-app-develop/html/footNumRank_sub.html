@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<title>选择小队长</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+		<link rel="stylesheet" href="../css/mui.min.css">
+		<link rel="stylesheet" href="../css/ipark.css"/>
+		<link rel="stylesheet" href="../fonts/iconfont/iconfont.css"/>
+		<style type="text/css">
+			.mui-table-view{
+				margin: 0;
+				width: 100%;
+			}
+			.creatTable{
+				padding: 0 15px;
+				background: #fff;
+			}
+			.creatTable .mui-table-view-cell {
+				color:#666666;
+				height: 50px;
+				line-height: 50px;
+    			border-bottom:1px solid #F3F3F3;
+			}
+			.creatTable .mui-table-view-cell:nth-last-child(1){
+				border: 0;
+			}
+			.creatTable>li{
+				margin: 0;
+			}
+			.mui-content {
+    			background-color: inherit;
+    		}
+			.mui-table-view-cell>a:not(.mui-btn).mui-active {
+			    background-color: transparent;
+			}
+			.mui-table-view-cell.warn .rightContent p{
+				color: #FF0000;
+			}
+			.mui-table-view:after,
+			.mui-table-view:before{
+				height: 0;
+			}
+			.mui-table-view-cell.warn a.iot-list-time-tip {
+			    color: #FF0000;
+			}
+			.mui-table-view-cell:after{
+				background-color: #fff
+			}
+			.mui-table-view-cell span{
+				display: inline-block;
+			}
+			span.col-20{
+				width:20%;
+				float: left;
+				text-align: left;
+			}
+			span.col-30{
+				width:30%;
+				float: left;
+				text-align: right;
+			}
+			span.col-50{
+				width:50%;
+				float: left;
+				text-align:center;
+			}
+			.col-20-font{
+				font-size: 15px;
+				color:#686868;
+			}
+			.col-30-font{
+				font-size: 15px;
+				font-weight: bold;
+				color: #686868;		
+			}
+			.col-50-font{
+				font-size: 14px;
+				color:#282828 !important;
+			}
+			.listTitle{
+				margin: 0 0 10px 0;
+				padding: 0;
+				font-size: 16px;
+				color:#282828;
+				background-color: #fff;
+			}
+			.first .iconfont,
+			.second .iconfont,
+			.third .iconfont{
+				font-size: 24px;
+			}
+			.first .iconfont{
+				color:#f4908c;
+			}
+			.second .iconfont{
+				color:#ffc86c;
+			}
+			.third .iconfont{
+				color:#73c8c1;
+			}
+			.normalSpace{
+				padding-left: 7px;
+			}
+		</style>
+	</head>
+
+	<body>
+		<div id="noDataWapper" class="mui-content" style="display: none;">
+			<div class="iot-list-nodata-wapper">
+				<div class="iot-list-nodata">
+					<span></span>
+				</div>
+				<p class="iot-list-nodata-text">当前页面暂无数据</p>
+			</div>
+		</div>
+		<!--下拉刷新容器-->
+		<div id="pullrefresh" class="mui-content mui-scroll-wrapper" style="display:none;">
+			<ul class="listTitle">
+				<li class="mui-row mui-table-view-cell">
+					<span class="col-20">排名</span><span class="col-50">手环ID</span><span class="col-30" id="descTab">步数</span>
+				</li>
+			</ul>
+			<div class="mui-scroll">
+				<!--数据列表-->
+				<ul class="mui-table-view mui-table-view-chevron creatTable">
+					<!--<li class="mui-table-view-cell">
+						<span class="col-20">1</span><span class="col-50">1020200120312</span><span class="col-30 text-right">999</span>
+					</li>-->
+				</ul>
+			</div>
+		</div>
+		<script src="../js/mui.min.js"></script>
+		<script src="../js/util.js"></script>
+		<script>
+		(function($, doc) {		
+			var page = 0, size = 9999, count = 0,tlId='',sort='asc';
+			pulldownRefresh();
+			$.ready(function(){
+				window.addEventListener('resetPage',function(event){
+				  	pulldownRefresh()
+				});
+			})
+			
+			document.getElementById('descTab').addEventListener("tap",function(event){
+				if(sort == 'asc'){
+					sort = 'desc';
+					pulldownRefresh();
+				}else{
+					sort = 'asc';
+					pulldownRefresh();
+				}
+			});
+			
+			$.plusReady(function(){
+				var self = plus.webview.currentWebview();
+    			tlId = self.tlId;
+			});
+			
+			function load(flag){
+				Util.ajax({
+					url: '/tlDevice/getNumberAnalysis',
+					data: {
+						page: page++,
+						size: size,
+						tlId: tlId,
+						sort: sort
+					},
+					success: function(data){
+						count = data.numberOfElements;
+						var totalCount = data.totalElements;
+						if(totalCount == 0){
+							document.getElementById("noDataWapper").style.display="block";
+							document.getElementById("pullrefresh").style.display="none";
+						}else{
+							document.getElementById("noDataWapper").style.display="none";
+							document.getElementById("pullrefresh").style.display="block";
+						}
+						var table = document.body.querySelector('.mui-table-view');
+						for (var i = 0, len = data.content.length; i < len; i++) {
+							var li = document.createElement('li'),
+								tempData = data.content[i],result='';
+								console.log(JSON.stringify(tempData));
+							li.className = 'mui-table-view-cell';
+							switch(tempData.rank){
+								case 1:
+									result +='<span class="col-20 col-20-font first"><i class="iconfont">&#xe692;</i></span>';
+									break;
+								case 2:
+									result +='<span class="col-20 col-20-font second"><i class="iconfont">&#xe694;</i></span>';
+									break;
+								case 3:
+									result +='<span class="col-20 col-20-font third"><i class="iconfont">&#xe693;</i></span>';
+									break;
+								default:
+									result +='<span class="col-20 col-20-font normalSpace">'+tempData.rank+'</span>';
+									break;
+							}
+							result+='<span class="col-50 col-50-font">'+tempData.deviceId+'</span><span class="col-30 col-30-font">'+tempData.number+'</span>';
+							li.innerHTML = result;
+							table.appendChild(li);
+						}
+					}
+				});
+			}
+			/**
+			 * 下拉刷新具体业务实现
+			 */
+			function pulldownRefresh() {
+				setTimeout(function() {
+					page = 0,count = 0;
+					document.body.querySelector('.mui-table-view').innerHTML = '';
+					load(true);
+				},500);
+			}
+			/**
+			 * 上拉加载具体业务实现
+			 */
+			function pullupRefresh() {
+				setTimeout(function() {
+					load(false);
+				},500);
+			}
+		})(mui, document);
+		</script>
+	</body>
+</html>

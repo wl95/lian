@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8" />
+    <title>提交日报</title>
+    <meta name="viewport"
+        content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+    <link href="../css/mui.min.css" rel="stylesheet" />
+    <link href="../css/mui.picker.min.css" rel="stylesheet" />
+   <link href="../fonts/iconfont/iconfont.css" rel="stylesheet" />
+    <link rel="stylesheet" href="../css/dailySub.css" />
+  <script type="text/javascript" src="../js/vue.min.js"></script>
+    <style>
+        html,
+        body {
+            width: 100%;
+            height: 100%;
+            color: #333;
+            overflow: hidden;
+        }
+
+        .mui-bar-nav {
+            background-color: #009E96
+        }
+        * {
+            margin: 0;
+            padding: 0;
+        }
+		.color-white{
+			color:#fff ;
+		}
+        .progress .form-right {
+            position: relative;
+        }
+
+        .progress_bg {
+            height: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            overflow: hidden;
+            background-color: #f2f2f2;
+        }
+
+        .progress_bar {
+            background: #5fb878;
+            width: 0;
+            height: 10px;
+            border-radius: 5px;
+        }
+
+        .progress_btn {
+            width: 20px;
+            height: 20px;
+            background: #5fb878;
+            border-radius: 50%;
+            position: absolute;
+            left: 0px;
+            margin-left: -10px;
+            top: -5px;
+            cursor: pointer;
+            border: 1px #ddd solid;
+            box-sizing: border-box;
+        }
+
+        .progress_btn:hover {
+            border-color: #f7b824;
+        }
+
+        .off {
+            margin-top: 17px;
+        }
+
+        .dailySub-wrap select,
+        .dailySub-wrap input,
+        .dailySub-wrap textarea {
+            margin-bottom: 0;
+        }
+		.mesg{
+			padding: 12px;
+			border-bottom: 1px solid #ddd;
+		}
+		.mesg:last-child{
+			border:none;
+		}
+		.base{
+			display: none;
+		}
+		.form{
+			border-bottom: 1px solid #ddd;
+		}
+		.form:last-child{
+			border:none;
+		}
+		[v-cloak] {
+		    display: none !important;
+		}
+		
+    </style>
+</head>
+
+<body>
+    <header class="mui-bar mui-bar-nav padd">
+        <a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left color-white"></a>
+        <h1 class="mui-title color-white monthTitle"></h1>
+    </header>
+    <div class="dailySub-wrap" id="cont" v-cloak >
+
+        <div class="statistics">
+			<div class="back-green">
+				<div class="totalCost-text">
+					<span>总费用</span>
+					<span>{{dayMegs.total}}</span>
+				</div>
+				<ul class="totalCost-eachItem">
+                <li>
+                    <span>用工费</span>
+                    <span>{{dayMegs.human}}</span>
+                </li>
+                <li>
+                    <span>机械费</span>
+                    <span>{{dayMegs.machine}}</span>
+                </li>
+                <li>
+                    <span>材料费</span>
+                    <span>{{dayMegs.material}}</span>
+                </li>
+            </ul>
+			</div>
+		</div>
+        <div class="mui-scroll-wrapper" style="position: initial;margin-top:13rem;">
+			<div class="mui-scroll dailySub-scroll">
+				<div class="dataStatis">
+					<div class="dataStatis-item" :class="labors.length==0?'base':''">
+						<div class="dataStatis-item-title">用工统计</div>
+						<div class="dataStatis-item-content flexaj" v-for="(item,index) in labors" :key="index" >
+							<div class="content-left">
+								<span class="left-title">{{item.costsName}}:{{item.amount}}{{item.unit}}</span>
+								<span class="left-s">{{item.job}}</span>
+							</div>
+							<div class="content-right">
+								<span class="right-money money-red">{{item.price}}</span>
+							</div>
+						</div>
+					</div>
+					<div class="dataStatis-item" :class="overtimes.length==0?'base':''">
+						<div class="dataStatis-item-title">加班统计</div>
+						<div class="dataStatis-item-content flexaj" v-for="(item,index) in overtimes" :key="index">
+							<div class="content-left">
+								<span class="left-title">{{item.costsName}}:{{item.amount}}{{item.unit}}</span>
+								<span class="left-s">{{item.job}}</span>
+							</div>
+							<div class="content-right">
+								<span class="right-money money-red">{{item.price}}</span>
+							</div>
+						</div>
+					</div>
+					<div class="dataStatis-item" :class="mechanicals.length==0?'base':''">
+						<div class="dataStatis-item-title">机械统计</div>
+						<div class="dataStatis-item-content" v-for="(item,index) in mechanicals" :key="index">
+							<div class="content-top flexaj">
+								<span class="left-title">{{item.costsName}}:{{item.amount}}{{item.unit}}</span>
+								<span class="right-money money-red">{{item.price}}</span>
+							</div>
+							<div class="content-bottom flexaj">
+								<span class="left-title">{{item.job}}</span>
+								<!-- <span class="left-s">含油</span> -->
+							</div>
+						</div>
+						<!-- <div class="dataStatis-item-content">
+							<div class="content-top flexaj">
+								<span class="left-title">小余农用机械 割草机 C30:8个小时</span>
+								<span class="right-money money-red">800.00</span>
+							</div>
+							<div class="content-bottom flexaj">
+								<span class="left-title">花园中心广场草坪</span>
+								<span class="left-s">含油</span>
+							</div>
+						</div> -->
+					</div>
+				 <div class="dataStatis-item" :class="Materials.length==0?'base':''"  >
+						<div class="dataStatis-item-title">材料统计</div>
+						<div class="dataStatis-item-content"  v-for="(item,index) in Materials" :key="index"   >
+							<div class="content-top flexaj">
+								<span class="left-title">{{item.costsName}}:{{item.amount}}{{item.unit}}</span>
+								<span class="right-money money-red">{{item.price}}</span>
+							</div>
+							<div class="content-bottom flexaj">
+								<span class="left-title">{{item.job}}</span>
+								<!-- <span class="left-s">易耗</span> -->
+							</div>
+						</div>
+					<!-- 	<div class="dataStatis-item-content">
+							<div class="content-top flexaj">
+								<span class="left-title">小王五金百货 铁丝 直径0.5: 20米</span>
+								<span class="right-money money-red">800.00</span>
+							</div>
+							<div class="content-bottom flexaj">
+								<span class="left-title">固定广场树枝</span>
+								<span class="left-s">易耗</span>
+							</div>
+						</div> -->
+					</div>
+					<div class="dataStatis-item litigation" :class="appeal.length==0?'base':''">
+						<div class="dataStatis-item-title">业主诉求及需协调事项</div>
+					    <div class="form" v-for="(item,index) in appeal" :key="index">
+							<div class="form-item">
+								<div class="mui-row">
+									<div class="mui-col-xs-3 hua">
+										诉求事项:
+									</div>
+									<div class="mui-col-xs-9  huh">
+									<span>{{item.matter}}</span>
+									</div>
+								</div>
+							</div>
+							<div class="form-item">
+								<div class="mui-row">
+									<div class="mui-col-xs-3 hua">
+										责任人:
+									</div>
+									<div class="mui-col-xs-9  huh">
+										<span>{{item.respUser}}</span>
+									</div>
+								</div>
+							</div>
+							<!-- <div class="form-item">
+								<div class="mui-row">
+									<div class="mui-col-xs-3 hua">
+										协助部门:
+									</div>
+									<div class="mui-col-xs-9  huh">
+									<span></span>
+									</div>
+								</div>
+							</div> -->
+							<div class="form-item">
+								<div class="mui-row">
+									<div class="mui-col-xs-3 hua">
+										解决措施:
+									</div>
+									<div class="mui-col-xs-9  huh">
+										<span>{{item.solutions}}</span>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>	
+					<div class="dataStatis-item quality" :class="problem.length==0?'base':''">
+						<div class="dataStatis-item-title">质量问题</div>
+						<div class="form" v-for="(item,index) in problem" :key="index">
+							<div class="form-item">
+								<div class="mui-row">
+									<div class="mui-col-xs-3 hua">
+										问题描述:
+									</div>
+									<div class="mui-col-xs-9  huh">
+										<span>{{item.problemDesc}}</span>
+									</div>
+								</div>
+							</div>
+							<div class="form-item">
+								<div class="mui-row">
+									<div class="mui-col-xs-3 hua">
+										完成进度:
+									</div>
+									<div class="mui-col-xs-9  huh">
+										<span>{{item.completion}}%</span>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>	
+					
+					<div class="dataStatis-item security">
+						<div class="dataStatis-item-title">已采取安全文明施工措施</div>
+						<div class="mesg" v-if="dayMegs.security==''">
+							无
+						</div>
+						<div class="mesg" v-else >
+							{{dayMegs.security}}
+						</div>
+					</div>	
+				</div>
+				<div class="banner-content" :class="imgLists.length==0?'base':''">
+					<div class="content-img">
+						<div class="banner-img"  v-for="(item,index) in imgLists" :key="index"><img :src="item"/></div>
+						<!-- <div class="banner-img"><img src="../images/144x144.png" /></div>
+						<div class="banner-img"><img src="../images/144x144.png" /></div>
+						<div class="banner-img"><img src="../images/144x144.png" /></div> -->
+					</div>
+				</div>
+		</div>
+		
+    </div>
+    <script src="../js/mui.min.js"></script>
+    <script src="../js/mui.picker.min.js"></script>
+    <script type="text/javascript" src="../js/jquery-1.8.0.min.js"></script>
+    <!-- <script src="../js/app.js"></script> -->
+    <!-- <script src="../js/progressbar.js"></script> -->
+    <script type="text/javascript">
+		mui.plusReady(function () {
+		       	var view = plus.webview.getWebviewById("dayReportDetails");
+				var id = view.dayId;//获得日报id
+				var ststus=view.stat;//获取状态
+				if(ststus=="A"){
+					$('.security').css('display','none');
+					$('.quality').css('display','none');
+					$('.litigation').css('display','none');
+				}
+				dayReports();
+				var vue = new Vue({
+					el: '#cont',
+					data: {
+						dayMegs:{},//费用
+						labors:[],//用工统计
+						overtimes:[],//加班统计
+						mechanicals:[],//机械统计
+						Materials:[],//材料统计 
+						imgLists:[],//图片
+						appeal:[],//诉求事项
+						problem:[],//质量问题
+						measures:[]//安全文明措施
+					},
+					methods: {
+					
+					},
+					beforeCreate:function() {
+					  
+					},
+					created:function() {
+					   
+					},
+					beforeMount:function() {
+					 
+					},
+					mounted:function() {
+				
+					},
+					beforeUpdate:function() {
+					   
+					},
+					updated:function() {
+					},
+					beforeDestroy:function() {
+				
+					},
+					destroyed:function() {
+				
+					}
+					});
+				
+				function dayReports(){//日报详情信息
+					$.ajax({
+					    url:'http://ipark.bplusiot.com/iPark/APIs/daily/getdailyinfo',
+					    type: 'get',
+					    data: {
+							 dailyId:id
+					    },
+					    dataType: "json",
+					    success: function (data) {
+					        console.log(66666);
+							console.log(JSON.stringify(data));
+							$('.monthTitle').html(data.daily.createDate);//设置头部日期
+							vue.dayMegs=data.daily;//费用
+							vue.imgLists=data.images;//图片
+							var dat =data.costs;
+							console.log(JSON.stringify(dat))
+							for(var i=0;i<dat.length;i++){
+								console.log(dat[i].type)
+								if(dat[i].type==0){
+									//用工
+									vue.labors.push(dat[i])
+								}else if(dat[i].type==4){
+									//加班
+									vue.overtimes.push(dat[i])
+								}else if(dat[i].type==2){
+									//机械
+									vue.mechanicals.push(dat[i])	
+								}else{
+									//材料
+									vue.Materials.push(dat[i])
+								}
+							}
+							//质量问题
+							vue.problem=data.problems;
+							//console.log(JSON.stringify(data.problems))
+							//业主反馈
+							vue.appeal=data.appeals;
+							//安全文明措施
+							vue.measures=data.dailystatis;
+					    },
+					    error: function (e) {
+					        console.log(JSON.stringify(e));
+					    }
+					});
+				}
+				})
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,16 @@
+{
+  "id": "",
+  "name": "",
+  "font_family": "iconfont",
+  "css_prefix_text": "icon-",
+  "description": "",
+  "glyphs": [
+    {
+      "icon_id": "99516",
+      "name": "喇叭",
+      "font_class": "weibiaoti1",
+      "unicode": "e637",
+      "unicode_decimal": 58935
+    }
+  ]
+}

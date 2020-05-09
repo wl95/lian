@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8" />
+    <title>查看日报</title>
+    <meta name="viewport"
+        content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+    <link href="../css/mui.min.css" rel="stylesheet" />
+    <link href="../css/mui.picker.min.css" rel="stylesheet" />
+    <link href="../fonts/iconfont/iconfont.css" rel="stylesheet" />
+    <link rel="stylesheet" href="../css/dayDetails.css" />
+    <link rel="stylesheet" href="../css/dailySub.css" />
+    <style>
+        html,
+        body {
+            width: 100%;
+            height: 100%;
+            color: #333;
+            overflow: hidden;
+        }
+
+        .mui-bar-nav {
+            background-color: darkgray;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        .progress .form-right {
+            position: relative;
+        }
+
+        .progress_bg {
+            height: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            overflow: hidden;
+            background-color: #f2f2f2;
+        }
+
+        .progress_bar {
+            background: #5fb878;
+            width: 0;
+            height: 10px;
+            border-radius: 5px;
+        }
+
+        .progress_btn {
+            width: 20px;
+            height: 20px;
+            background: #5fb878;
+            border-radius: 50%;
+            position: absolute;
+            left: 0px;
+            margin-left: -10px;
+            top: -5px;
+            cursor: pointer;
+            border: 1px #ddd solid;
+            box-sizing: border-box;
+        }
+
+        .progress_btn:hover {
+            border-color: #f7b824;
+        }
+
+        .cover {
+            text-align: left !important;
+        }
+    </style>
+</head>
+
+<body>
+    <header class="mui-bar mui-bar-nav" style="background-color: darkgray">
+        <a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+        <h1 class="mui-title">提交日报</h1>
+    </header>
+    <div class="dailySub-wrap">
+        <div class="statistics">
+            <div class="totalCost-text">
+                <span>总费用</span>
+                <span>4,160.00</span>
+            </div>
+            <ul class="totalCost-eachItem">
+                <li>
+                    <span>用工费</span>
+                    <span>3,100.00</span>
+                </li>
+                <li>
+                    <span>机械费</span>
+                    <span>950.00</span>
+                </li>
+                <li>
+                    <span>用工费</span>
+                    <span>110.00</span>
+                </li>
+            </ul>
+        </div>
+        <div class="dataStatis">
+            <div class="dataStatis-item">
+                <div class="dataStatis-item-title">用工统计</div>
+                <div class="dataStatis-item-content flexaj">
+                    <div class="content-left">
+                        <span class="left-title">用工13人</span>
+                        <span class="left-s">南门口扫雪</span>
+                    </div>
+                    <div class="content-right">
+                        <span class="right-money money-red">1,300.00</span>
+                    </div>
+                </div>
+            </div>
+            <div class="dataStatis-item">
+                <div class="dataStatis-item-title">加班统计</div>
+                <div class="dataStatis-item-content flexaj">
+                    <div class="content-left">
+                        <span class="left-title">用工13人</span>
+                        <span class="left-s">南门口扫雪</span>
+                    </div>
+                    <div class="content-right">
+                        <span class="right-money money-red">1,300.00</span>
+                    </div>
+                </div>
+            </div>
+            <div class="dataStatis-item">
+                <div class="dataStatis-item-title">机械统计</div>
+                <div class="dataStatis-item-content">
+                    <div class="content-top flexaj">
+                        <span class="left-title">小余农用机械 割草机 C30:8个小时</span>
+                        <span class="right-money money-red">800.00</span>
+                    </div>
+                    <div class="content-bottom flexaj">
+                        <span class="left-title">花园中心广场草坪</span>
+                        <span class="left-s">含油</span>
+                    </div>
+                </div>
+                <div class="dataStatis-item-content">
+                    <div class="content-top flexaj">
+                        <span class="left-title">小余农用机械 割草机 C30:8个小时</span>
+                        <span class="right-money money-red">800.00</span>
+                    </div>
+                    <div class="content-bottom flexaj">
+                        <span class="left-title">花园中心广场草坪</span>
+                        <span class="left-s">含油</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="dataStatis-item">
+                <div class="dataStatis-item-title">材料统计</div>
+                <div class="dataStatis-item-content">
+                    <div class="content-top flexaj">
+                        <span class="left-title">晴天日用百货 垃圾袋 中号:8个</span>
+                        <span class="right-money money-red">30.00</span>
+                    </div>
+                    <div class="content-bottom flexaj">
+                        <span class="left-title">花园中心广场</span>
+                        <span class="left-s">易耗</span>
+                    </div>
+                </div>
+                <div class="dataStatis-item-content">
+                    <div class="content-top flexaj">
+                        <span class="left-title">小王五金百货 铁丝 直径0.5: 20米</span>
+                        <span class="right-money money-red">800.00</span>
+                    </div>
+                    <div class="content-bottom flexaj">
+                        <span class="left-title">固定广场树枝</span>
+                        <span class="left-s">易耗</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="dataStatis-item">
+                <div class="dataStatis-item-title">业主诉求及需协调事项</div>
+                <div class="form-item">
+                    <span>诉求事项:</span>
+                    <input class="form-right" type="text" placeholder="请输入具体事项" />
+                </div>
+                <div class="form-item">
+                    <span>责任人:</span>
+                    <select class="form-right" placeholder="请选择责任人">
+                        <option disabled selected style="display: none;color: #8B9CAC;" value="">请选择责任人</option>
+                        <option value="1">1233</option>
+                        <option value="2">443</option>
+                        <option value="3">33</option>
+                    </select>
+                </div>
+                <div class="form-item">
+                    <span>协助部门:</span>
+                    <select class="form-right" placeholder="">
+                        <option disabled selected style="display: none;color: #8B9CAC;  " value="">请选择协助部门</option>
+                        <option value="1">1233</option>
+                        <option value="2">443</option>
+                        <option value="3">33</option>
+                    </select>
+                </div>
+                <div class="form-item">
+                    <span>解决措施:</span>
+                    <input class="form-right" type="text" placeholder="请输入解决措施" />
+                </div>
+            </div>
+            <div class="dataStatis-item">
+                <div class="dataStatis-item-title">质量问题</div>
+                <div class="form-item">
+                    <span class="cover">问题描述</span>
+                    <input class="form-right" type="text" placeholder="请输入具体事项" />
+                </div>
+                <div class="form-item">
+                    <span class="cover">完成进度:</span>
+                    <span class="form-right"></span>
+                </div>
+            </div>
+            <div class="dataStatis-item">
+                <div class="dataStatis-item-title">已采取安全文明施工措施</div>
+                <div class="form-item">
+                    <span class="cover"> 无</span>
+                    <!-- <input class="form-right" type="text" placeholder="请输入具体事项" /> -->
+                </div>
+            </div>
+        </div>
+        <!-- <div class="needsCoord">
+            <div class="needsCoord-item">
+                <div class="needsCoord-title">业主诉求及需协调事项</div>
+                <div class="form-item">
+                    <span>诉求事项:</span>
+                    <input class="form-right" type="text" placeholder="请输入具体事项" />
+                </div>
+                <div class="form-item">
+                    <span>责任人:</span>
+                    <select class="form-right" placeholder="请选择责任人">
+                        <option disabled selected style="display: none;color: #8B9CAC;" value="">请选择责任人</option>
+                        <option value="1">1233</option>
+                        <option value="2">443</option>
+                        <option value="3">33</option>
+                    </select>
+                </div>
+                <div class="form-item">
+                    <span>协助部门:</span>
+                    <select class="form-right" placeholder="">
+                        <option disabled selected style="display: none;color: #8B9CAC;  " value="">请选择协助部门</option>
+                        <option value="1">1233</option>
+                        <option value="2">443</option>
+                        <option value="3">33</option>
+                    </select>
+                </div>
+                <div class="form-item">
+                    <span>解决措施:</span>
+                    <input class="form-right" type="text" placeholder="请输入解决措施" />
+                </div>
+                <div class="quality-problem-add">继续添加</div>
+            </div>
+        </div> -->
+        <div class="banner-content">
+            <div class="content-img">
+                <div class="banner-img"><img src="../images/144x144.png" /></div>
+                <div class="banner-img"><img src="../images/144x144.png" /></div>
+                <div class="banner-img"><img src="../images/144x144.png" /></div>
+
+            </div>
+        </div>
+
+
+        <!-- <div class="check-text">
+            <div class="check-title">已采取安全文明施工措施</div>
+        </div>
+        <div class="check-text">
+            <div class="check-title">质量问题</div>
+        </div>
+        <div class="dailySub-sublime">提交</div> -->
+    </div>
+    <script src="../js/mui.min.js"></script>
+    <script src="../js/mui.picker.min.js"></script>
+    <script type="text/javascript" src="../js/jquery-1.8.0.min.js"></script>
+    <script src="../js/app.js"></script>
+    <script src="../js/progressbar.js"></script>
+    <script type="text/javascript">
+        let qualityProblem = document.getElementsByClassName(
+            "quality-problem"
+        )[0];
+
+        var count = 0
+        var str = ''
+        var obj = {};
+
+        $('.quality-problem').on('click', '.quaPro-item:last .quality-problem-add', function () {
+            str = `
+                    <div class='quaPro-item'>
+                        <div class='form-item'>
+                            <span>质量问题：</span>
+                            <input class='form-right' type='text' placeholder='请输入问题描述' />
+                        </div>
+                        <div class='form-item progress'>
+                            <span>解决进度：</span>
+                            <div class='form-right'>
+                                <div class='progress_bg'>
+                                    <div class='progress_bar'></div>
+                                </div>
+                                <div class='progress_btn' data-index="${count}"></div>
+                            </div>
+                        </div>
+                        <div class='quality-problem-add'>继续添加</div> 
+                    </div>`
+            count++
+            $('.quality-problem').append(str)
+            progress()
+        })
+        progress()
+
+        function progress() {
+            var quaProItem = $(".quality-problem .quaPro-item");
+            var formRight = null;
+            var dataIndex = 0;
+            for (var i = 0; i < quaProItem.length; i++) {
+                obj[i] = {
+                    tag: false,
+                    ox: 0,
+                    left: 0,
+                    bgleft: 0
+                };
+                var progress_btn = $(
+                    ".quality-problem .quaPro-item:nth-child(" +
+                    (Number(i) + 1) +
+                    ") .form-item:eq(1) .progress_btn"
+                );
+                progress_btn.attr("data-index", i);
+
+                $('.quality-problem').on("touchstart", ".quaPro-item:nth-child(" +
+                    (Number(i) + 1) +
+                    ") .form-item:eq(1) .progress_btn",
+                    function (e) {
+                        var originalEvent = e.originalEvent;
+                        var touches = originalEvent.touches[0];
+                        dataIndex = $(this).attr("data-index");
+                        console.log(dataIndex)
+                        obj[dataIndex].ox = touches.pageX - obj[dataIndex].left;
+                        obj[dataIndex].tag = true;
+                    });
+                $(document).on("touchend", function (e) {
+                    obj[dataIndex].tag = false;
+                });
+                $('.quality-problem').on("touchmove", ".quaPro-item:nth-child(" +
+                    (Number(i) + 1) +
+                    ") .form-item:eq(1) .form-right",
+                    function (e) {
+                        var originalEvent = e.originalEvent;
+                        var touches = originalEvent.touches[0];
+                        //鼠标移动
+                        if (obj[dataIndex].tag) {
+                            obj[dataIndex].left = touches.pageX - obj[dataIndex].ox;
+                            if (obj[dataIndex].left <= 0) { // 判断拖拽到达左边的位置将圆点设置为0
+                                obj[dataIndex].left = 0;
+                            } else if (
+                                obj[dataIndex].left >
+                                $(this).width()
+                            ) { // 判断拖拽到达右边的位置将圆点设置为form-right-$(this)的宽度
+                                obj[dataIndex].left = $(this).width();
+                            }
+                            $(this)
+                                .children(".progress_btn")
+                                .css("left", obj[dataIndex].left);
+                            $(this)
+                                .find(".progress_bar")
+                                .width(obj[dataIndex].left);
+                            //console.log(parseInt((left / progress_bg.width()) * 100) + "%") // 当前解决进度条 百分比
+                            // $(".text").html(parseInt((left / progress_bg.width()) * 100) + "%");
+                        }
+                    });
+
+                $('.quality-problem').on("click", ".quaPro-item:nth-child(" +
+                    (Number(i) + 1) +
+                    ") .form-item:eq(1) .progress_bg",
+                    function (e) {
+                        //鼠标点击
+                        if (!obj[dataIndex].tag) {
+                            obj[dataIndex].bgleft = $(this).offset().left;
+                            obj[dataIndex].left = e.pageX - obj[dataIndex].bgleft;
+                            if (obj[dataIndex].left <= 0) {
+                                obj[dataIndex].left = 0;
+                            } else if (obj[dataIndex].left > $(this).width()) {
+                                obj[dataIndex].left = $(this).width();
+                            }
+                            $(this)
+                                .siblings(".progress_btn")
+                                .css("left", obj[dataIndex].left);
+                            $(this)
+                                .find(".progress_bar")
+                                .animate({
+                                    width: obj[dataIndex].left
+                                }, $(this).width());
+                            //$(".text").html(parseInt((left / progress_bg.width()) * 100) + "%");
+                        }
+                    });
+            }
+        }
+
+        $('.needsCoord').on('click', '.needsCoord-item:last .quality-problem-add', function () {
+            str = `
+            <div class="needsCoord-item">
+                <div class="needsCoord-title">业主诉求及需协调事项</div>
+                <div class="form-item">
+                    <span>诉求事项:</span>
+                    <input class="form-right" type="text" placeholder="请输入具体事项" />
+                </div>
+                <div class="form-item">
+                    <span>责任人:</span>
+                    <select class="form-right" placeholder="请选择责任人">
+                        <option disabled selected style="display: none;color: #8B9CAC;" value="">请选择责任人</option>
+                        <option value="1">1233</option>
+                        <option value="2">443</option>
+                        <option value="3">33</option>
+                    </select>
+                </div>
+                <div class="form-item">
+                    <span>协助部门:</span>
+                    <select class="form-right" placeholder="">
+                        <option disabled selected style="display: none;color: #8B9CAC;  " value="">请选择协助部门</option>
+                        <option value="1">1233</option>
+                        <option value="2">443</option>
+                        <option value="3">33</option>
+                    </select>
+                </div>
+                <div class="form-item">
+                    <span>解决措施:</span>
+                    <input class="form-right" type="text" placeholder="请输入解决措施" />
+                </div>
+                <div class="quality-problem-add">继续添加</div>
+            </div>`
+            count++
+            $('.needsCoord').append(str)
+        })
+    </script>
+</body>
+
+</html>

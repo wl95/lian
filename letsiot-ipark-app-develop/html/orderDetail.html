@@ -1,0 +1,280 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>新建工单</title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<link href="../css/mui.min.css" rel="stylesheet" />
+		<link href="../css/mui.picker.min.css" rel="stylesheet" />
+		<link href="../fonts/iconfont/iconfont.css" rel="stylesheet" />
+		<link href="../css/ipark.css" rel="stylesheet" />
+		<script type="text/javascript" src="../js/jquery-1.8.0.min.js" ></script>
+		<script src="../js/mui.min.js"></script>
+		<script src="../js/mui.picker.min.js"></script>
+		<script src="http://api.map.baidu.com/getscript?v=2.0&ak=A876b671f8466a2b8bcfbc202fe4bc73&services=&t=20180102152545" 
+		type="text/javascript"></script>
+		<script type="text/javascript" src="http://developer.baidu.com/map/jsdemo/demo/convertor.js"></script>
+		<!-- <script type="text/javascript" src="http://api.map.baidu.com/api?v=3.0&ak=A876b671f8466a2b8bcfbc202fe4bc73"></script> -->
+		<style>
+			html,body {
+				height: 100%;
+			}
+			.mui-content {
+    			background-color: inherit;
+    		}
+			.mui-input-group .mui-input-row {
+				height: auto;
+				color: #4D4D4D;
+			}
+			.mui-radio input[type=radio]{
+				display: none;
+			}
+			.mui-radio label{
+				padding:9px;
+				text-align: center;
+    			background: #fff;
+				line-height: 1;
+				width: 90px;
+				color:#282828;
+				border:1px solid #f0f0f0;
+				border-radius: 35px;
+			}
+			.mui-radio label.active{
+				border-color:#009e96;
+				background-color: #acefe6;
+			}
+			.mui-radio.mui-left input[type=radio] {
+				left: 0;
+			}
+			.mui-radio.mui-left label {
+				padding-left:28px;
+			}
+			.mui-input-row span {
+				line-height: 40px;
+			}
+			.mui-input-row span.form-full-span {
+				display: inline-block;
+			    height: 36px;
+			    width: 100%;
+			}
+			.mui-input-row .iot-unit-span {
+				margin-left: 5px;
+				display: inline-block;
+			}
+			.mui-input-row .mui-textarea {
+			    height: 120px;
+			    display: inline-block;
+			    margin: 10px 0px 0px;
+			    font-size: 13px;
+			    float: left;
+			}
+			.mui-input-row .textnum-tip{
+				font-size: 13px;
+			    color: #9E9E9E;
+			    line-height: 25px;
+			    height: 25px;
+			    text-align: right;
+			    clear: both;
+			}
+			.mui-input-row .textnum.error{
+				color:#F17368;
+			}
+			.mui-input-group .mui-input {
+		        height: 32px;
+    			margin-top: 4px;
+			}
+			span.endTimeBtn .iconfont {
+				color: #36C6D3;
+				font-size: 20px;
+			}
+			.job-budgetTip{
+				background-color: #FDF0DA;
+				text-align: center;
+				color: #666666;
+				font-size: 14px;
+			}
+			.job-budgetTip span{
+				line-height: 0;
+			}
+			.job-budgetTip span.dailyBudget{
+				font-size: 17px;
+			}
+			.mui-img-list{
+				margin-top: 13px;
+				line-height: 0;
+			}
+			.mui-img-list a{
+				display: inline-block;
+				position: relative;
+				line-height: 0;
+				width: 28%;
+				height: 69px;
+				margin: 0 8px 8px 0;
+			}
+			.mui-img-list img{
+				display: inline-block;
+				width: 100%;
+				height: 100%;
+			}
+			img.mui-img-uni{
+				width: 23px;
+				height: 23px;
+				position: absolute;
+				right: 0px;
+			}
+			.iconfont.icon-space{
+				color:#686868;
+				padding-left: 15px;
+				padding-right: 6px;
+			}
+			.iconfont.important{
+				font-size: 7px;
+				color:#F17368;
+				padding-left: 4px;
+				position: absolute;
+			}
+			.unactive.newBtn{
+				color:rgba(255,255,255,0.5);
+			}
+			.mui-img-upload{
+				border-radius: 4px;
+			}
+			.text-algin-center{
+				text-align: center;
+			}
+			.text-algin-right{
+				text-align: right;
+			}
+			.rig{
+				right:10px;
+			}
+			.icon-size{
+				font-size: 2rem;
+			}
+			#allmap{
+				width:100%;
+				height:10rem;
+			}
+			#locont{
+				line-height: initial;
+			}
+			.right-arrow{
+				width:7%;
+				float: right!important;
+				right: 10px;
+				text-align: right;
+				padding: 10px;
+			}
+			/* ipad */
+			@media screen
+			
+			and (min-device-width : 768px)
+			
+			and (max-device-width : 1024px) {
+				.title-label{
+					width:10%!important;
+				}
+				.tit-cont{
+					width:92%;
+				}
+				
+			}
+		</style>
+	</head>
+
+	<body>
+		<header class="mui-bar mui-bar-nav padd-top">
+			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+			<h1 class="mui-title">新建工单</h1>
+		</header>
+		<div id="addWorkOrder" class="mui-content my-sheet">
+			<div id='backdrop'></div>
+			<form class="mui-input-group" onsubmit="return false;">
+				<div id="work-theme" class="mui-row mui-input-row">
+					<label class="title-label text-algin-center">
+						工单主题:
+					</label>
+					<div id="theme" class="mui-col-sm-60t mui-col-xs-11">
+						
+					</div>
+					<div class="mui-col-sm-7t mui-col-xs-1 mui-icon mui-icon-arrowright right-arrow"></div>
+				</div>
+				<div class="mui-row mui-input-row">
+					<label class="title-label text-algin-center">
+						工单内容:
+					</label>
+					<div class="mui-col-sm-65t mui-col-xs-12 tit-cont">
+						<input class="mui-input" placeholder="请输入工单内容" type="text" name="estimateLabor" id="themeTxt" />
+					</div>
+				</div>
+				<div class="mui-row mui-input-row">
+					<label class="title-label text-algin-center">
+						现场照片:
+					</label>
+					<div class="mui-col-sm-65t mui-col-xs-12 tit-cont" id='showUserPicker'>
+						<div id="imgList" class="mui-img-list">
+							<a href="javascript:;" class="imageup">
+								<img src="../images/upload.png"/>
+							</a>
+						</div>
+				  	</div>
+				</div>
+				<div  id="locat" class="mui-row mui-input-row">
+					<label class="title-label text-algin-center">
+						作业区域:
+					</label>
+					<div  class="mui-col-sm-70t mui-col-xs-12 mui-row tit-cont">
+						<div id="locont" class="mui-col-xs-6"></div>
+						<div class="mui-col-xs-6 text-algin-right rig">
+							<span class="mui-icon mui-icon-location rsalert icon-size" ></span>
+							自动定位
+						</div>
+					</div>
+					<div id="allmap" class="mui-col-xs-12"></div>
+				</div>
+				<!-- <div class="mui-row mui-input-row">
+					<label class="title-label text-algin-center">
+						语音描述:
+					</label>
+					<div  id="record" class="mui-col-sm-70t mui-col-xs-12">
+						<span class="mui-icon mui-icon-mic rsalert icon-size"></span>
+						<div id="voiceFile"></div>
+					</div>
+				</div> -->
+				<div class="mui-row mui-input-row">
+					<label class="title-label text-algin-center">
+						开始时间:
+					</label>
+					<div  id="startTime" class="mui-col-sm-70t mui-col-xs-12 tit-cont">
+						
+					</div>
+				</div>
+				<div class="mui-row mui-input-row">
+					<label class="title-label text-algin-center">
+						结束时间:
+					</label>
+					<div  id="stopTme" class="mui-col-sm-70t mui-col-xs-12 tit-cont">
+						
+					</div>
+				</div>
+				<div id="appointees" class="mui-row mui-input-row">
+					<label class="title-label text-algin-center">
+						指派人员:
+					</label>
+					<div id="appoin" class="mui-col-sm-60t mui-col-xs-11">
+						
+					</div>
+					<div class="mui-col-sm-7t mui-col-xs-1 mui-icon mui-icon-arrowright right-arrow"></div>
+				</div>
+			</form>
+			<div class="mui-row mui-button-row" style="margin-top: 20px;">
+				<button type="button" class="mui-btn mui-btn-primary unactive newBtn" id="submitBtn" onclick="return false">提 交</button>
+			</div>
+		</div>
+		
+		
+    	
+		<script src="../js/workOrder/addWorkOrder.js"></script>
+	
+	</body>
+</html>

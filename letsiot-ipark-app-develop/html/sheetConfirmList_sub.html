@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<title>待确认工单</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+		<link rel="stylesheet" href="../css/mui.min.css">
+		<link href="../css/ipark.css" rel="stylesheet" />
+		<style type="text/css">
+			.mui-content {
+    			background-color: inherit;
+    		}
+			.mui-table-view-cell:active {
+			    background-color: #eee;
+			}
+			.mui-table-view-cell:after {
+				background-color: #F1F1F1;
+			}
+			.mui-table-view-cell>a:not(.mui-btn).mui-active {
+			    background-color: transparent;
+			}
+			.mui-table-view-cell .rightContent .topText span{
+				color:#282828;
+			}
+			.mui-table-view-cell.warn .rightContent .topText span{
+				color: #F17368;
+			}
+			.mui-table-view:before{height: 0;}
+			.mui-table-view:after{height: 0;}
+			.mui-table-view-cell a.iot-list-time-tip {
+			    margin-left: 80px;
+				white-space: normal;
+			    text-overflow: unset;
+			    font-size: 14px;
+			    color: #FF7600;
+			    font-size: 14px;
+			}
+			.mui-table-view-chevron .mui-table-view-cell{padding-right:10px;}
+			.mui-table-view-cell.warn .isContent{line-height: 25px;font-size: 14px;color:red;top:2px;width:50px;height: 25px;background:rgba(255,18,6,.1);text-align: center;border-radius:10px;}
+			
+		</style>
+	</head>
+
+	<body>
+		<div id="noDataWapper" class="mui-content"  style="display: none;">
+			<div class="iot-list-nodata-wapper">
+				<div class="iot-list-nodata">
+					<span></span>
+				</div>
+				<p class="iot-list-nodata-text">当前页面暂无数据</p>
+			</div>
+		</div>
+		<div id="pullrefresh" class="mui-content mui-scroll-wrapper" style="display: none;">
+			<div class="mui-scroll">
+				<ul class="mui-table-view mui-table-view-chevron creatTable">
+					<!--<li class="mui-table-view-cell">
+						<div class="leftImg">
+							<img src="../images/sheetList/sheetReview-icon01.png"  />
+						</div>
+						<div class="rightContent">
+							<div class="topText">
+								<span>
+								指派指派内指派内内</span>
+							</div>
+							<div class="botTime">
+								<p class='isCon'><span><img src="../images/sheetList/sheetEditList-icon01.png" /></span>截至时间：23:59:59</p>
+								<p class="isContent">正常</p>
+					      	</div>
+						</div>
+					</li>-->
+				</ul>
+			</div>
+		</div>
+		<script src="../js/mui.min.js"></script>
+		<script src="../js/util.js"></script>
+		<script src="../js/app.js"></script>
+		<script>
+		(function($, doc) {
+			$.init({
+				pullRefresh: {
+					container: '#pullrefresh',
+					down: {
+						callback: pulldownRefresh
+					},
+					up: {
+						contentrefresh: '正在加载...',
+						callback: pullupRefresh
+					}
+				}
+			});
+			
+			var page = 0, size = 10, count = 0;
+			var woStatus = "TD";
+			pulldownRefresh();
+			$.ready(function(){
+				window.addEventListener('comfirmResetPage',function(event){
+				  	pulldownRefresh()
+				});
+				$('body').on('tap','.mui-table-view-cell',function(){
+					var id = this.getAttribute("data-id");
+					var view = plus.webview.getWebviewById("confirmSheet");
+					if(view){
+//						mui.fire(view,"editSheetWithNewId",{
+//	                        sheetId: id
+//	                    });
+//						view.show();
+						view.close();
+						setTimeout(function() {
+								$.openWindow({
+								    url: './confirmSheet.html', 
+								    id:'confirmSheet',
+									extras:{
+										sheetId: id
+									}
+								});
+						}, 200);
+					}else{
+						$.openWindow({
+						    url: './confirmSheet.html', 
+						    id:'confirmSheet',
+							extras:{
+								sheetId: id
+							}
+						});
+					}
+				});
+			})
+			
+			function load(flag){
+				Util.ajax({
+					url: 'workorderManage/listWorkorderManage',
+					dataType: 'json',//服务器返回json格式数据
+					type:'post',//HTTP请求类型
+					data: {
+						page: page++,
+						size: size,
+						woStatus: woStatus,
+						projectId: localStorage.getItem("IPARK_APP_PROJECTID")
+					},
+					success: function(data){
+						count = data.numberOfElements;
+						var totalCount = data.totalElements;
+						if(totalCount == 0){
+							document.getElementById("noDataWapper").style.display="block";
+							document.getElementById("pullrefresh").style.display="none";
+						}else{
+							document.getElementById("noDataWapper").style.display="none";
+							document.getElementById("pullrefresh").style.display="block";
+						}
+						var table = document.body.querySelector('.mui-table-view');
+						for (var i = 0, len = data.content.length; i < len; i++) {
+							var li = document.createElement('li'),
+								tempData = data.content[i],
+								imgSrc = "../images/default.png";
+							li.className = 'mui-table-view-cell';
+							if('U'==tempData.woType){
+								li.className = 'mui-table-view-cell warn';
+							}
+							li.setAttribute('data-id', tempData.id);
+							if(tempData.woImage){
+								imgSrc = app.configures.API_URL + "/maintGuide/getImageByPath?imagePath=" + tempData.woImage;
+							}
+							li.innerHTML='<div class="leftImg">'+
+									'<img src="'+imgSrc+'"  />'
+								+'</div>'
+								+'<div class="rightContent">'
+									+'<div class="topText">'
+										+'<span>'+ tempData.remark +'</span>'
+									+'</div>'
+									+'<div class="botTime" id="urgency">'
+										+'<p>截至时间：'+tempData.endTime.substr(10, tempData.endTime.length-1)+'</p>'
+									+'</div>'
+								+'</div>';
+							table.appendChild(li);
+						}
+						flag ? 
+							(function(){
+								$('#pullrefresh').pullRefresh().endPulldownToRefresh();
+								$('#pullrefresh').pullRefresh().endPullupToRefresh(count<size);
+							})() :
+							$('#pullrefresh').pullRefresh().endPullupToRefresh(count<size); //refresh completed
+					}
+				});
+			}
+			/**
+			 * 下拉刷新具体业务实现
+			 */
+			function pulldownRefresh() {
+				page = 0;
+				count = 0;
+				var table = document.body.querySelector('.mui-table-view');
+				table.innerHTML = '';
+				load(true);
+			}
+			/**
+			 * 上拉加载具体业务实现
+			 */
+			function pullupRefresh() {
+				load(false);
+			}
+		})(mui, document);
+		</script>
+	</body>
+</html>

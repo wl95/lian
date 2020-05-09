@@ -1,0 +1,135 @@
+<!doctype html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>智能喷灌</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+    <link href="../css/mui.min.css" rel="stylesheet" />
+    <link href="../css/mui.picker.min.css" rel="stylesheet" />
+    <link href="../fonts/iconfont/iconfont.css" rel="stylesheet" />
+    <link href="../css/ipark.css" rel="stylesheet" />
+    <style>
+        html,
+        body {
+            height: 100%;
+            overflow: hidden;
+        }
+
+        .HHmapContainer {
+            width: 100%;
+            height: 100%;
+            display: block;
+            position: relative;
+        }
+
+        canvas {
+            margin-top: 64px;
+            width: 100% !important;
+            height: calc(100% - 64px) !important;
+        }
+
+        .HHmapContainer>img {
+            width: 100%;
+            height: 100%;
+            border-radius: 0;
+        }
+    </style>
+</head>
+
+<body>
+    <header class="mui-bar mui-bar-nav">
+        <a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+        <h1 class="mui-title">智能喷灌</h1>
+    </header>
+    <div class="HHmapContainer">
+        <!-- <img src="../icon/bg.png" usemap="#HHmap" alt="Planets" /> -->
+        <canvas id="map-canvas" width="375" height="603"></canvas>
+    </div>
+    <script src="../js/jquery-1.8.0.min.js"></script>
+    <script src="../js/mui.min.js"></script>
+    <script src="../js/mui.picker.min.js"></script>
+    <script>
+        mui.plusReady(function(){
+            var c = document.getElementById("map-canvas");
+            var canvasWidth = 375;
+            var canvasHeight = 603;
+            var areaId = '';
+            var cxt = c.getContext("2d");
+            var img = new Image();
+            img.src = '../icon/bg.png'
+            img.onload = function () {
+                cxt.drawImage(this, 0, 0, 375, 667)
+                cxt.beginPath();
+                cxt.lineWidth = "1";
+                cxt.strokeStyle = "rgba(1, 1, 1, 0)";
+                cxt.moveTo(0, 105);
+                cxt.lineTo(70, 105);
+                cxt.lineTo(145, 145);
+                cxt.lineTo(215, 240);
+                cxt.lineTo(255, 350);
+                cxt.lineTo(270, 510);
+                cxt.lineTo(255, 603);
+                cxt.lineTo(0, 603);
+                cxt.lineTo(0, 105);
+                cxt.closePath();
+                cxt.stroke(); // 进行绘制
+            }
+            $(c).on("tap", function(e) {
+                var cRect = c.getBoundingClientRect();
+                var canvasX = Math.round(e.originalEvent.detail.gesture.changedTouches[0].pageX - cRect.left);
+                var canvasY = Math.round(e.originalEvent.detail.gesture.changedTouches[0].pageY - cRect.top);
+                var realWidth = window.innerWidth;
+                var realHeight = window.innerHeight - 64;
+                var widthScale = (canvasWidth / realWidth);
+                var heightScale = (canvasHeight / realHeight);
+                var point = {
+                    x: canvasX * widthScale,
+                    y: canvasY * heightScale
+                }
+                var poly = [
+                    { x: 0, y: 105 },
+                    { x: 70, y: 105 },
+                    { x: 145, y: 145 },
+                    { x: 215, y: 240 },
+                    { x: 255, y: 350 },
+                    { x: 270, y: 510 },
+                    { x: 255, y: 600 },
+                    { x: 0, y: 600 },
+                    { x: 0, y: 105 }
+                ];
+                if (PointInPoly(point, poly)) {
+                    // 草坪 -- areaId 
+                    areaId = '3254787787851776';
+                } else {
+                    // 玫瑰园 -- areaId
+                    areaId = '3254786001291264';
+                }
+                var view = plus.webview.getWebviewById("gisIrrigationHHdetail");
+                if (view) {
+                    mui.fire(view,'resetPage');
+                    view.show();
+                } else {
+                    mui.openWindow({
+                        url: './gisIrrigationHHdetail.html', 
+                        id:'gisIrrigationHHdetail',
+                        extras: {
+                            areaId: areaId
+                        }
+                    });
+                }
+            });
+        })
+
+        // 判断点是否在多边形内
+        function PointInPoly(pt, poly) { 
+            for (var flag = false, i = -1, l = poly.length, j = l - 1; ++i < l; j = i) 
+                ((poly[i].y <= pt.y && pt.y < poly[j].y) || (poly[j].y <= pt.y && pt.y < poly[i].y)) 
+                && (pt.x < (poly[j].x - poly[i].x) * (pt.y - poly[i].y) / (poly[j].y - poly[i].y) + poly[i].x) 
+                && (flag = !flag); 
+            return flag;
+        }
+    </script>
+</body>
+
+</html>

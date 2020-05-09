@@ -1,0 +1,941 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>项目经理首页</title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<link href="../css/mui.min.css" rel="stylesheet" />
+		<link href="../css/ipark.css" rel="stylesheet" />
+		<link href="../css/four.css" rel="stylesheet" />
+		<link href="../fonts/iconfont/iconfont.css" rel="stylesheet" />
+		<style>
+			.mui-bar .mui-icon{
+				font-size: 20px;
+				position: relative;
+				top: 3px;
+			}
+			.iot-card-wapper .mui-grid-view.mui-grid-9{
+				background-color: #ffffff;
+				border:0;
+			}
+			.iot-card-wapper .mui-grid-view.mui-grid-9 .mui-table-view-cell{
+				border:0;
+				padding: 2px 11px;
+			}
+			.iot-card-wapper .icon-bg{
+				position: relative;
+				margin: 0 auto;
+				width: 2em;
+				height: 2em;
+			}
+			.mui-slider-item img{
+				height: 200px;
+			}
+			.mui-table-view.mui-grid-view .mui-table-view-cell .mui-media-body{
+				font-size:14px ;
+				height: 14px;
+				line-height: 14px;
+			}
+			.mui-line-5{
+				width: 20%;
+			}
+			.chartTitle-line.before::before{
+				right: -2px;
+			}
+			.chartTitle-line.after::after{
+				right: 2px;
+			}
+			
+			.chartTitle-line {
+				font-size: 18px;
+				font-weight: bold;
+			}
+			.chartTitle-line.before::before,
+			.chartTitle-line.after::after {
+			    content: ' ';
+			    width: 50px;
+			    height: 1px;
+			    background: #666666;
+			    display: inline-block;
+			    position: relative;  
+			    top: -5px;
+			}
+			.chartTitle-line.before::before{
+    			right: -2px;
+			}
+			.chartTitle-line.after::after{
+    			right: 2px;
+			}
+			.mui-content-padded{
+				padding-top: 10px;
+				margin:0 0 0 0;
+				position: relative;	
+				background: #fff;
+			}
+
+			.cardLeft{width: 50%;float: left;}
+			.cardLeft li{width:50%;}
+			.cardLeft{border-left: 1px solid #F3F3F3;}
+			.mui-grid-view.sheet-mui-grid-view{padding:0 10px}
+			.weather-info{
+				position: absolute;
+				width: 45%;
+				font-size: 12px;
+				top: 44px;
+				right: 40px;
+				height: 18px;
+				border-radius: 35px;
+				line-height: 18px;
+				background: RGBA(0, 212, 128, 0.2);
+			}
+			.weather-info span{
+				height: 0;
+			}
+			.aaa{
+				text-align: left;
+			}
+			.noUpdate img{
+				width: 30%;
+				margin:30px 0 15px 0;
+			}
+			.mui-popup{
+				border-radius: 2px;
+			}
+			.mui-popup-inner:after,.mui-popup-button:after{
+				background-color: rgba(255,255,255,0.2);
+			}
+			.mui-popup-inner,.mui-popup-button{
+				color:white;
+				background: rgba(0,0,0,0.7);
+			}
+			.mui-popup-inner .tips{
+				font-size: 14px;
+				color:white;
+			}
+			.mui-popup-inner{
+				border-radius: 2px 2px 0  0;
+			}
+			.mui-popup-button:first-child {
+			    border-radius: 0 0 0 2px !important;
+			}
+			.mui-popup-button:last-child {
+			    border-radius: 0 0 2px 0 !important;
+			}
+			.iot-card-wapper {
+				background-color: #fff;
+				margin: 10px 15px;
+				border-radius: 5px;
+			}
+            .gisIrrigation {
+                display: none;
+            }
+            .si-add-ico-so-angry {
+                width: 100%;
+                height: 100%;
+            }
+            .no-bg-item {
+                padding: 0;
+				height:auto;
+            }
+            .si-content-no-bg {
+                height: auto;
+            }
+			.marg-left{
+				margin-left: 15%;
+			}
+			.marg-right{
+				margin-right: 15%;
+			}
+			.img-wid{
+				width:2rem;
+			}
+		
+			c
+		</style>
+	</head>
+
+	<body>
+		<header class="mui-bar mui-bar-nav">
+			<span class="iconfont iconproject mui-pull-left top-ico manager-main" id="index-back"></span>
+			<h1 class="mui-title">珀安智慧园林</h1>
+			<span class="iconfont iconexit mui-pull-right top-ico ipark-logout"></span>
+		</header>
+		<div class="mui-content">
+			<div class="area-weather">
+				<div class="today-weather">
+					<div class="img-content">
+						<img class="weather-img" src="../images/weatherIcon/W0.png"/><br/>
+						<span class="tempNum"></span>℃
+					</div>
+					<div class="info-content">
+						<p class="info"><span class="name"></span> <span class="wind"></span> 湿度<span class="wet"></span>%</p>
+						<p class="tip"><img src="../images/index/rain-icon.png"> <span>未来24小时内无雨</span></p>
+						<p class="address"><img src="../images/index/location-icon.png"> <span>江宁区218号</span></p>
+					</div>
+				</div>
+				<ul class="temp-list">
+					<!--<li>
+						<span>星期五</span><br/>
+						<img src="../images/weatherIcon/W0.png"/><br/>
+						<span>31℃</span>
+					</li>-->
+				</ul>
+			</div>
+
+			<div class="si-content">
+				<div class="si-img-container sheet-assign-list">
+					<!-- <div class="si-red-circle" id="daifenpei"></div> -->
+					<img class="si-manager-png" src='../images/DZP.png'></img>
+					<span class="si-manager-text">待分配</span>
+				</div>
+				<div class="si-img-container sheet-confirm-list">
+					<!-- <div class="si-red-circle" id="daiqueren"></div> -->
+					<img class="si-manager-png" src='../images/DQR.png'></img>
+					<span class="si-manager-text">待确认</span>
+				</div>
+				<div class="si-img-container sheet-review-list">
+					<!-- <div class="si-red-circle" id="daishenhe"></div> -->
+					<img class="si-manager-png" src='../images/DSH.png'></img>
+					<span class="si-manager-text">待审核</span>
+				</div>
+			</div>
+
+			<div class="si-content-no-bg">
+				<div class="no-bg-item sheet-add"> <!--  创建工单 -->
+					<img class="si-add-ico-so-angry" src="../images/addGD.png">
+				</div>
+				<div class="no-bg-item addDailyReport"><!--  创建日报  -->
+					<img class="si-add-ico-so-angry" src="../images/addRB.png">
+				</div>
+				<div class="no-bg-item add-matter"> <!--  创建月报  -->
+					<img class="si-add-ico-so-angry" src="../images/addYB.png">
+				</div>
+			</div>
+
+			<div class="si-content-many">
+				<div class="si-content-title"></div>
+				<div class="si-content-container">
+					<div>
+						<div class="si-content-container-item reportList">
+							<div class="si-content-container-img-container">
+								<img class="si-content-container-item-img img-wid"  src="../images/icon-home-RB.png">
+							</div>
+							<span class="si-content-container-item-span">日报</span>
+						</div>
+						<div class="si-content-container-item reportList2">
+							<div class="si-content-container-img-container">
+								<img class="si-content-container-item-img img-wid"  src="../images/icon-home-RB.png">
+							</div>
+							<span class="si-content-container-item-span">月报</span>
+						</div>
+						<div class="si-content-container-item sheet-query-list ">
+							<div class="si-content-container-img-container">
+								<img class="si-content-container-item-img img-wid"  src="../images/icon-home-GD.png">
+							</div>
+							<span class="si-content-container-item-span">工单</span>
+						</div>
+					<!-- 	<div class="si-content-container-item matterList">
+							<div class="si-content-container-img-container">
+								<img class="si-content-container-item-img" style="width: 24px;" src="../images/icon-home-ZDSX.png">
+							</div>
+							<span class="si-content-container-item-span">重大事项</span>
+						</div> -->
+						<div class="si-content-container-item gisPerson">
+							<div class="si-content-container-img-container">
+								<img class="si-content-container-item-img img-wid"  src="../images/icon-home-gis.png">
+							</div>
+							<span class="si-content-container-item-span">直通现场</span>
+						</div>
+						<div class="si-content-container-item gisation">
+						    <div class="si-content-container-img-container">
+						        <img class="si-content-container-item-img img-wid"  src="../images/icon-home-irrigation.png">
+						    </div>
+						    <span class="si-content-container-item-span">喷灌互动</span>
+						</div>
+                        <div class="si-content-container-item gisIrrigation">
+                            <div class="si-content-container-img-container">
+                                <img class="si-content-container-item-img img-wid"  src="../images/icon-home-irrigation.png">
+                            </div>
+                            <span class="si-content-container-item-span">智能喷灌</span>
+                        </div>
+                        <div class="si-content-container-item videoTeach">
+                            <div class="si-content-container-img-container">
+                                <img class="si-content-container-item-img img-wid"  src="../images/icon-home-wisdom.png">
+                            </div>
+                            <span class="si-content-container-item-span">智库</span>
+                        </div>
+						<div class="si-content-container-item message-noread">
+							<div class="si-content-container-img-container">
+								<div class="si-red-circle si-red-bottom  " id="xiaoxi"></div>
+								<img class="si-content-container-item-img img-wid"  src="../images/icon-home-message.png">
+							</div>
+							<span class="si-content-container-item-span">消息</span>
+						</div>
+						<!-- <div class="si-content-container-item footNumRank">
+							<div class="si-content-container-img-container">
+								<img class="si-content-container-item-img" style="width: 24px;" src="../images/icon-home-run.png">
+							</div>
+							<span class="si-content-container-item-span">步数排名</span>
+						</div> -->
+						<div class="si-content-container-item nowVersion">
+							<div class="si-content-container-img-container">
+								<div class="si-red-circle si-red-bottom  si-red-circle-new">New</div>
+								<img class="si-content-container-item-img img-wid"  src="../images/icon-home-setting.png">
+							</div>
+							<span class="si-content-container-item-span">版本</span>
+						</div>
+                    </div>
+				</div>
+			</div>
+		</div>
+		<script src="../js/mui.min.js"></script>
+		<script src="../libs/echarts.js"></script>
+		<script src="../js/app.js"></script>
+		<script src="../js/util.js"></script>
+		<script src='http://api.map.baidu.com/getscript?v=2.0&ak=A876b671f8466a2b8bcfbc202fe4bc73&services=&t=20180102152545'></script>
+		<script src='http://api.map.baidu.com/library/Heatmap/2.0/src/Heatmap_min.js'></script>
+		<script src="../js/jquery-1.8.0.min.js"></script>
+		<script type="text/javascript">
+			mui.init();
+			var projectId = localStorage.getItem("IPARK_APP_PROJECTID");
+            console.log(projectId);
+            var slider = mui("#slider");
+            var pageCode = '';
+			slider.slider({
+				interval: 20000
+			});
+			
+			var IPARK_APP_PROJECTID_NUMBER = localStorage.getItem("IPARK_APP_PROJECTID_NUMBER");
+			if(IPARK_APP_PROJECTID_NUMBER==1){
+				// mui("#index-back")[0].remove();
+			}
+
+			(function($, doc) {
+				$.init({
+					beforeback: function(){
+						if(IPARK_APP_PROJECTID_NUMBER==1){
+							return false;
+						}
+						plus.navigator.setStatusBarStyle("dark");
+						return true;
+					}
+				});
+				
+				$.ready(function(){
+                    // 判断是否显示智能喷灌入口
+                    Util.ajax({
+                        url: '/idim/isenabled/v1',  //使用项目id查询是否启用棚官
+                        data: {
+                            projectId: projectId
+                        },
+                        success: function(data){
+                            if (data == 'true') {
+                                document.getElementsByClassName('gisIrrigation')[0].style.display = 'block'
+                            }
+                        }
+                    })
+
+                    // 判断是否显示智能喷灌入口
+                    Util.ajax({
+                        url: '/idim/getIdimProjectPage',  //该接口获取项目页面列表
+                        data: {
+                            projectId: projectId
+                        },
+                        success: function(data){
+                            console.log(JSON.stringify(data));
+                            if (data) {
+                                pageCode = data.pageCode;
+                            }
+                            console.log(JSON.stringify(pageCode));
+                        }
+                    })
+
+					function getRed () {
+						// 数量提示
+						// 待分配
+						/* Util.ajax({
+							url: 'workorderManage/listWorkorderManage',
+							dataType: 'json',//服务器返回json格式数据
+							type:'post',//HTTP请求类型
+							data: {
+								woStatus: "BA",
+								projectId: localStorage.getItem("IPARK_APP_PROJECTID")
+							},
+							success: function(data){
+								var totalCount = data.totalElements;
+								if (totalCount > 99) {
+									document.getElementById('daifenpei').innerText = '···';
+								} else if (totalCount > 0) {
+									document.getElementById('daifenpei').innerText = totalCount;
+								} else {
+									document.getElementById('daifenpei').style.display = 'none';
+								}
+							}
+						}) */
+						// 待确认
+					/* 	Util.ajax({
+							url: 'workorderManage/listWorkorderManage',
+							dataType: 'json',//服务器返回json格式数据
+							type:'post',//HTTP请求类型
+							data: {
+								woStatus: "TD",
+								projectId: localStorage.getItem("IPARK_APP_PROJECTID")
+							},
+							success: function(data){
+								var totalCount = data.totalElements;
+								if (totalCount > 99) {
+									document.getElementById('daiqueren').innerText = '···';
+								} else if (totalCount > 0) {
+									document.getElementById('daiqueren').innerText = totalCount;
+								} else {
+									document.getElementById('daiqueren').style.display = 'none';
+								}
+							}
+						}) */
+						
+						// 待审核
+					/* 	Util.ajax({
+							url: 'workorderManage/listWorkorderManage',
+							dataType: 'json',//服务器返回json格式数据
+							type:'post',//HTTP请求类型
+							data: {
+								woStatus: "CP",
+								projectId: localStorage.getItem("IPARK_APP_PROJECTID")
+							},
+							success: function(data){
+								var totalCount = data.totalElements;
+								if (totalCount > 99) {
+									document.getElementById('daishenhe').innerText = '···';
+								} else if (totalCount > 0) {
+									document.getElementById('daishenhe').innerText = totalCount;
+								} else {
+									document.getElementById('daishenhe').style.display = 'none';
+								}
+							}
+						}) */
+						// 消息
+						Util.ajax({
+							url: 'message/querInfoPage',
+							data: {
+								readFalge: "0",
+								projectId: localStorage.getItem("IPARK_APP_PROJECTID")
+							},
+							success: function(data){
+								var totalCount = data.totalElements;
+								if (totalCount > 99) {
+									document.getElementById('xiaoxi').innerText = '···';
+								} else if (totalCount > 0) {
+									document.getElementById('xiaoxi').innerText = totalCount;
+								} else {
+									document.getElementById('xiaoxi').style.display = 'none';
+								}
+							}
+						})
+					}
+					getRed();
+					setInterval(function () {
+						getRed();
+					}, 5000)
+
+					//projectId
+					var id = localStorage.getItem("IPARK_APP_PROJECTID");
+					drawWeather(id);
+					function drawWeather(id){
+						// 项目数据渲染
+						Util.ajax({
+							url:'/project/findById',
+							data:{id : id},
+							success: function(res){
+								//项目地址
+								jQuery('.today-weather .info-content .address span').text(res.projectAddr);
+								Util.ajax({
+                        			url:'/weatherForecast/selectByCityName',
+									data:{cityname:res.city},
+									success: function(res){
+        								var infoList = res.weatherInfoList,totalRain = 0;
+										jQuery('.today-weather .weather-img').attr('src','../images/weatherIcon/W'+infoList[0].iconDay+'.png');
+		   								jQuery('.name','.today-weather .info-content .info').text(infoList[0].condition);
+		   								jQuery('.tempNum','.today-weather .img-content').text(infoList[0].temp);
+		   								jQuery('.wet','.today-weather .info-content .info').text(infoList[0].humidity);
+		   								// jQuery('.wind','.today-weather .info-content .info').text(Util.formatWindDir(infoList[0].windDir)+'('+Util.formatWind(infoList[0].windlevel)+')');
+        								for(var i=1;i<infoList.length;i++){
+        									totalRain -= -(infoList[i].qpf);
+        								}
+        								if(totalRain > 0){
+        									var num = totalRain.toString().split(".")[0];
+        									var pointerNum = totalRain.toString().split(".")[1].substring(0,1);
+        									jQuery(".today-weather .tip span").text("未来24小时内，会有"+num+'.'+pointerNum+"mm降雨");
+        								}else{
+        									jQuery(".today-weather .tip span").text("未来24小时内无雨");
+        								}
+									}
+                            	});
+				            	Util.ajax({
+				        			url:'/weatherForecast/selectByCityNameManyDay',
+									data:{cityname:res.city},
+									success: function(res){
+				   						var list = res.weatherInfoList,
+				   						now = new Date().Format('yyyy-MM-dd'),
+				   						arrNum = 0;
+				   						jQuery('.temp-list').empty();
+				   						for(var i = 0;i < list.length;i++){
+				   							if(new Date(list[i].predictDate).getTime() > new Date(now).getTime()){
+				   								if(arrNum < 5){
+				   									var result = '<li>'+
+														'<span>'+(arrNum == 0 ? '明天' : new Date(list[i].predictDate).FormatWeek())+'</span><br/>'+
+														'<img src="../images/weatherIcon/W'+list[i].conditionIdDay+'.png"/><br/>'+
+														'<span>'+list[i].tempDay+'℃</span>'+
+													'</li>';
+				   									jQuery('.temp-list').append(result);
+				   									arrNum++;
+				   								}
+				   							}
+				   						}
+									}
+				            	})
+							}
+						});
+					}
+					Date.prototype.FormatWeek = function(){
+						var day = this.getDay(),result;
+						switch(day){
+							case 1:
+								result = "星期一";
+								break;
+							case 2:
+								result = "星期二";
+								break;
+							case 3:
+								result = "星期三";
+								break;
+							case 4:
+								result = "星期四";
+								break;
+							case 5:
+								result = "星期五";
+								break;
+							case 6:
+								result = "星期六";
+								break;
+							case 0:
+								result = "星期天";
+								break;
+						}
+						return result;
+					}
+					Date.prototype.Format = function (fmt) {
+						var o = {
+						"Y+": this.getFullYear(), // 年
+						"M+": this.getMonth() + 1, // 月份
+						"d+": this.getDate(), // 日
+						"h+": this.getHours(), // 小时
+						"m+": this.getMinutes(), // 分
+						"s+": this.getSeconds(), // 秒
+						"q+": Math.floor((this.getMonth() + 3) / 3), // 季度
+						"S": this.getMilliseconds() // 毫秒
+						};
+						if (/(y+)/.test(fmt))
+						fmt = fmt.replace(RegExp.$1, (this.getFullYear() + "").substr(4 - RegExp.$1.length));
+						for (var k in o) {
+							if (new RegExp("(" + k + ")").test(fmt)) {
+								fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
+							}
+						}
+						return fmt;
+				   }				
+				});
+				$.plusReady(function(){
+					var self = plus.webview.currentWebview();
+					// app当前版本
+					var currentVersion = plus.runtime.version;
+					plus.runtime.getProperty(plus.runtime.appid,function(inf){
+				        currentVersion = inf.version;
+				    });
+				    // 检查当前的版本信息
+				    checkVersion();
+				    // 首页返回键处理
+	                // 处理逻辑：1秒内，连续两次按返回键，则退出应用；
+	                var first = null;
+	                plus.key.addEventListener('backbutton', function() {
+	                    // 首次按键，提示‘再按一次退出应用’
+	                    if (!first) {
+	                        first = new Date().getTime();
+	                        mui.toast('再按一次退出应用');
+	                        setTimeout(function() {
+	                            first = null;
+	                        }, 1000);
+	                    } else {
+	                        if (new Date().getTime() - first < 1000) {
+	                            plus.runtime.quit();
+	                        }
+	                    }
+	                }, false);
+                
+					plus.navigator.setStatusBarStyle("light");
+                    projectId = localStorage.getItem("IPARK_APP_PROJECTID");
+					document.getElementsByClassName('mui-title')[0].innerHTML = localStorage.getItem("IPARK_APP_PROJECTNAME");
+
+					// 退出登录
+					$('body').on('tap','.ipark-logout',function(){
+						var btnArray = ['是', '否'];
+						mui.confirm('确认退出，确认？', null, btnArray, function(e) {
+							if (e.index == 0) {
+								var url = app.configures.URL+'/iPark/logout';
+								$.ajax(url,{
+									dataType:'json',// 服务器返回json格式数据
+									type:'get',// HTTP请求类型
+									timeout:10000,// 超时时间设置为10秒；
+									headers:{'Content-Type':'application/json'},	              
+									success:function(data){
+										//为啥还要调用一次？为了快速退出
+									    Util.ajax({
+											url:'/project/findById',
+											data:{id : projectId},
+											success: function(res){
+											}
+                                        });
+									},
+									error:function(xhr,type,errorThrown){
+										mui.toast("退出失败！");
+									}
+								});
+							}
+						});
+					});
+						//喷灌互动
+						$('body').on('tap','.gisation',function(){
+							$.openWindow({
+								url: './gisat.html',
+								id:'gisat'
+							});	
+						});
+						
+					// 点击返回项目列表按钮
+					$('body').on('tap','.manager-main',function(){
+						var view = plus.webview.getWebviewById("managerMainPage");
+						if(view){
+							setTimeout(function(){
+								$.openWindow({
+									url: './manager-main.html',
+									id:'managerMainPage'
+                                });
+                                self.close();
+							}, 300)
+						}else{
+							$.openWindow({
+							    url: './manager-main.html', 
+								id:'managerMainPage'
+							});
+						}
+					});
+						
+					
+				
+					/* 创建工单 */
+					$('body').on('tap','.sheet-add',function(){
+							$.openWindow({
+							    url: './addWorkOrder.html', 
+							    id:'addWorkOrder'
+							});
+						
+					});
+					/* 工单列表 */
+					$('body').on('tap','.sheet-query-list',function(){
+						/* $.openWindow({
+						    url: './orderlist.html', 
+						    id:'orderlist'  // confirmOrder
+						}); */
+							$.openWindow({
+							    url: './workOrderList.html', 
+							    id:'workOrderList'
+							});
+							window.localStorage.setItem("stat","2");	
+						
+					});
+					
+					$('body').on('tap','.sheet-edit-list',function(){
+						var view = plus.webview.getWebviewById("sheetEditList");
+						if(view){
+							mui.fire(view,"init");
+							setTimeout(function() {
+								view.show("slide-in-right", 300);
+							}, 150);
+						}else{
+							$.openWindow({
+							    url: './sheetEditList.html', 
+							    id:'sheetEditList'
+							});
+						}
+					});
+					//待分配
+					$('body').on('tap','.sheet-assign-list',function(){
+						$.openWindow({
+							    url: './workOrderList.html', 
+							    id:'workOrderList'
+							});
+						window.localStorage.setItem("stat","0");	//设置缓存改变进入的Tab页状态
+					});
+					//待确认
+					$('body').on('tap','.sheet-confirm-list',function(){
+						//alert("123423");
+						$.openWindow({
+							url: './workOrderList.html', 
+							id:'workOrderList'
+						});
+						window.localStorage.setItem("stat","1");
+					});
+					$('body').on('tap','.sheet-review-list',function(){
+							$.openWindow({
+							    url: './sheetReviewList.html', 
+							    id:'sheetReviewList'
+						    });
+					
+					});
+					// 提交日报
+					$('body').on('tap','.addDailyReport',function(){
+							$.openWindow({
+							    url: './dailySub.html', 
+							    id:'dailySub'
+						    });
+					});
+					// 提交月报
+					$('body').on('tap','.add-matter',function(){
+						monthList();
+						//window.localStorage.setItem("stats","2");//区别页面跳转的方式  在页面跳转
+						//获取上一个月的月份
+						function getMonth(){
+							 var date = new Date;
+							var year = (date.getFullYear()).toString();
+							var month = (date.getMonth()).toString();
+							month = month.length == 2 ? month : '0' + month;
+							var monthId = year + '-' + month
+							return monthId
+						}
+						function monthList(){//月报列表  
+							$.ajax({
+							    url:'http://ipark.bplusiot.com/iPark/APIs/monthly/getmonthlylist',
+							    type: 'get',
+							    data: {
+									 projectId:localStorage.getItem("IPARK_APP_PROJECTID"),
+									 month:getMonth()
+							    },
+							    dataType: "json",
+							    success: function (data) {
+									if(data.content[0].submission=="N"){
+										mui.openWindow({
+											url: './monthSub.html', 
+											id:'monthSub',
+											extras: {
+												monthId:data.content[0].monthlyId
+											} 
+										});
+									}else{
+									 mui.toast("月报已提交")
+									}
+							    },
+							    error: function (e) {
+							        console.log(JSON.stringify(e));
+							    }
+							});
+						}
+					});
+					// 重大事项
+					/* $('body').on('tap','.add-matter',function(){
+						var view = plus.webview.getWebviewById("add-matter");
+						if(view){
+							mui.fire(view,"resetPage");
+							setTimeout(function() {
+								view.show("slide-in-right", 300);
+							}, 150);
+						}else{
+							$.openWindow({
+							    url: './add-matter.html', 
+							    id:'add-matter'
+						    });
+						}
+					});
+					$('body').on('tap','.matterList',function(){
+						var view = plus.webview.getWebviewById("matterList");
+						if(view){
+							mui.fire(view,"resetPage");
+							setTimeout(function() {
+								view.show("slide-in-right", 300);
+							}, 150);
+						}else{
+							$.openWindow({
+							    url: './matterList.html', 
+							    id:'matterList'
+						    });
+						}
+					}); */
+					// 消息
+					$('body').on('tap','.message-noread',function(){
+						var view = plus.webview.getWebviewById("message-noread");
+						if(view){
+							mui.fire(view,"init");
+							setTimeout(function() {
+								view.show("slide-in-right", 300);
+							}, 150);
+						}else{
+							$.openWindow({
+							    url: './message-noread.html', 
+							    id:'message-noread'
+						    });
+						}
+					});
+					
+					$('body').on('tap','.message-read',function(){
+						var view = plus.webview.getWebviewById("message-read");
+						if(view){
+							mui.fire(view,"init");
+							setTimeout(function() {
+								view.show("slide-in-right", 300);
+							}, 150);
+						}else{
+							$.openWindow({
+							    url: './message-read.html', 
+							    id:'message-read'
+						    });
+						}
+					});
+					//查看日报
+					$('body').on('tap','.reportList',function(){
+							$.openWindow({
+							    url: './dayDetails.html', 
+							    id:'dayDetails'
+						    });
+						
+					});
+					//查看月报
+					$('body').on('tap','.reportList2',function(){
+							$.openWindow({
+							    url: './monthDetails.html', 
+							    id:'monthDetails'
+						    });
+						
+					});
+					
+					// 现场情况
+					$('body').on('tap','.gisPerson',function(){
+						var view = plus.webview.getWebviewById('gisPerson');
+						if(view){
+							mui.fire(view,"resetPage");
+							setTimeout(function() {
+								view.show("slide-in-right", 300);
+							}, 150);
+						}else{
+							$.openWindow({
+							    url: './gisPerson.html', 
+							    id:'gisPerson'
+						    });
+						}
+					});
+					/* 步数排名 */
+					/* $('body').on('tap','.footNumRank',function(){
+						var view = plus.webview.getWebviewById('xdzList');
+						if(view){
+							mui.fire(view,"resetPage");
+							setTimeout(function() {
+								view.show("slide-in-right", 300);
+							}, 150);
+						}else{
+							$.openWindow({
+							    url: './xdzList.html', 
+							    id:'xdzList'
+						    });
+						}
+					}); */
+					// 系统设置
+					$('body').on('tap','.nowVersion',function(){
+						var view = plus.webview.getWebviewById('nowVersion');
+						if(view){
+							mui.fire(view,"resetPage");
+							setTimeout(function() {
+								view.show("slide-in-right", 300);
+							}, 150);
+						}else{
+							$.openWindow({
+							    url: './nowVersion.html', 
+							    id:'nowVersion'
+						    });
+						}
+					});
+					
+					    // 判断是否是花海项目
+					// 智能喷灌
+					$('body').on('tap','.gisIrrigation',function(){
+                        // 判断是否是花海项目
+                        if (pageCode == '1') {
+                            var view = plus.webview.getWebviewById("gisIrrigationHH");
+                            if (view) {
+                                mui.fire(view,'resetPage');
+                                view.show();
+                            } else {
+                                $.openWindow({
+                                    url: './gisIrrigationHH.html', 
+                                    id:'gisIrrigationHH'
+                                });
+                            }
+                        } else {
+                            var view = plus.webview.getWebviewById("gisIrrigation");
+                            if (view) {
+                                mui.fire(view,'resetPage');
+                                view.show();
+                            } else {
+                                $.openWindow({
+                                    url: './gisIrrigation.html', 
+                                    id:'gisIrrigation'
+                                });
+                            }
+                        }
+					});
+
+                    // 智库
+					$('body').on('tap','.videoTeach',function(){
+						var view = plus.webview.getWebviewById("videoTeach");
+						if(view){
+							mui.fire(view,'resetPage');
+							view.show();
+						}else{
+							$.openWindow({
+							    url: './videoTeach.html', 
+							    id:'videoTeach'
+							});
+						}
+					});
+					
+					function checkVersion(){
+						var versionType = "ios";
+						if(mui.os.ios){//判断是否为IOS
+							versionType = "ios";
+						}else{
+							versionType = "android";
+						}
+						var versionUrl = app.configures.URL+'/iPark/APIs/app/checkVersion?type='+versionType;
+						$.ajax(versionUrl,{
+							dataType:'json',//服务器返回json格式数据
+							type:'get',//HTTP请求类型
+							timeout:10000,//超时时间设置为10秒；
+							headers:{'Content-Type':'application/json'},	              
+							success:function(data){
+                                //获取到app的版本信息
+								if(data && data.version){
+                                    version = data.version;
+                               }
+								if(currentVersion == version){
+									$('.si-red-circle-new')[0].style.display = "none";
+								} else{
+									$('.si-red-circle-new')[0].style.display = "block";
+								}
+							},
+							error:function(xhr,type,errorThrown){
+								mui.toast("网络异常，请稍后重试！");
+							}
+						});
+					}
+				});
+			}(mui, document));
+		</script>
+	</body>
+
+</html>

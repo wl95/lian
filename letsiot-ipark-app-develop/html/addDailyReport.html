@@ -1,0 +1,528 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>新建日报</title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<link href="../css/mui.min.css" rel="stylesheet" />
+		<link href="../css/mui.picker.min.css" rel="stylesheet" />
+		<link href="../fonts/iconfont/iconfont.css" rel="stylesheet" />
+		<link href="../css/ipark.css" rel="stylesheet" />
+		<link href="../css/four.css" rel="stylesheet" />
+		<style>
+			form.mui-input-group {
+			    font-size: 16px;
+			}
+			.mui-content {
+    			background-color: inherit;
+    		}
+			.mui-radio input[type=radio]{
+				display: none;
+			}
+			.mui-radio label{
+				padding:9px;
+				text-align: center;
+    			background: #fff;
+				line-height: 1;
+				width: 90px;
+				color:#282828;
+				border:1px solid #f0f0f0;
+				border-radius: 35px;
+			}
+			.mui-radio label.active{
+				border-color:#009e96;
+				background-color: #acefe6;
+			}
+			.mui-radio.mui-left input[type=radio] {
+				left: 0;
+			}
+			.mui-radio.mui-left label {
+				padding-left: 22px;
+			}
+			.mui-input-row .title-label {
+				width: 31%;
+				color: #262626;
+				font-size: 14px;
+			}
+			.mui-radio label.active{
+				border-color:#009e96;
+				background-color: #acefe6;
+			}
+			.mui-input-row .mui-col-sm-30t {
+				width: 30%;
+			}
+			.mui-input-row .mui-col-sm-35t {
+				width: 35%;
+			}
+			.mui-input-row .mui-col-sm-50t {
+				width: 50%;
+			}
+			.mui-input-row .mui-col-sm-20t {
+				width: 20%;
+			}
+			.mui-input-row .mui-col-sm-65t {
+				width: 65%;
+			}
+			.mui-input-row .mui-col-sm-70t {
+				width: 70%;
+			}
+			.mui-input-row .mui-col-sm-10t {
+				width: 10%;
+			}
+			.mui-input-row span {
+				line-height: 40px;
+			}
+			.mui-input-row span.form-full-span {
+				display: inline-block;
+			    height: 36px;
+			    width: 100%;
+			}
+			.mui-input-row .iot-unit-span {
+				margin-left: 5px;
+				display: inline-block;
+			}
+			.mui-input-row .mui-textarea {
+			    height: 120px;
+			    display: inline-block;
+			    color:#666;
+			    font-size: 14px;
+			}
+			.iot-submit-btn {
+			    padding: 10px 50px;
+			    font-size: 16px;
+			}
+			.mui-col-sm-textarea textarea{
+				background: #FAFAFA;
+			}
+			.icon-bg{
+				position: relative;
+				margin: 0 auto;
+				display: inline-block;
+				vertical-align: middle;
+				width: 1.4em;
+				height: 1.4em;
+				margin:-1px 6px 0px -4px;
+			}
+			.mui-btn-uni{
+				width: 60%;
+				font-size: 16px;
+				padding: 8px 35px;
+				border-radius: 100px;
+				color: white;
+				border: 1px solid #01D16D;
+				background: #01D16D;
+			}
+			.mui-btn-uni:enabled:active{
+				background: #01d195;
+				border: 1px solid #01d195;
+			}
+			.mui-span-number{
+				min-width: 55px;
+				margin-right: 5px;
+				display: inline-block;
+				text-align: right;
+			}
+			.mui-span-tip{
+				margin-top: 4px;
+				color: #009E96;
+				float: right;
+			}
+			.mui-bill-list input {
+			    line-height: 40px;
+			    width: 55px;
+			    padding: 0;
+			}
+			.mui-bill-list li{
+				position: relative;
+				list-style: none;
+			}
+			.delBill{
+				position: absolute;
+				right: -20px;
+				top: 14px;
+				vertical-align: text-bottom;
+				width: 18px;
+			}
+			.mui-input-row  .sheetText{font-size: 15px;color:#666;}
+			.mui-navigate-right:after, .mui-push-right:after {
+			    right: 0px;
+			}
+			.mui-row.mui-input-row {
+				padding: 0 15px;
+			}
+			.si-label {
+				width: 120px!important;
+			}
+			.mui-input-group .mui-input-row {
+				height: auto;
+			}
+			.mui-input-row .textnum-tip {
+				font-size: 13px;
+				color: #9E9E9E;
+				line-height: 1;
+				height: 25px;
+				text-align: right;
+				clear: both;
+			}
+			.mui-input-row .textnum.error{
+				color:#F17368;
+			}
+			.mui-textarea {
+				padding: 0!important;
+			}
+			.mui-input-group .mui-input-row {
+				margin-bottom: 0;
+			}
+			#chooseBillType {
+				width: auto;
+				float: right;
+				margin-right: 26px;
+			}
+			#billText {
+				color: #9E9E9E;
+			}
+			.mui-navigate-right:after, .mui-push-right:after {
+				margin-right: -20px;
+				top: 26px;
+				color: #9E9E9E;
+			}
+		</style>
+	</head>
+
+	<body>
+		<header class="mui-bar mui-bar-nav">
+			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+			<h1 class="mui-title">新建日报</h1>
+		</header>
+		<div class="mui-content">
+			<div class="mui-content-padded" style="margin: 0;">
+				<form class="mui-input-group" onsubmit="return false;">
+					<div class="mui-row mui-input-row si-first-line">
+						<div>
+							<div class="mui-radio mui-left reportDay">
+								<label class="active si-label" id="normalSheetLabel">提交今日</label>
+								<input name="type" type="radio" value="1" />
+							</div>
+				        </div>
+						<div>
+							<div class="mui-radio mui-left reportDay" style="margin-right: 36px;">
+								<label class="si-label" id="disnormalSheetLabel">补填昨日</label>
+								<input name="type" type="radio" value="2" class="sheetText" />
+							</div>
+                        </div>
+					</div>
+					<div class="mui-row mui-input-row">
+						<label class="title-label">
+							<span class="iconfont iconmoney ico-left"></span>结算<span class="iconfont important">&#xe677;</span>
+						</label>
+						<div class="mui-col-sm-65t mui-col-xs-12 sheetText">
+							<span id="peopleBill" class="mui-span-number sheetText">0</span>元<span class="mui-span-tip">人工费</span><br/>
+							<div class="mui-bill-list">
+								<!--<input class="mui-span-number" value="0">元<span class="mui-span-tip">(人工费)</span><br/>-->
+							</div>
+				      </div>
+					</div>
+					<div class="mui-row mui-input-row" style="border-top: 1px solid #F5F5F5; border-bottom: 1px solid #F5F5F5">
+						<label class="title-label">
+							<span class="iconfont iconsun ico-left"></span>总计
+						</label>
+						<div class="mui-col-sm-65t mui-col-xs-12 sheetText">
+							<span id="totalBill" class="mui-span-number sheetText">0</span>元<span class="mui-span-tip">当日预算：<span id="budget" class="sheetText">0</span>元</span>
+						</div>
+					</div>
+					<div class="mui-row mui-input-row" style="overflow: hidden">
+						<div class="mui-col-sm-65t mui-col-xs-12" id='chooseBillType'>
+							<input type="hidden" name="actionValue" />
+							<span class="mui-navigate-right sheetText" id="billText">
+								新增费用
+							</span> 
+				      	</div>
+					</div>
+					<div class="mui-row mui-input-row" style="margin-top: 10px;">
+						<label class="title-label">
+							<span class="iconfont iconnote1 ico-left"></span>日报<span class="iconfont important">&#xe677;</span>
+						</label>
+						<div class="mui-col-sm-70t mui-col-xs-12 sheetText si-sjb-textarea">
+							<textarea class="mui-textarea" name="remark" rows="10" maxlength="250" placeholder="请输入日报（不超过250个字）"></textarea>
+							<p class="textnum-tip"><span class="textnum">0</span>/250</p>
+						  </div>
+					</div>
+				</form>
+			</div>			
+			<div class="mui-row mui-button-row" style="margin-top: 20px;">
+				<button type="button" class="mui-btn mui-btn-primary unactive newBtn" id="submitBtn" onclick="return false">提 交</button>
+			</div>
+		</div>
+		<script type="text/javascript" src="../js/jquery-1.8.0.min.js"></script>
+		<script src="../js/mui.min.js"></script>
+		<script src="../js/mui.picker.min.js"></script>
+		<script src="../js/util.js"></script>
+		<script type="text/javascript">
+			(function($, doc) {
+				$.init();
+				window.addEventListener('resetPage',function(event){
+					plus.webview.currentWebview().reload();
+				});
+				$.ready(function(){
+					//对textarea绑定输入文字长度检查
+					jQuery("[name='remark']").on("input",function(){
+						var number = jQuery(this).val().length;
+						if(number == 250){
+							jQuery('.textnum-tip .textnum').addClass('error').text(number);
+						}else{
+							jQuery('.textnum-tip .textnum').removeClass('error').text(number);
+						}
+					})
+					Util.ajax({
+						url: 'guideDay/querDayAll',
+						data: {
+							page: 0,
+							size: 2,
+							projectId: localStorage.getItem("IPARK_APP_PROJECTID")
+						},
+						success: function(data){
+							var content = data.content;
+							var nowDate = new Date(Date.parse(new Date()) - 86400000);
+							var year = nowDate.getFullYear();
+							var month = nowDate.getMonth() + 1;
+							var date = nowDate.getDate();
+							if (month < 10) {
+								month = '0' + month;
+							}
+							if (date < 10) {
+								date = '0' + date;
+							}
+							var str = year + '-' + month + '-'  + date;
+                            var flag = false;
+                            if (content) {
+                                for (var i = 0; i < content.length; i++) {
+                                    if (content[i].day == str) {
+                                        flag = true;
+                                    }
+                                }
+                            }
+							if (flag) {
+								jQuery('.si-first-line').hide();
+							} else {
+								jQuery('.si-first-line').show();
+							}
+						},
+					});
+				})
+				$.plusReady(function(){
+					var projectId = localStorage.getItem("IPARK_APP_PROJECTID");
+					//定义费用项目列表
+					var temp_details = [];
+					//默认选择今日
+					$('input[name="type"]')[0].checked = true;
+					//获取当天的预算
+					getDayBudget();
+					//获取新增费用下拉列表
+					getCostItemList();
+					//日期选择切换时更新当天预算
+					jQuery("[name='type']").on('change', function(event) {
+						getDayBudget();
+					});
+					
+					//提交按钮绑定事件
+					document.getElementById('submitBtn').addEventListener('tap', function(event) {
+						var content = $("[name='remark']")[0].value;
+                    	if(!(content && content.length > 0)){
+                    		$.alert('日报内容不能为空');
+                    		return;
+                    	}
+						var btnArray = ['否', '是'];
+		                mui.confirm('项目日报提交后将无法修改，是否确认提交？', '提示', btnArray, function(e) {
+							var submitDOM = document.getElementById('submitBtn');
+							submitDOM.disabled = true;
+		                    if (e.index == 1) {
+		                    	var url = 'guideDay/addDailyPlan';
+		                    	var details = temp_details;
+		                    	var dayCost = jQuery('#totalBill').text();
+		                    	var dayBudget = jQuery('#budget').text();
+		                    	var day = jQuery("[name='type']:checked").val();
+		                    	jQuery('.mui-new-bill','.mui-bill-list').each(function(){
+									var id = jQuery(this).attr('id');
+									var cost = jQuery(this).val();
+									if('' == cost){
+										cost = 0;
+									}
+									details.push({itemId:id,cost:cost});
+								});
+								//console.log(JSON.stringify(details));
+								var param = {
+									'projectId': projectId,
+			                        'day': day,
+			                    	'content': content,
+			                    	'dayCost': dayCost,
+			                    	'dayBudget': dayBudget,
+			                    	'details': details
+								};
+								
+								Util.ajax({
+									url: url,
+									type: 'post',
+									data: param,
+									success: function(data){
+										$.openWindow({
+										    url: './actionResult.html', 
+										    id:'actionResult',
+										    extras:{
+										    	actionId: '9'
+										    }
+										});
+									}
+								});
+		                    } else {
+								submitDOM.disabled = false;
+							}
+		                })
+					});
+					
+					//获取当天的预算
+					function getDayBudget(){
+						var day = jQuery("[name='type']:checked").val();
+						Util.ajax({
+							url: 'guideDay/getDayBudget',
+							type:'get',
+							data:{
+								'projectId':projectId,
+								'day':day
+							},
+							success: function(data){
+								//下拉选择
+								var dailyBudget = data.dailyBudget;
+								var estimateLabor = data.estimateLabor;
+								var personAveragePrice = data.personAveragePrice;
+								jQuery('#budget').text(dailyBudget);
+								jQuery('#peopleBill').text(estimateLabor*personAveragePrice);
+								jQuery('#totalBill').text(estimateLabor*personAveragePrice);
+								temp_details = [];//初始化itemList
+								temp_details.push({itemId:'1',cost:estimateLabor*personAveragePrice});
+								//清空新增的当日结算
+								jQuery('.mui-bill-list').empty();
+							}
+						});
+					}
+					
+					//获取费用项列表
+					function getCostItemList(){
+						Util.ajax({
+							url: 'costItem/all',
+							data:{size:100},
+							type:'get',
+							success:function(data){
+								var actionData = [], userPicker = new $.PopPicker();
+								for (var i = 0,len = data.content.length;i<len;i++) {
+									actionData.push({
+										value: data.content[i].id,
+										text: data.content[i].name
+									});
+								}
+								userPicker.setData(actionData);
+								document.getElementById('chooseBillType').addEventListener('tap', function(event) {
+									userPicker.show(function(items) {
+										var itemId = items[0].value;
+										var itemName = items[0].text;
+										var isRepeat = false;
+										//校验当前是否存在该费用
+										if(itemId != '1'){
+											jQuery('.mui-new-bill','.mui-bill-list').each(function(){
+												var id = jQuery(this).attr('id');
+												//判断新增的费用是否已经存在
+												if(itemId == id){
+													mui.toast('已存在'+itemName);
+													isRepeat = true;
+												}
+											});
+											
+										}else{
+											mui.toast('已存在人工费');
+											isRepeat = true;
+										}
+										if(!isRepeat){
+											jQuery(".mui-bill-list").append('<li><input type="text" id="'+items[0].value+'" class="mui-span-number mui-new-bill" value="0">元<span class="mui-span-tip">'+items[0].text+'</span><img class="delBill" src="../images/del.png"></li>');
+											jQuery('.mui-new-bill','.mui-bill-list').off();
+											jQuery('.mui-new-bill','.mui-bill-list').on('input',function(){
+												var val = jQuery(this).val();
+								                var reg = /^[0-9]+([.]{1}[0-9]{0,2}){0,1}$/;
+								                if (!reg.test(val)){
+								                	jQuery(this).val('');
+								                    mui.toast('请输入正确的费用数值,精确到小数点后两位');
+								                }
+								                randerPage();
+
+											});
+											jQuery('.delBill','.mui-bill-list').off();
+											jQuery('.delBill','.mui-bill-list').on('click',function(){
+												jQuery(this).parent('li').remove();
+												randerPage();
+											});
+										}
+									});
+								}, false);
+							}
+						});
+					}
+					
+					//选择新增费用时，进行渲染界面与存储数据
+					function randerPage(){
+						var totalBill = parseFloat(jQuery('#peopleBill').text());
+	                	jQuery('.mui-new-bill','.mui-bill-list').each(function(){
+	                		var bill = jQuery(this).val();
+	                		if('' == bill){
+	                			bill = 0 ;
+	                		}
+	                		totalBill = add(totalBill,parseFloat(bill));
+	                	})
+	                	
+						jQuery('#totalBill').text(totalBill);
+					}
+					
+					//优化js浮点数算法
+					function add(a, b) {
+					    var c, d, e;
+					    try {
+					        c = a.toString().split(".")[1].length;
+					    } catch (f) {
+					        c = 0;
+					    }
+					    try {
+					        d = b.toString().split(".")[1].length;
+					    } catch (f) {
+					        d = 0;
+					    }
+					    return e = Math.pow(10, Math.max(c, d)), (mul(a, e) + mul(b, e)) / e;
+					}
+					
+					function mul(a, b) {
+					    var c = 0,
+					        d = a.toString(),
+					        e = b.toString();
+					    try {
+					        c += d.split(".")[1].length;
+					    } catch (f) {}
+					    try {
+					        c += e.split(".")[1].length;
+					    } catch (f) {}
+					    return Number(d.replace(".", "")) * Number(e.replace(".", "")) / Math.pow(10, c);
+					}
+					
+				});
+				$('.mui-input-row').on('change', 'input[name="type"]',function() {
+					if('1'==this.getAttribute("value")){
+						type = '1';
+						jQuery("#normalSheetLabel").addClass('active');
+						jQuery("#disnormalSheetLabel").removeClass('active');
+
+					}else{
+						type = '2';
+						jQuery("#normalSheetLabel").removeClass('active');
+						jQuery("#disnormalSheetLabel").addClass('active');
+					}
+				}) 
+			})(mui, document);
+		</script>
+	</body>
+</html>

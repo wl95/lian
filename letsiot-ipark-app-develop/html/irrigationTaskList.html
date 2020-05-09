@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>计划列表</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <link rel="stylesheet" href="../css/mui.min.css">
+    <link rel="stylesheet" href="../css/ipark.css">
+    <style>
+        .nextPlanContainer {
+            font-size: 14px;
+            position: fixed;
+            /* top: 78px; */
+            padding-top: 15px;
+            width: 100%;
+            height: 60px;
+            background-color: #e6f1f2;
+            color: #009E96;
+        }
+
+        .nextPlan {
+            width: 100%;
+            height: 60px;
+            background-color: #fff;
+        }
+
+        .left {
+            width: 30%;
+            height: 66px;
+            margin-top: -3px;
+            background-color: #AFDE82;
+            line-height: 66px;
+            text-align: center;
+            color: #fff;
+            float: left;
+        }
+
+        .left-number {
+            font-size: 30px;
+        }
+
+        .right {
+            float: left;
+            line-height: 30px;
+            padding-left: 20px;
+            width: 170px;
+        }
+
+        .nextPlanName {
+            display: block;
+            color: #282828;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        #mySwitch {
+            float: right;
+            margin: 19px;
+        }
+
+        .mui-switch-mini {
+            width: 39px;
+            height: 23px;
+        }
+
+        .mui-switch .mui-switch-handle {
+            width: 20px;
+            height: 20px;
+        }
+
+        .mui-switch {
+            border: 2px solid rgba(43, 215, 206, 1);
+        }
+
+        .mui-switch.mui-active {
+            border-color: rgba(43, 215, 206, 1);
+            background-color: rgba(43, 215, 206, 1);
+        }
+    </style>
+</head>
+
+<body>
+    <header class="mui-bar mui-bar-nav">
+        <a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+        <h1 id="title" class="mui-title">计划列表</h1>
+    </header>
+    <div class="mui-content">
+        <div class="nextPlanContainer">
+            <div class="nextPlan">
+                <div class="left"><span class="left-number">--</span>小时后</div>
+                <div class="right">
+                    <div style="overflow: hidden;"><span style="float: left;">待执行：</span><span class="nextPlanName">--</span></div>
+                    <div>开启<span class="nextPlanDuration">--</span>分钟</div>
+                </div>
+                <div class="mui-switch mui-switch-mini" id="mySwitch">
+                    <div class="mui-switch-handle"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="../js/mui.min.js"></script>
+    <script src="../js/util.js"></script>
+    <script src="../js/jquery-1.8.0.min.js"></script>
+    <script>
+        mui.plusReady(function () {
+            var deviceId = plus.webview.currentWebview().deviceId;
+            var deviceName = plus.webview.currentWebview().deviceName;
+            var str = '计划列表（阀门：' + deviceName + '）';
+            $('#title').text(str);
+            Util.ajax({
+                url: '/idim/plan/getlatestvalveplan/v1',
+                data: {
+                    deviceId: deviceId
+                },
+                success: function(data){
+                    if (data) {
+                        $('.nextPlanName').text(data.name);
+                        $('.nextPlanDuration').text(data.keep);
+                        if (data.nextExecute) {
+                            var nowTime = Date.parse(new Date());
+                            var nextExecute = Date.parse(new Date(fmDate(data.nextExecute)));
+                            $('.left-number').text(Math.round((nextExecute - nowTime) / 1000 / 60 / 60));
+                        }
+                        if (data.tmpstatus == 'C') {
+                            $('#mySwitch').removeClass('mui-active');
+                            $('.mui-switch-handle').attr('style', '');
+                            $('.left').css({
+                                background: '#9E9E9E'
+                            })
+                        } else if (data.tmpstatus == 'O'){
+                            $('#mySwitch').addClass('mui-active');
+                            $('.mui-switch-handle').attr('style', 'transition-duration: 0.2s; transform: translate(16px, 0px);');
+                            $('.left').css({
+                                background: '#AFDE82'
+                            })
+                        }
+                        mui.init({
+                            gestureConfig: {
+                                doubletap: true
+                            },
+                            subpages: [{
+                                url: 'irrigationTaskList_sub.html',
+                                id: 'irrigationTaskList_sub',
+                                styles: {
+                                    top: '154px',
+                                    bottom: '0px',
+                                },
+                                extras: {
+                                    deviceId: deviceId
+                                }
+                            }]
+                        });
+                    } else {
+                        $('.nextPlanContainer').css({
+                            display: 'none'
+                        })
+                        mui.init({
+                            gestureConfig: {
+                                doubletap: true
+                            },
+                            subpages: [{
+                                url: 'irrigationTaskList_sub.html',
+                                id: 'irrigationTaskList_sub',
+                                styles: {
+                                    top: '64px',
+                                    bottom: '0px',
+                                },
+                                extras: {
+                                    deviceId: deviceId
+                                }
+                            }]
+                        });
+                    }
+                }
+            })
+            
+            var contentWebview = null;
+            document.querySelector('header').addEventListener('doubletap', function () {
+                if (contentWebview == null) {
+                    contentWebview = plus.webview.currentWebview().children()[0];
+                }
+                contentWebview.evalJS("mui('#pullrefresh').pullRefresh().scrollTo(0,0,100)");
+            });
+            $('#mySwitch')[0].addEventListener("toggle", function (event) {
+                if (event.detail.isActive) {
+                    openPlan(true);
+                } else {
+                    openPlan(false);
+                }
+            })
+            function openPlan(flag) {
+                Util.ajax({
+                    url: '/idim/plan/deallatestvalveplan/v1',
+                    data: {
+                        deviceId: deviceId
+                    },
+                    success: function (data) {
+                        if (flag) {
+                            mui.toast('开启成功');
+                            $('.left').css({
+                                background: '#AFDE82'
+                            })
+                        } else {
+                            mui.toast('关闭成功');
+                            $('.left').css({
+                                background: '#9E9E9E'
+                            })
+                        }
+                        // $('#mySwitch').addClass('mui-active');
+                        // $('.mui-switch-handle').attr('style', 'transition-duration: 0.2s; transform: translate(16px, 0px);');
+                    },
+                    error: function () {
+                        if (flag) {
+                            mui.toast('开启失败');
+                            $('#mySwitch').removeClass('mui-active');
+                            $('.mui-switch-handle').attr('style', '');
+                        } else {
+                            mui.toast('关闭失败');
+                            $('#mySwitch').addClass('mui-active');
+                            $('.mui-switch-handle').attr('style', 'transition-duration: 0.2s; transform: translate(16px, 0px);');
+                        }
+                    }
+                })
+            }
+
+            // 时间格式化方法
+            function addZero(num) {
+                if (num * 1 < 10) {
+                    num = '0' + num
+                }
+                return num;
+            }
+
+            function fmDate(str) {
+                return str.replace(/-/g, '/');
+            }
+        });
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,323 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>GIS地图</title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<link href="../css/mui.min.css" rel="stylesheet" />
+		<link href="../css/mui.picker.min.css" rel="stylesheet" />
+		<link href="../fonts/iconfont/iconfont.css" rel="stylesheet" />
+		<link href="../fonts/iconfont20190415/iconfont.css" rel="stylesheet" />
+		<link href="../css/ipark.css" rel="stylesheet" />
+		<style>
+			html,body{
+				height: 100%;
+			}
+			p{
+				margin-bottom: 0;
+			}
+			form.mui-input-group {
+				padding: 15px 0 10px 0;
+			    font-size: 16px;
+			}
+			.mapContent {
+				height: 100%;
+    			background-color: inherit;
+    		}
+    		.mui-tab-style{
+    			width:50px;	
+			    position: absolute;
+			    top: 80px;
+			    right: 20px;
+			    text-align: center;
+			    background: rgba(255,255,255,0.9);
+    			border-radius: 4px;
+    			box-shadow: 0px 0px 4px 0px rgba(0, 0, 0, 0.3);
+    		}
+    		.sensor-name{
+    			margin: 10px 0;
+    		}
+    		.mui-tab-style p{
+    			margin-top: 5px;
+    			font-size: 11px;
+    			line-height: 11px;
+    		}
+    		.mui-tab-style img{
+    			display: block;
+    			margin: 0 auto;
+    		}
+    		.showAllInfo{
+    			display: none;
+    			border-bottom: 1px solid #EFEFEF;
+    			color: #009E96;
+    		}
+    		.showAllInfo p{
+    			color: #009E96;
+    		}
+    		.turn-right{
+    			font-size: 12px;
+    			display: block;
+    			transform: rotate(90deg);
+    		}
+    		.charts-area{
+    			bottom: 0;
+    			height: 180px;
+			    position: absolute;
+			    margin: 0 10px 10px;
+			    border-radius: 4px;
+			    width: calc(100% - 20px);
+			    background: rgba(255,255,255,0.9);
+    		}
+    		.charts-area .chartContent{
+    			width: 100%;
+    			height: 180px;
+    			display: none;
+    		}
+    		.charts-area .active.chartContent{
+    			display: block;
+    		}
+    		.unactive{
+    			/*opacity: 0.4;*/
+    		}
+    		.sensor-info{
+    			width: 33.3%;
+    			float: left;
+    			padding: 0 8px;
+    			margin-bottom: 15px;
+    		}
+    		.left-info{
+    			color: #FFC86C;
+    			font-size: 20px;
+    			vertical-align: super;
+    			display: inline-block;
+    		}
+    		.right-info{
+    			display: inline-block;
+    		}
+    		.right-info .info-title{
+    			color: #9E9E9E;
+    			font-size: 12px;
+    		}
+    		.right-info .info-num{
+    			color: #585858;
+    			font-size: 15px;
+    		}
+    		.right-info .info-unit{
+    			font-size: 12px;
+    		}
+    		#chart-weather,#chart-others{
+    			display: none;
+    		}
+    		.mapWin{
+    			position: relative;
+    		}
+    		.mapWin label{
+    			color:#9E9E9E;
+    		}
+    		.mapWin .label-row{
+    			font-size: 12px;
+    			line-height: 3;
+    			border-bottom: 1px solid #EFEFEF;
+    			color: #585858;
+    		}
+    		.mapWin .sensor-info{
+    			padding: 10px;
+    		}
+    		.mapWin .iconfont{
+    			margin-right: 5px;
+    		}
+    		.mapWin .sensor-info:nth-child(1){
+    			border-right: 1px solid #EFEFEF;
+    		}
+    		.mapWin .copy{
+    			display: inline-block;
+    			width: 130px;
+    		}
+    		.mapWin .copyword{
+    			color: #009E96;
+    		}
+    		.mapWin .no-border{
+    			border: 0;
+    		}
+    		.turn-up{
+    			transform: rotate(-90deg);
+    			display: inline-block;
+    		}
+    		.charts-btn{
+    			bottom: 0;
+    			height: 40px;
+    			line-height: 40px;
+    			color: #009E96;
+    			display: none;
+    			text-align: center;
+			    position: absolute;
+			    margin: 0 10px 0px;
+			    border-radius: 4px;
+			    width: calc(100% - 20px);
+			    background: rgba(255,255,255,0.9);
+    		}
+    		.specical-call{
+  				bottom: -17px;
+    			right: 60px;
+    			position: absolute;
+    			color:#009E96;
+    			font-size: 24px;
+    		}
+    		.live-video-area{
+    			display: none;
+    			width: 100%;
+    			height: 230px;
+    			position: absolute;
+    			left: 0;
+    			bottom: 0;
+    		}
+    		.live-video-area video{
+    			width:100%;
+    			height: 100%;
+    		}
+    		.videoOption,
+    		.chartOption{
+    			width:40px;
+    			height:40px;
+    			position:absolute;
+    			top:85px;
+    			right:15px;
+    			z-index: 9999;
+    		}
+    		.chartOption{
+    			top:70px;
+    		}
+    		.totalContent{
+    			position: absolute;
+    			height: 40px;
+    			margin: auto;
+    			text-align: center;
+    			top:0;left:0;right:0;bottom: 0;
+    		}
+    		.totalContent .totalTitle{
+    			color:#9e9e9e;
+    			font-size: 14px;
+    		}
+    		.totalContent .totalNumber{
+    			color:#585858;
+    			font-size: 14px;
+    		}
+		</style>
+	</head>
+
+	<body>
+		<header class="mui-bar mui-bar-nav">
+			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+			<h1 class="mui-title">直通现场</h1>
+		</header>
+		<div id='backdrop'></div>
+		<div class="mapContent" id="mapContainer"></div>
+		<!-- 右边栏切换tab -->
+		<div class="mui-tab mui-row mui-tab-style">
+			<div class="showAllInfo">
+				<p style="line-height: 40px;height:40px;margin-top: 0px;">全景</p>
+			</div>
+			<div class="sensor-name" data-type="worker">
+				<img src="../images/icon/icon_worker.png" style="width: 28px;height: 28px;"/>
+				<p>人员</p>
+			</div>
+			<div class="sensor-name" data-type="trash">
+				<img src="../images/icon/icon_trash.png" style="width: 28px;height: 28px;"/>
+				<p>垃圾箱</p>
+			</div>
+			<div class="sensor-name" data-type="soil">
+				<img src="../images/icon/icon_sensor.png" style="width: 28px;height: 28px;"/>
+				<p>土壤</p>
+			</div>
+			<div class="sensor-name" data-type="weather">
+				<img src="../images/icon/icon_weather.png" style="width: 28px;height: 28px;"/>
+				<p>气象</p>
+			</div>
+			<div class="sensor-name" data-type="smoke">
+				<img src="../images/icon/icon_smoke.png" style="width: 28px;height: 28px;"/>
+				<p>烟感</p>
+			</div>
+			<div class="sensor-name" data-type="cam">
+				<img src="../images/icon/icon_cam.png" style="width: 28px;height: 28px;"/>
+				<p>摄像头</p>
+			</div>
+		</div>
+		<!-- 底部echarts -->
+		<div class="mui-row charts-area" id="chart-others">
+			<div id="chart-worker" class="chartContent"></div>
+			<div id="chart-rubbish" class="chartContent"></div>
+			<div id="chart-smoke" class="chartContent"></div>
+			<p class="totalContent">
+				<span class="totalTitle">人员</span><br/>
+				<span class="totalNumber"></span>
+			</p>
+			<img src="../images/icon/close.png" class="chartOption" id="chartOption"/>
+		</div>
+		<div class="mui-row charts-btn" id="chart-btn">
+			<span class="iconfont turn-up">&#xe68a;</span>
+		</div>
+		<div class="mui-row live-video-area" id="liveVideo">
+			<video id="myPlayer" class="video-style" controls  autoplay></video>
+			<img src="../images/icon/close.png" class="videoOption" id="videoOption"/>
+		</div>
+		<!-- 气象站图表 -->
+		<div class="mui-row charts-area" id="chart-weather" style="height: 130px;padding-top: 15px;">
+			<!--湿度-->
+			<div class="sensor-info">
+				<span class="left-info iconfont">&#xe6aa;</span>
+				<div class="right-info">
+					<p class="info-title">空气湿度</p>
+					<p class="info-num"><span class="weatherhumidity"></span><span class="info-unit">%</span></p>
+				</div>
+			</div>
+			<!--气压-->
+			<div class="sensor-info">
+				<span class="left-info iconfont">&#xe6b1;</span>
+				<div class="right-info">
+					<p class="info-title">气压</p>
+					<p class="info-num"><span class="pressure"></span><span class="info-unit">hpa</span></p>
+				</div>
+			</div>
+			<!--风速-->
+			<div class="sensor-info">
+				<span class="left-info iconfont">&#xe6ac;</span>
+				<div class="right-info">
+					<p class="info-title">风速</p>
+					<p class="info-num"><span class="windspeed"></span><span class="info-unit">m/s</span></p>
+				</div>
+			</div>
+			<!--空气温度-->
+			<div class="sensor-info">
+				<span class="left-info iconfont">&#xe6ad;</span>
+				<div class="right-info">
+					<p class="info-title">空气温度</p>
+					<p class="info-num"><span class="weathertmperature"></span><span class="info-unit">℃</span></p>
+				</div>
+			</div>
+			<!--降雨量-->
+			<div class="sensor-info">
+				<span class="left-info iconfont">&#xe6b0;</span>
+				<div class="right-info">
+					<p class="info-title">降雨量</p>
+					<p class="info-num"><span class="rainfall"></span><span class="info-unit">mm</span></p>
+				</div>
+			</div>
+			<!--风向-->
+			<div class="sensor-info">
+				<span class="left-info iconfont">&#xe6b3;</span>
+				<div class="right-info">
+					<p class="info-title">风向</p>
+					<p class="info-num winddirection">偏北</p>
+				</div>
+			</div>
+		</div>
+		<script type="text/javascript" src="../js/jquery-1.8.0.min.js"></script>
+		<script src="../js/mui.min.js"></script>
+		<script src="../js/mui.picker.min.js"></script>
+		<script src="../js/util.js"></script>
+		<script src="http://api.map.baidu.com/getscript?v=2.0&ak=A876b671f8466a2b8bcfbc202fe4bc73&services=&t=20190528152545"></script>
+		<script src="../js/GeoUtils_min.js"></script>
+		<script src="https://cdn.bootcss.com/echarts/4.2.1-rc1/echarts.min.js"></script>
+		<script src="../js/gisFunction.js"></script>
+	</body>
+</html>

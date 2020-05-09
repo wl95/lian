@@ -1,0 +1,332 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>反馈工单</title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<link href="../css/mui.min.css" rel="stylesheet" />
+		<link href="../css/mui.picker.min.css" rel="stylesheet" />
+		<link href="../fonts/iconfont/iconfont.css" rel="stylesheet" />
+		<link href="../css/ipark.css" rel="stylesheet" />
+		<style>
+			html,body {
+				height: 100%;
+			}
+			.mui-input-group .mui-input-row {
+				height: auto;
+				padding: 0 15px;
+				margin-bottom: 0px;
+			}
+			.mui-input-row span {
+				line-height: 50px;
+			}
+			.mui-button-row{padding-bottom: 20px;}
+			.mui-img-list > a{
+				width: 60px;
+				height: 60px;
+				float: left;
+				margin: 10px 10px 10px 0;
+			}
+			.mui-img-list img{
+				display: inline-block;
+				width:100%;
+				height:100%;
+			}
+			.sheetType>p{font-size: 16px;color:#4D4D4D}
+			#remark{width: 200px;display: inline-block;word-wrap: break-word;line-height: 20px;margin-top:6px;}
+			.iconfont.icon-space{
+				color:#686868;
+				vertical-align: middle;
+				padding-left: 0px;
+				padding-right: 6px;
+			}
+			.mui-content .sheetText.onlyRead{
+				color:#282828;
+			}
+			.mui-input-group .mui-input-row:nth-last-child(3),
+			.mui-input-group .mui-input-row:nth-last-child(1){
+				margin-top: 10px;
+			}
+			.mui-input-row .mui-textarea{
+		    	color:#282828;
+		    	padding: 0;
+			    height: 120px;
+			    display: inline-block;
+			    margin: 10px 0px 0px;
+			    font-size: 13px;
+			    float: left;
+			}
+			.mui-input-row .textnum-tip{
+				font-size: 13px;
+			    color: #9E9E9E;
+			    line-height: 25px;
+			    height: 25px;
+			    text-align: right;
+			    clear: both;
+			    margin-bottom: 20px;
+			}
+			.mui-input-row .textnum.error{
+				color:#F17368;
+			}
+			#callPhone{
+				position: absolute;
+				color:#009E96;
+				font-size:22px;
+				right: 0;
+			}
+			.writeOption{
+				color:#009E96 !important;
+			}
+		</style>
+	</head>
+
+	<body>
+		
+		<header class="mui-bar mui-bar-nav">
+			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+			<h1 class="mui-title">审核工单</h1>
+		</header>
+		<div class="mui-content my-sheet">
+			<div id='backdrop'></div>
+			<div class="mui-content-padded" style="margin: 0;">
+				<form class="mui-input-group" onsubmit="return false;">
+					<div class="mui-row mui-input-row">
+						<div class="mui-row split-line">
+							<label class="title-label form_type"><span class="iconfont icon-space">&#xe67b;</span>类型</label>
+							<div class="mui-col-sm-70t mui-col-xs-12 sheetText onlyRead">
+								<span id="sheetType"></span>
+					      	</div>
+					    </div>
+					</div>
+					<div class="mui-row mui-input-row">
+						<div class="mui-row split-line">
+							<label class="title-label form_time"><span class="iconfont icon-space">&#xe66d;</span>截止</label>
+							<div class="mui-col-sm-20t mui-col-xs-12 sheetText onlyRead">
+								<span id='endTime'><span>
+					      	</div>
+					    </div>
+					</div>
+					<div class="mui-row mui-input-row">
+						<div class="mui-row split-line">
+							<label class="title-label form_area"><span class="iconfont icon-space">&#xe665;</span>区域</label>
+							<div class="mui-col-sm-70t mui-col-xs-12 sheetText onlyRead" id='showAreaPicker'>
+								<input type="hidden" name="areaValue" />
+								<span class="" id="areaText"></span>
+					      	</div>
+					    </div>
+					</div>
+					<div class="mui-row mui-input-row">
+						<div class="mui-row split-line">
+							<label class="title-label form_maintain"><span class="iconfont icon-space">&#xe67e;</span>动作</label>
+							<div class="mui-col-sm-70t mui-col-xs-12 action-span-zcfz sheetText  onlyRead" >
+								<input type="hidden" name="actionValue" />
+								<span class="" id="actionText"></span>
+					      	</div>
+					    </div>
+					</div>
+					<div class="mui-row mui-input-row">
+						<div class="mui-row split-line">
+							<label class="title-label form_photo"><span class="iconfont icon-space">&#xe670;</span>用工</label>
+							<div class="mui-col-sm-70t mui-col-xs-12 sheetType">
+								<p class="sheetText onlyRead" style="margin-bottom: 0;"><span id='numberEmployment'>0</span>人</p>
+					      	</div>
+					    </div>
+					</div>
+					<div class="mui-row mui-input-row">
+						<label class="title-label form_photo"><span class="iconfont icon-space">&#xe67c;</span>照片</label>
+						<div class="mui-col-sm-70t mui-col-xs-12 img-top sheetText">
+							<div class="mui-img-list" id="oldImgList"></div>
+				      	</div>
+					</div>
+					<div class="mui-row mui-input-row">
+						<div class="mui-row split-line">
+							<label class="title-label yijian"><span class="iconfont icon-space">&#xe67a;</span>工单反馈</label>
+							<div class="mui-col-sm-70t mui-col-xs-12 sheetText onlyRead" >
+								<span id='remark'><span>
+					      	</div>
+					    </div>
+					</div>
+					<div class="mui-row mui-input-row">
+						<label class="title-label form_photo"><span class="iconfont icon-space">&#xe67c;</span>照片</label>
+						<div class="mui-col-sm-70t mui-col-xs-12 img-top sheetText">
+							<div class="mui-img-list" id="imgList"></div>
+				      	</div>
+					</div>
+					<div class="mui-row mui-input-row">
+						<label class="title-label yijian"><span class="iconfont icon-space writeOption">&#xe67a;</span>审核意见</label>
+						<div class="mui-col-sm-70t mui-col-xs-12 sheetText">
+							<textarea class="mui-textarea" name="auditRecommendations" rows="10" maxlength="250" placeholder="请填写你的意见（不超过250个字）"></textarea>
+							<p class="textnum-tip"><span class="textnum">0</span>/250</p>
+				      	</div>
+					</div>
+				</form>
+				<div class="mui-row mui-button-row" style="margin-top:10px;">
+					<button type="button" class="mui-btn mui-btn-primary newBtnSmall" id="jobPass">同意</button>
+					<button type="button" class="mui-btn mui-btn-primary newBtnSmall" id="jobReject">拒绝</button>
+				</div>
+			</div>
+		</div>
+		<script src="../js/mui.min.js"></script>
+		<script src="../js/mui.picker.min.js"></script>
+		<script type="text/javascript" src="../js/jquery-1.8.0.min.js" ></script>
+		<script src="../js/app.js"></script>
+		<script src="../js/util.js"></script>
+		<script type="text/javascript">
+			(function($, doc) {
+				$.init();
+				var sheetId = "";
+				window.addEventListener('assignSheetWithNewId',function(event){
+    				sheetId = event.detail.sheetId;
+    				getWoInfo(sheetId);
+				});
+				
+				$.plusReady(function(){
+					var self = plus.webview.currentWebview();
+    				sheetId = self.sheetId;
+					getWoInfo(sheetId);
+					getOldInfo(sheetId);
+				});
+				
+				function getOldInfo(sheetId){
+					Util.ajax({
+						url: 'workorderManage/getWorkorderInfo',
+						data: {id:sheetId},
+						success: function(data){
+							// console.log(JSON.stringify(data));
+							if((null != data.images) && (data.images.length >0)){
+								for(var i=0;i<data.images.length;i++){
+									var imgId = data.images[i].id,mediumSrc = "",src = app.configures.URL + "/iPark/APIs/maintGuide/getImageByPath?imagePath=" + data.images[i].path;
+									if(data.images[i].resourceMinimal){
+										src = app.configures.URL + "/iPark/APIs/maintGuide/getImageByPath?imagePath=" + data.images[i].resourceMinimal;
+										mediumSrc = app.configures.URL + "/iPark/APIs/maintGuide/getImageByPath?imagePath=" + data.images[i].resourceMedium;
+									}
+									var html = "<a class='imgItem' href='javascript:void(0);'><img class='mui-img-upload' id='"+imgId+"' data-src='"+mediumSrc+"' src='"+src+"'/></a>";
+									jQuery("#oldImgList").append(html);
+								}
+							}else{
+								jQuery("#oldImgList").html("<p style='color:#282828;margin-bottom:0px;font-size:14px'>无</p>");
+							}   
+						
+							jQuery(".mui-img-upload").on("click",function(){
+								var src = jQuery(this).data('src');
+								(src == "") && (src = jQuery(this).attr('src'))
+								var result = "<img src='"+src+"'/>";
+								jQuery("#backdrop").addClass('mui-backdrop').html(result).show();
+							});
+			
+							jQuery("#backdrop").on("click",function(){
+								jQuery("#backdrop").remove('mui-backdrop').html('').hide();	
+							});
+						}
+					});
+				}
+				
+				function getWoInfo(sheetId){
+    				Util.ajax({
+						url: 'workorderManage/getWorkorderBackInfo',
+						data: {id:sheetId},
+						success: function(data){
+							// console.log(JSON.stringify(data));
+							var backInfos = data;
+							var woTypes='正常工单';
+							if('U' == backInfos.woType){
+								woTypes='紧急工单';
+							};
+							jQuery("#actionText")[0].innerText = data.maintActionName;
+							jQuery("#areaText").text(data.areaName || "暂未添加");
+							jQuery("#sheetType").html(woTypes);
+							jQuery("#endTime").html(backInfos.endTime);  
+							jQuery("#maintActionName").html(backInfos.maintActionName);  
+							jQuery("#numberEmployment").html(backInfos.numberEmployment); 
+							jQuery("#remark").html(backInfos.backInfo);  
+							if((null != backInfos.images) && (backInfos.images.length >0)){
+								for(var i=0;i<backInfos.images.length;i++){
+									var imgId = backInfos.images[i].id;
+									var mediumSrc = "",src = app.configures.URL + "/iPark/APIs/maintGuide/getImageByPath?imagePath=" + backInfos.images[i].path;
+									if(backInfos.images[i].resourceMinimal){
+										src = app.configures.URL + "/iPark/APIs/maintGuide/getImageByPath?imagePath=" + backInfos.images[i].resourceMinimal;
+										mediumSrc = app.configures.URL + "/iPark/APIs/maintGuide/getImageByPath?imagePath=" + backInfos.images[i].resourceMedium;
+									}
+									var html = "<a class='imgItem' href='javascript:void(0);'><img class='mui-img-upload' id='"+imgId+"' data-src='"+mediumSrc+"' src='"+src+"'/></a>";
+									jQuery("#imgList").append(html);
+								}
+							}else{
+								jQuery("#imgList").html("<p style='color:#282828;margin-bottom:0px;font-size:14px'>无</p>");
+							}   
+						
+							jQuery(".mui-img-upload").on("click",function(){
+								var src = jQuery(this).data('src');
+								(src == "") && (src = jQuery(this).attr('src'))
+								var result = "<img src='"+src+"'/>";
+								jQuery("#backdrop").addClass('mui-backdrop').html(result).show();
+							});
+			
+							jQuery("#backdrop").on("click",function(){
+								jQuery("#backdrop").remove('mui-backdrop').html('').hide();	
+							});
+						}
+					});
+				}
+								
+				//对textarea绑定输入文字长度检查
+				jQuery("[name='auditRecommendations']").on("input",function(){
+					var number = jQuery(this).val().length;
+					if(number == 250){
+						jQuery('.textnum-tip .textnum').addClass('error').text(number);
+					}else{
+						jQuery('.textnum-tip .textnum').removeClass('error').text(number);
+					}
+				})		
+				
+				document.getElementById("jobPass").addEventListener('tap', function() {
+					mui.confirm('您将审核通过该工单！', '审核通过', ['否', '是'], function(e) {
+						if (e.index == 1) {
+							var auditRecommendations = $("[name='auditRecommendations']")[0].value;
+							var url = 'workorderManage/auditWO?result=yes&id='+sheetId+'&status="CP"&auditRecommendations='+auditRecommendations;
+							Util.ajax({
+								url: url,
+								type: 'put',
+								success: function(data){
+									$.openWindow({
+									    url: './actionResult.html', 
+									    id:'actionResult',
+									    extras:{
+									    	actionId: '6'
+									    }
+									});
+									self.close();
+								}
+							});
+						} else {
+							
+						}
+					});
+				});
+				
+				document.getElementById("jobReject").addEventListener('tap', function() {
+					mui.confirm('确定要拒绝该工单吗？', '审核不通过', ['否', '是'], function(e) {
+						if (e.index == 1) {
+							var auditRecommendations = $("[name='auditRecommendations']")[0].value;
+							var url = 'workorderManage/auditWO?result=no&id='+sheetId+'&status="CP"&&auditRecommendations='+auditRecommendations;
+							Util.ajax({
+								url: url,
+								type: 'put',
+								success: function(data){
+									$.openWindow({
+									    url: './actionResult.html', 
+									    id:'actionResult',
+									    extras:{
+									    	actionId: '7'
+									    }
+									});
+									self.close();
+								}
+							});
+						}
+					});
+				});
+			})(mui, document);
+		</script>
+	</body>
+</html>

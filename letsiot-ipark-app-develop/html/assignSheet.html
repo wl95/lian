@@ -1,0 +1,253 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>指派工单</title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<link href="../css/mui.min.css" rel="stylesheet" />
+		<link href="../css/mui.picker.min.css" rel="stylesheet" />
+		<link href="../fonts/iconfont/iconfont.css" rel="stylesheet" />
+		<link href="../css/ipark.css" rel="stylesheet" />
+		<style>
+			html,body {
+				height: 100%;
+			}
+			.mui-input-group .mui-input-row {
+				height: auto;
+				padding:0px 15px;
+				margin-bottom: 0px;
+			}
+			.mui-content .sheetText.onlyRead{
+				color:#282828;
+			}
+			.mui-input-group .mui-input-row:nth-last-child(1){
+				margin-top: 10px;
+			}
+			#remark{width:94%;display: inline-block;word-wrap: break-word;line-height: 20px;margin-top: 15px;}
+			.mui-input-row .action-span {
+				padding-left: 27px;
+			}
+			.mui-navigate-right:after, .mui-push-right:after{color:#009E96;font-size:20px;right: 0px;}
+			#photoList img{
+				display: inline-block;
+				width: 60px;
+				height: 60px;
+				margin: 10px 10px 10px 0;
+    			float: left;
+			}
+			.iconfont.icon-space{
+				color:#686868;
+				vertical-align: middle;
+				padding-left: 0px;
+				padding-right: 6px;
+			}
+			.writeOption{
+				color:#009E96 !important;
+			}
+		</style>
+	</head>
+
+	<body>
+		<header class="mui-bar mui-bar-nav">
+			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+			<h1 class="mui-title">指派工单</h1>
+		</header>
+		<div class="mui-content my-sheet">
+			<div id='backdrop'></div>
+			<div class="mui-content-padded" style="margin: 0;">
+				<form class="mui-input-group" onsubmit="return false;">
+					<div class="mui-row mui-input-row">
+						<div class="mui-row split-line">
+							<label class="title-label form_type"><span class="iconfont icon-space">&#xe67b;</span>类型</label>
+							<div class="mui-col-sm-70t mui-col-xs-12 sheetText onlyRead">
+								<span id="sheetType"></span>
+					      	</div>		
+						</div>
+					</div>
+					<div class="mui-row mui-input-row">
+						<div class="mui-row split-line">
+							<label class="title-label form_time"><span class="iconfont icon-space">&#xe66d;</span>截至</label>
+							<div class="mui-col-sm-20t mui-col-xs-12 sheetText onlyRead">
+								<span id='endTime'><span>
+					      	</div>
+					   </div>
+					</div>
+					<div class="mui-row mui-input-row">
+						<div class="mui-row split-line">
+							<label class="title-label form_area"><span class="iconfont icon-space">&#xe665;</span>区域</label>
+							<div class="mui-col-sm-70t mui-col-xs-12 sheetText onlyRead" id='showAreaPicker'>
+								<input type="hidden" name="areaValue" />
+								<span class="" id="areaText"></span>
+					      	</div>
+					   </div>
+					</div>
+					<div class="mui-row mui-input-row">
+						<div class="mui-row split-line">
+							<label class="title-label form_maintain"><span class="iconfont icon-space">&#xe67e;</span>动作</label>
+							<div class="mui-col-sm-70t mui-col-xs-12 action-span-zcfz sheetText onlyRead" >
+								<input type="hidden" name="actionValue" />
+								<span class="" id="actionText"></span>
+					      	</div>
+					   </div>
+					</div>
+					<div class="mui-row mui-input-row">
+						<div class="mui-row split-line">
+							<label class="title-label form_photo"><span class="iconfont icon-space">&#xe67c;</span>照片</label>
+							<div class="mui-col-sm-70t mui-col-xs-12">
+								<div class="mui-img-list mui-limit-width" id="photoList"></div>
+							</div>
+						</div>
+					</div>
+					<div class="mui-row mui-input-row">
+						<label class="title-label form_desc"><span class="iconfont icon-space">&#xe67a;</span>说明</label>
+						<div class="mui-col-sm-70t mui-col-xs-12 sheetText onlyRead">
+							<span id='remark'><span>
+				      	</div>
+					</div>
+					<div class="mui-row mui-input-row">
+						<label class="title-label zhipai"><span class="iconfont icon-space writeOption">&#xe680;</span>指派人员</label>
+						<div class="mui-col-sm-70t mui-col-xs-12 sheetText" id='showUserPicker'>
+							<input type="hidden" name="assignValue" />
+							<span class="mui-navigate-right" id="assignText">
+								请选择班组长
+							</span>
+				      	</div>
+					</div>	
+				</form>
+				<div class="mui-row mui-button-row" style="margin-top: 15px;">
+					<button type="button" class="mui-btn mui-btn-primary unactive newBtn" id="submitBtn">确认</button>
+				</div>
+			</div>
+		</div>
+		<script src="../js/mui.min.js"></script>
+		<script src="../js/mui.picker.min.js"></script>
+		<script type="text/javascript" src="../js/jquery-1.8.0.min.js" ></script>
+		<script src="../js/app.js"></script>
+		<script src="../js/util.js"></script>
+		<script type="text/javascript">
+			(function($, doc) {
+				$.init();
+				var sheetId = "";
+				window.addEventListener('assignSheetWithNewId',function(event){
+    				sheetId = event.detail.sheetId;
+    				getWoInfo(sheetId);
+					getAssignMemberList(sheetId);
+				});
+				$.ready(function(){
+					var submitButton = doc.getElementById('submitBtn');
+					submitButton.addEventListener('tap', function(event) {
+						var userId = $("[name='assignValue']")[0].value;
+						if(!userId){
+							$.alert("指派人员不能为空");
+							return;
+						};
+						var url = 'workorderManage/distributeWO?userId='+userId+'&id='+sheetId+'&status="BA"';
+						Util.ajax({
+							url: url,
+							type: 'put',
+							success: function(data){
+								var view = plus.webview.getWebviewById("actionResult");
+								if(view){
+									$.fire(view,"newActionId",{
+				                        actionId: '3'
+				                    });
+									view.show();
+								}else{
+									$.openWindow({
+									    url: './actionResult.html', 
+									    id:'actionResult',
+									    extras:{
+									    	actionId: '3'
+									    }
+									});
+								}
+							}
+						});
+					});
+				});
+				
+				$.plusReady(function(){
+					var self = plus.webview.currentWebview();
+    				sheetId = self.sheetId;
+					getWoInfo(sheetId);
+				});
+				function getWoInfo(sheetId){
+    				Util.ajax({
+						url: 'workorderManage/getWorkorderInfo',
+						data: {id:sheetId},
+						success: function(data){
+							//是否显示图片说明
+							if ((null != data.images) && (data.images.length > 0)) {
+								var imageArr = data.images;
+								for (var i = 0; i < imageArr.length; i++) {
+									var mediumSrc = "";
+									var src = app.configures.URL + "/iPark/APIs/maintGuide/getImageByPath?imagePath=" + imageArr[i].path;
+									if(imageArr[i].resourceMinimal){
+										src = app.configures.URL + "/iPark/APIs/maintGuide/getImageByPath?imagePath=" + imageArr[i].resourceMinimal;
+										mediumSrc = app.configures.URL + "/iPark/APIs/maintGuide/getImageByPath?imagePath=" + imageArr[i].resourceMedium;
+									}
+									jQuery("#photoList").append("<img class='mui-img-upload' data-src='"+mediumSrc+"' src='" + src + "'/>");
+								}
+							} else {
+								jQuery("#photoList").append("<p style='color:#282828;margin-bottom:0px;font-size:14px'>无</p>");
+							}
+							jQuery(".mui-img-upload").on("click", function () {
+								var src = jQuery(this).data('src');
+								if(src == ""){
+									src = jQuery(this).attr('src');
+								}
+								var result = "<img src='" + src + "'/>";
+								jQuery("#backdrop").addClass('mui-backdrop').html(result).show();
+							});
+							jQuery("#backdrop").on("click", function () {
+								jQuery(this).removeClass('mui-backdrop').html('').hide();
+							});
+							jQuery("#photoList").parents('.mui-input-row').show();
+							//其他内容
+							var woinfo = data;
+							sheetId = woinfo.id;
+							jQuery("#sheetType").html(woinfo.woTypeStr);
+							jQuery("#endTime").html(woinfo.endTime);  
+							jQuery("#maintActionName").text(woinfo.maintActionName);
+							jQuery('#remark').text(woinfo.remark);
+							jQuery("#actionText").text(data.maintActionName);
+							jQuery("#areaText").text(data.areaName || "暂未添加");
+							getAssignMemberList(sheetId);
+						}
+					});
+				}
+					
+				function getAssignMemberList(sheetId){
+					Util.ajax({
+						data:{
+							woId : sheetId
+						},
+						url: '/workorderManage/getProjectPersonnel',
+						success: function(data){
+							var memberData = [], userPicker = new $.PopPicker();
+							
+							for (var i = 0,len = data.length;i<len;i++) {
+								memberData.push({
+									value: data[i].userId,
+									text: data[i].name
+								});
+							}
+							userPicker.setData(memberData);
+							var showUserPickerButton = doc.getElementById('showUserPicker');
+							showUserPickerButton.addEventListener('tap', function(event) {
+								userPicker.show(function(items) {
+									if(items[0].text==undefined){
+										$("[name='assignValue']")[0].value = '';
+									}else{
+										$("[name='assignValue']")[0].value = items[0].value;
+										$("#assignText")[0].innerText = items[0].text;
+									}
+								});
+							}, false);
+						}
+					});
+				}
+			})(mui, document);
+		</script>
+	</body>
+</html>

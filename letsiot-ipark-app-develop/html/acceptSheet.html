@@ -1,0 +1,246 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>接受工单</title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<link href="../css/mui.min.css" rel="stylesheet" />
+		<link href="../css/mui.picker.min.css" rel="stylesheet" />
+		<link href="../fonts/iconfont/iconfont.css" rel="stylesheet" />
+		<link href="../css/ipark.css" rel="stylesheet" />
+		<style>
+			html,body {
+				height: 100%;
+			}
+			form.mui-input-group:after {
+				background: #FFFFFF;
+			}
+			.mui-content .sheetText.onlyRead{
+				color:#282828;
+			}
+			.mui-input-group .mui-input-row {
+				height: auto;
+				padding: 0 15px;
+				margin-bottom: 0;
+				color: #4D4D4D;
+			}
+			.mui-input-row span.form-full-span {
+				display: inline-block;
+			    height: 36px;
+			    width: 100%;
+			}
+			.mui-input-row .iot-unit-span {
+				margin-left: 5px;
+				display: inline-block;
+			}
+			span.endTimeBtn .iconfont {
+				color: #36C6D3;
+				font-size: 20px;
+			}
+			.mui-input-row .mui-input-row-Edit{width: 60%;}
+			#remark{width: calc(100% - 15px);display: inline-block;word-wrap: break-word;line-height: 20px;margin-top: 8px;}
+			#photoList img{
+				display: inline-block;
+				width: 60px;
+				height: 60px;
+				float: left;
+				margin: 10px 10px 10px 0;
+			}
+			.iconfont.icon-space{
+				color:#686868;
+				padding-left: 0px;
+				padding-right: 6px;
+			}
+			.unactive.newBtnSmall{
+				color:rgba(255,255,255,0.5);
+			}
+		</style>
+	</head>
+
+	<body>
+		<header class="mui-bar mui-bar-nav">
+			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+			<h1 class="mui-title">接受工单</h1>
+		</header>
+		<div class="mui-content my-sheet">
+			<div id='backdrop'></div>
+			<div class="mui-content-padded" style="margin:0;">
+				<form class="mui-input-group" onsubmit="return false;">
+					<div class="mui-row mui-input-row">
+						<div class="mui-row split-line">
+							<label class="title-label">
+								<span class="iconfont icon-space">&#xe67b;</span>类型
+							</label>
+							<div class="mui-col-sm-70t mui-col-xs-12 sheetText onlyRead">
+								<span id="typeText" class=""></span>
+					      	</div>
+					   </div>
+					</div>
+					<div class="mui-row mui-input-row">
+						<div class="mui-row split-line">
+							<label class="title-label">
+								<span class="iconfont icon-space">&#xe66d;</span>截止
+							</label>
+							<div class="mui-col-sm-20t mui-col-xs-12 sheetText onlyRead">
+								<span id='endTime'><span>
+					      	</div>
+					   </div>
+					</div>
+					<div class="mui-row mui-input-row">
+						<div class="mui-row split-line">
+							<label class="title-label">
+								<span class="iconfont icon-space">&#xe665;</span>区域
+							</label>
+							<div class="mui-col-sm-70t mui-col-xs-12 sheetText onlyRead" id='showAreaPicker'>
+								<input type="hidden" name="areaValue" />
+								<span class="" id="areaText"></span>
+					      	</div>
+					   </div>
+					</div>
+					<div class="mui-row mui-input-row">
+						<div class="mui-row split-line">
+							<label class="title-label">
+								<span class="iconfont icon-space">&#xe67e;</span>动作
+							</label>
+							<div class="mui-col-sm-70t mui-col-xs-12 action-span-zcfz sheetText onlyRead" >
+								<input type="hidden" name="actionValue" />
+								<span class="sheetText" id="actionText"></span>
+					      	</div>
+					   </div>
+					</div>
+					<div class="mui-row mui-input-row" style="display: none;">
+						<div class="mui-row split-line">
+							<label class="title-label">
+								<span class="iconfont icon-space">&#xe67c;</span>照片
+							</label>
+							<div class="mui-col-sm-70t mui-col-xs-12">
+								<div class="mui-img-list mui-limit-width" id="photoList"></div>
+							</div>
+						</div>
+					</div>
+					<div class="mui-row mui-input-row">
+						<label class="title-label">
+							<span class="iconfont icon-space">&#xe67a;</span>说明
+						</label>
+						<div class="mui-col-sm-70t mui-col-xs-12 sheetText">
+							<span id='remark' class="sheetText onlyRead"><span>
+				      	</div>
+					</div>
+				</form>
+				<div class="mui-row mui-button-row" style="margin-top:15px;">
+					<button id='confirmBtn' type="button" class="mui-btn mui-btn-primary newBtnSmall unactive">接受</button>
+					<button id='promptBtn' type="button" class="mui-btn mui-btn-primary newBtnSmall">拒绝</button>
+				</div>
+			</div>
+		</div>
+		<script src="../js/mui.min.js"></script>
+		<script src="../js/mui.picker.min.js"></script>
+		<script type="text/javascript" src="../js/jquery-1.8.0.min.js" ></script>
+		<script src="../js/app.js"></script>
+		<script src="../js/util.js"></script>
+		<script type="text/javascript">
+			(function($, doc) {
+				$.init();
+				var sheetId = "";
+			
+				$.plusReady(function(){
+					var self = plus.webview.currentWebview();
+    				sheetId = self.sheetId;
+					getWoInfo(sheetId);
+				});
+				
+				function getWoInfo(sheetId){
+    				Util.ajax({
+						url: 'workorderManage/getWorkorderInfo',
+						data: {id:sheetId},
+						success: function(data){
+							//显示图片说明
+							if ((null != data.images) && (data.images.length > 0)) {
+								var imageArr = data.images;
+								for (var i = 0; i < imageArr.length; i++) {
+									var mediumSrc = "";
+									var src = app.configures.URL + "/iPark/APIs/maintGuide/getImageByPath?imagePath=" + imageArr[i].path;
+									if(imageArr[i].resourceMinimal){
+										src = app.configures.URL + "/iPark/APIs/maintGuide/getImageByPath?imagePath=" + imageArr[i].resourceMinimal;
+										mediumSrc = app.configures.URL + "/iPark/APIs/maintGuide/getImageByPath?imagePath=" + imageArr[i].resourceMedium;
+									}
+									jQuery("#photoList").append("<img class='mui-img-upload' data-src='"+mediumSrc+"' src='" + src + "'/>");
+								}
+							} else {
+								jQuery("#photoList").append("<p style='color:#282828;margin-bottom: 0;font-size:14px'>无</p>");
+							}
+							jQuery(".mui-img-upload").on("click", function () {
+								var src = jQuery(this).data('src');
+								if(src == ""){
+									src = jQuery(this).attr('src');
+								}
+								var result = "<img src='" + src + "'/>";
+								jQuery("#backdrop").attr('class', 'mui-backdrop').html(result).show();
+							});
+							jQuery("#backdrop").on("click", function () {
+								jQuery("#backdrop").attr('class', '').html('').hide();
+							});
+							jQuery("#photoList").parents('.mui-input-row').show();
+							var woinfo = data;
+							sheetId = woinfo.id;
+							jQuery("#areaText").text(data.areaName || "暂未添加");
+							jQuery("#typeText").text(woinfo.woTypeStr);
+							jQuery("#endTime").text(woinfo.endTime);
+							jQuery("#maintAction").text(woinfo.maintActionName);
+							jQuery("#remark").text(woinfo.remark);
+							jQuery("#estimateLabor").text(woinfo.estimateLabor);
+							jQuery("#actionText")[0].innerText = data.maintActionName;
+						}
+					});
+				}
+				
+				document.getElementById("confirmBtn").addEventListener('tap', function() {
+					mui.confirm('确认接受此工单', '接受', ['否', '是'], function(e) {
+						if (e.index == 1) {
+							var url = 'workorderManage/takeWO?id='+sheetId+'&status="TA"';
+							Util.ajax({
+								url: url,
+								type: 'put',
+								success: function(data){
+									$.openWindow({
+									    url: './actionResult.html', 
+									    id:'actionResult',
+									    extras:{
+									    	actionId: '11'
+									    }
+									});
+									self.close();
+								}
+							});
+						}
+					});
+				});
+				document.getElementById("promptBtn").addEventListener('tap', function(e) {
+					e.detail.gesture.preventDefault(); 
+					var btnArray = ['取消', '确定'];
+					mui.prompt('请输入拒绝理由：', '拒绝理由', '拒绝', btnArray, function(e) {
+						if (e.index == 1) {
+							var url = 'workorderManage/rejectWO?id='+sheetId+'&status="TA"'+'&rejectionReason='+e.value;
+							Util.ajax({
+								url: url,
+								type: 'put',
+								success: function(data){
+									$.openWindow({
+									    url: './actionResult.html', 
+									    id:'actionResult',
+									    extras:{
+									    	actionId: '12'
+									    }
+									});
+									self.close();
+								}
+							});
+						}
+					},"textarea")
+				});
+
+			})(mui, document);
+		</script>
+	</body>
+</html>

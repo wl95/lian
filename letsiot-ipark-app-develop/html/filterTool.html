@@ -1,0 +1,90 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<link rel="stylesheet" href="../css/mui.min.css"/>
+		<link rel="stylesheet" href="../css/ipark.css"/>
+		<link rel="stylesheet" href="../css/mui.picker.min.css"/>
+		<style type="text/css">
+			html{
+    			position: absolute;
+			    right: 0;
+			    left: 0;
+		        top: 45px;
+			}
+		</style>
+	</head>
+	<body>
+		<script src="../js/mui.min.js"></script>
+		<script src="../js/mui.picker.min.js"></script>
+		<script type="text/javascript" src="../js/jquery-1.8.0.min.js" ></script>
+		<script src="../js/util.js"></script>
+		<script type="text/javascript">
+			(function($, doc) {
+				$.plusReady(function(){
+				
+					var actionData = [],userPicker = new $.PopPicker();
+					//获取工单状态列，并渲染
+					function getSheetTypeList(){
+						Util.ajax({
+							type:'get',
+							url: 'workorderManage/listWorkorderStatus',
+							success: function(data){
+								//下拉选择
+								for (var i = 0,len = data.length;i<len;i++) {
+									actionData.push({
+										value: data[i].code,
+										text: data[i].message
+									});
+								}
+								userPicker.setData(actionData);
+							}
+						});
+					}
+					getSheetTypeList();
+					window.addEventListener('showType',function(event){
+						picker && picker.hide();
+						userPicker.show(function(items) {
+							var view = plus.webview.getWebviewById("sheetQueryList");
+							mui.fire(view,'filterTypeChange',{
+								data: items[0]
+							});
+						});
+					});
+					
+					var picker;
+					window.addEventListener('showMonth',function(event){
+						userPicker && userPicker.hide();
+			        	if(picker) {
+							picker.show(function (rs) {
+								var view = plus.webview.getWebviewById("sheetQueryList");
+								mui.fire(view,'filterMonthChange',{
+									data: rs
+								});
+							});
+						} else {
+							picker = new $.DtPicker({"type":"month"});
+							picker.show(function(rs) {
+								var view = plus.webview.getWebviewById("sheetQueryList");
+								mui.fire(view,'filterMonthChange',{
+									data: rs
+								});
+							});
+						}
+					});
+					
+					mui("body").on("tap",".mui-dtpicker-header > button, .mui-poppicker-header > button",function(){
+						if(jQuery(this).attr("data-id")=='btn-cancel' || jQuery(this).hasClass("mui-poppicker-btn-cancel")){
+							var view = plus.webview.getWebviewById("sheetQueryList");
+							mui.fire(view,'filterCancel',{});
+						}
+					});
+					
+				})
+			})(mui, document);
+		</script>
+	</body>
+
+</html>

@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<title>工单查看列表</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+		<link rel="stylesheet" href="../fonts/iconfont/iconfont.css"/>
+		<link rel="stylesheet" href="../css/mui.min.css"/>
+		<link rel="stylesheet" href="../css/ipark.css"/>
+		<style type="text/css">
+			.mui-col-xs-6{
+				float: left;
+			}
+			.mui-pull-top-pocket{
+				top: 54px !important;
+			}
+			.mui-icon.emptyFilter {
+			    position: absolute;
+			    right: 0;
+			    font-size: 20px;
+			    padding: 0 10px;
+			}
+		</style>
+	</head>
+
+	<body style="position:relative;z-index:100000">
+		<header class="mui-bar mui-bar-nav">
+			<input type="hidden" name="typeValue" value="" />
+			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+			<h1 id="title" class="mui-title"><span id="typeText"></span>工单 <span class="iconfont icon-down">&#xe68a;</span></h1>
+		</header>
+		<!--<div class="mui-sheet-selectArea">
+	      	<div class="seachBar">
+	      		<span id="seachBarIcon" class="iconfont icon-down">&#xe66a;</span><input type="text" name="searchInfo" value=""/>
+	      	</div>
+		</div>-->
+		<!--<div class="mui-content" style="margin-top: -100px;"></div>-->
+		<script src="../js/mui.min.js"></script>
+		<script type="text/javascript" src="../js/jquery-1.8.0.min.js" ></script>
+		<script src="../js/app.js"></script>
+		<script src="../js/util.js"></script>
+		<script>
+		(function($, doc) {
+			mui.plusReady(function(){
+				mui.init({
+					gestureConfig:{
+						doubletap:true
+					},
+					subpages:[{
+						url:'sheetQueryList_sub.html',
+						id:'sheetQueryList_sub',
+						styles:{
+							top: '64px',
+							bottom: '0px',
+						},
+						extras:{
+							readFalge: '0'
+						}
+					},{
+						url: './filterTool.html', 
+					    id:'filterTool',
+						styles:{
+							height: '274px',
+							bottom: '0px',
+						},
+						extras:{
+							readFalge: '0'
+						}
+					}]
+				});
+				var contentWebview = null;
+				document.querySelector('header').addEventListener('doubletap',function () {
+					(contentWebview == null) && (contentWebview = plus.webview.currentWebview().children()[0])
+					contentWebview.evalJS("mui('#pullrefresh').pullRefresh().scrollTo(0,0,100)");
+				});
+				
+				//点击标题展开、收起工单选择栏
+				document.getElementById('title').addEventListener("tap",function(){
+					var view = plus.webview.getWebviewById("filterTool");
+					if(jQuery(".iconfont","#title").attr('class').indexOf('down') > -1){
+						jQuery(".iconfont","#title").removeClass('icon-down').addClass('icon-up');
+						mui.fire(view,'showType',{});
+						view.setStyle({height: '242px'});
+						view.show();
+					}else{
+						jQuery(".iconfont","#title").removeClass('icon-up').addClass('icon-down');
+						var view = plus.webview.getWebviewById("filterTool");
+						view && view.hide();
+					}	
+				},false);
+				
+				function filterType(data){
+					$("[name='typeValue']")[0].value = data.value;
+					$("#typeText")[0].innerText = data.text;
+					var view2 = plus.webview.getWebviewById("sheetQueryList_sub");
+					mui.fire(view2,'refreshA',{
+						woStatus: data.value
+					});
+				}
+				
+				window.addEventListener('filterTypeChange',function(event){	
+					var view = plus.webview.getWebviewById("filterTool");
+					view && view.hide();
+					filterType(event.detail.data);
+					jQuery("#emptyType").removeClass("mui-hidden");
+					jQuery(".iconfont","#title").removeClass('icon-up').addClass('icon-down');
+				});
+				
+				var emptyBtns = $('.emptyFilter');
+				emptyBtns.each(function(i, emptyBtn){
+					emptyBtn.addEventListener('tap', function(event) {
+						event.stopPropagation();
+						filterType({value:'',text:'选择工单状态'});
+						jQuery(this).addClass("mui-hidden");
+					}, false);
+				});
+				
+				window.addEventListener('filterCancel',function(event){
+					jQuery(".iconfont","#title").removeClass('icon-up').addClass('icon-down');
+					var view = plus.webview.getWebviewById("filterTool");
+					view && view.hide();
+				});
+				
+				setTimeout(function(){
+					var view = plus.webview.getWebviewById("filterTool");
+					view && view.hide();
+				}, 100);
+			});
+		})(mui, document);
+		</script>
+	</body>
+</html>
+

@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>工单详情(已关闭,处理中,再处理,延期,取消)</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <link rel="stylesheet" href="../fonts/iconfont/iconfont.css" />
+    <link rel="stylesheet" href="../css/mui.min.css" />
+    <link rel="stylesheet" href="../css/ipark.css" />
+    <link rel="stylesheet" href="../css/base.css">
+    <link href="../css/mui.picker.min.css" rel="stylesheet" />
+    <script src="../js/mui.min.js"></script>
+    <script type="text/javascript" src="../js/jquery-1.8.0.min.js"></script>
+    <style type="text/css">
+        html,
+        body {
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+        }
+
+        .mui-col-xs-6 {
+            float: left;
+        }
+
+        .mui-pull-top-pocket {
+            top: 54px !important;
+        }
+
+        .mui-icon.emptyFilter {
+            position: absolute;
+            right: 0;
+            font-size: 20px;
+            padding: 0 10px;
+        }
+
+        #cont {
+            width: 100%;
+            height: auto;
+        }
+        .mui-bar-nav~.mui-content .mui-slider.mui-fullscreen {
+            top: 65px;
+        }
+
+        .padd-search {
+            padding: 10px;
+        }
+		.color-green{
+			color:#009e96!important;
+		}
+		.line2{
+			 background-color: #009e96!important;
+		}
+        .titles {
+            padding: 20px 10px;
+            background-color: #ffffff;
+        }
+		.titles2 {
+		    background-color: #009e96;
+		}
+        .timeBar {
+            padding: 5vw 0 2vw 11vw;
+        }
+         .line {
+            width: 100%;
+			height: 1px;
+            margin-top: 10px;
+            margin-left: 1px;
+            background-color: #cccccc;
+			
+        }
+        .timeBar .title
+       {
+            padding-top: 10px;
+            font-size: 13px;
+        }
+        .time{
+            padding-top: 2px;
+            font-size: 10px;
+        }
+        .timeBar .circular {
+            color: #ccc;
+            font-size: 80px;
+			    z-index: 2;
+        }
+		@media screen and (min-width: 320px) {
+		.l-frist{
+			margin-left: -26px;
+		}
+		.l-two{
+			margin-left: -17px;
+		}
+		.l-three{
+			margin-left: -10px;
+		}
+		}
+		.margin-top{
+			margin-top: 10px;
+		}
+		#dfk{
+			display: none;
+		}
+		#user{
+			display: none;
+		}
+		
+    </style>
+</head>
+
+<body style="position:relative;z-index:100000">
+    <header class="mui-bar mui-bar-nav">
+        <input type="hidden" name="typeValue" value="" />
+        <a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+        <h1 id="title" class="mui-title"><span id="typeText"></span>工单详情</h1>
+    </header>
+    <div id="cont" class="mui-content">
+        <div class="timeBar">
+            <div id="close" class="mui-row">
+                <div class="mui-col-xs-4">
+                    <div class="mui-row">
+                        <div class="mui-col-xs-1 circular color-green cir">&bull;</div>
+                        <div class="mui-col-xs-11">
+                            <div class="line line2 lie"></div>
+                        </div>
+                    </div>
+                    <div class="title">已分配</div>
+                    <div class="time l-frist"></div>
+
+                </div>
+                <div class="mui-col-xs-4">
+                    <div class="mui-row">
+                        <div class="mui-col-xs-1 circular color-green cir2">&bull;</div>
+                        <div class="mui-col-xs-11">
+                            <div class="line line2 lie2"></div>
+                        </div>
+                    </div>
+                    <div class="title title2">已反馈</div>
+                    <div class="time  l-two time2"></div>
+
+                </div>
+                <div class="mui-col-xs-4">
+                    <div class="circular cir3 color-green">&bull;</div>
+                    <div class="title title3">已确认</div>
+                    <div class="time  l-three time3"></div>
+                </div>
+            </div>
+			<div id="dfk" class="mui-row">
+			    <div class="mui-col-xs-3">
+			        <div class="mui-row">
+			            <div class="mui-col-xs-1 circular cir">&bull;</div>
+			            <div class="mui-col-xs-11">
+			                <div class="line lie"></div>
+			            </div>
+			        </div>
+			        <div class="title title1"></div>
+			        <div class="time"></div>
+			
+			    </div>
+			    <div class="mui-col-xs-3">
+			        <div class="mui-row">
+			            <div class="mui-col-xs-1 circular cir2">&bull;</div>
+			            <div class="mui-col-xs-11">
+			                <div class="line lie2"></div>
+			            </div>
+			        </div>
+			        <div class="title title2"></div>
+			        <div class="time time2"></div>
+			
+			    </div>
+				<div class="mui-col-xs-3">
+				    <div class="mui-row">
+				        <div class="mui-col-xs-1 circular cir3">&bull;</div>
+				        <div class="mui-col-xs-11">
+				            <div class="line lie3"></div>
+				        </div>
+				    </div>
+				    <div class="title title3"></div>
+				    <div class="time time3"></div>
+							
+				</div>
+			    <div class="mui-col-xs-3">
+			        <div class="circular cir4">&bull;</div>
+			        <div class="title title4"></div>
+			        <div class="time time4"></div>
+			    </div>
+			</div>
+			
+		</div>
+        <div  id="titles" class="titles">已通过</div>
+		<div id="user" class="titles margin-top"></div>
+		
+    </div>
+
+    </div>
+    <!-- <script src="../js/app.js"></script> -->
+    <script src="../js/mui.picker.min.js"></script>
+    <script type="text/javascript" src="../js/jquery-1.8.0.min.js"></script>
+    <script>
+			mui.plusReady(function () {
+			       	var view = plus.webview.getWebviewById("haveBeenThrough");
+					var id = view.workid;//获得跳转页面参数
+					//var id="3400844854879232";
+					var stat = view.stat;
+					console.log(stat);
+					if(stat!="已关闭"){
+						$("#close").css("display","none");
+						$("#titles").css("display","none");
+						$("#dfk").css("display","block");
+						$("#user").css("display","block");
+						ajx(id,stat);
+					}else{
+						ajx(id,stat);
+					}
+					// 获取指派人 designatedPersonName
+					
+			   
+				});	
+			
+			function ajx(id,stat){
+				$.ajax({
+					url: 'http://ipark.bplusiot.com/iPark/APIs/workorderManage/getWorkorderInfo',
+					type: 'post',
+					data: {
+						woId: id,
+					},
+					dataType: "json",
+					/* headers: {
+						'Content-Type': 'application/json'
+					}, */
+					success: function(data) {
+						console.log(5555555);
+						console.log(JSON.stringify(data));
+						var  staut=data.status;
+						var  endtime=data.endTime;
+						console.log(staut);//任务状态
+						//WD-待分配;FE-待反馈;BP-处理中;RE-再处理;OD-延期;TC-待确认;CO-完成;CA-取消
+						//startTime" : 开始时间,"endTime" : 结束时间,"deliveryTime" : 分配时间,"backTime" : 反馈时间,
+						//optionTime最近操作时间,//延期
+						//reworkTime返工时间，//再处理
+						//confirmTime 已完成 //确认,取消
+						if(stat=="已关闭"){
+							$(".time").text(data.deliveryTime);
+							$(".time2").text(data.backTime);
+							$(".time3").text(data.confirmTime);
+						}else{
+							if(staut=="OD" || staut=="BP" || staut=="CA"){
+								$(".title3").text(data.statusStr);
+								$(".time3").text(data.optionTime);
+								$(".title1").text("已分配");
+								$(".time").text(data.deliveryTime);
+								$(".title2").text("已处理");
+								$(".time2").text(data.optionTime);
+								$(".title4").text("待确认");
+								$(".time4").text("");
+								$("#user").text("指派人:"+data.designatedPersonName);  //指派人
+								//改变圆点的颜色
+								$(".cir").css("color","#009e96");
+								$(".cir2").css("color","#009e96");
+								$(".cir3").css("color","#009e96");
+								//改变线的颜色
+								$(".lie").css("background-color","#009e96");
+								$(".lie2").css("background-color","#009e96");
+								$(".lie3").css("background-color","#009e96");
+							}else if(staut=="RE"){
+								$(".title3").text(data.statusStr);
+								$(".time3").text(data.reworkTime);
+								$(".title1").text("已分配");
+								$(".time").text(data.deliveryTime);
+								$(".title2").text("已处理");
+								$(".time2").text(data.optionTime);
+								$(".title4").text("待确认");
+								$(".time4").text("");
+								$("#user").text("指派人:"+data.designatedPersonName);  //指派人
+								//改变圆点的颜色
+								$(".cir").css("color","#009e96");
+								$(".cir2").css("color","#009e96");
+								$(".cir3").css("color","#009e96");
+								//改变线的颜色
+								$(".lie").css("background-color","#009e96");
+								$(".lie2").css("background-color","#009e96");
+								$(".lie3").css("background-color","#009e96");
+							}else if(staut=="FE"){
+								$(".title3").text(data.statusStr);
+								$(".time3").text(data.reworkTime);
+								$(".title1").text("已分配");
+								$(".time").text(data.deliveryTime);
+								$(".title2").text("已处理");
+								$(".time2").text(data.optionTime);
+								$(".title4").text("待确认");
+								$(".time4").text("");
+								$("#user").text("指派人:"+data.designatedPersonName);  //指派人
+								//改变圆点的颜色
+								$(".cir").css("color","#009e96");
+								$(".cir2").css("color","#009e96");
+								$(".cir3").css("color","#009e96");
+								//改变线的颜色
+								$(".lie").css("background-color","#009e96");
+								$(".lie2").css("background-color","#009e96");
+								$(".lie3").css("background-color","#009e96");
+							}
+							
+							
+							
+							
+						}
+					
+					},
+					error: function(e) {
+						console.log(JSON.stringify(e));
+					}
+				});
+			}
+				
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<title>消息</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+		<link rel="stylesheet" href="../css/mui.min.css">
+		<link href="../css/ipark.css" rel="stylesheet" />
+		
+	</head>
+
+	<body>
+		<header class="mui-bar mui-bar-nav">
+			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+			<h1 id="title" class="mui-title">消息</h1>
+		</header>
+		<div class="mui-content"></div>
+		<script src="../js/mui.min.js"></script>
+		<script>
+		// 监听plusready事件  
+		document.addEventListener( "plusready", function(){
+            plus.push.clear();
+		}, false );
+		
+		mui.plusReady(function(){
+			var indexPage = localStorage.getItem("IPARK_APP_INDEX_PAGE");
+			window.addEventListener('init',function(event){
+	        	var view = plus.webview.getWebviewById("message-List");
+				mui.fire(view,'resetPage',{});
+			});
+			mui.init({
+				beforeback: function(){
+					//获得列表界面的webview
+					var list = plus.webview.getWebviewById(indexPage);
+					//触发列表界面的自定义事件（refresh）,从而进行数据刷新
+					if(list){
+						mui.fire(list,'init');
+					}
+					//返回true，继续页面关闭逻辑
+					return true;
+				},
+				gestureConfig:{
+					doubletap:true
+				},
+				swipeBack:true,
+				subpages:[{
+					url:'message-List.html',
+					id:'message-List',
+					styles:{
+						top: '63px',
+						bottom: '0px',
+					},
+					extras:{
+						readFalge: '0' //是否已读（0-未读，1-已读）
+					}
+				}]
+			});
+			var contentWebview = null;
+			
+			document.querySelector('header').addEventListener('doubletap',function () {
+				if(contentWebview==null){
+					contentWebview = plus.webview.currentWebview().children()[0];
+				}
+				contentWebview.evalJS("mui('#pullrefresh').pullRefresh().scrollTo(0,0,120)");
+			});
+		});
+		</script>
+	</body>
+</html>

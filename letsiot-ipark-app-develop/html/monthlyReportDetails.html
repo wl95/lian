@@ -1,0 +1,261 @@
+<!doctype html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>月报详情</title>
+    <meta name="viewport"
+        content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+    <link href="../css/mui.min.css" rel="stylesheet" />
+    <link href="../css/mui.picker.min.css" rel="stylesheet" />
+    <link href="../fonts/iconfont/iconfont.css" rel="stylesheet" />
+    <link rel="stylesheet" href="../fonts/pickFont/iconfont.css">
+    <link rel="stylesheet" href="../css/dayDetails.css">
+	<script type="text/javascript" src="../js/vue.min.js"></script>
+
+    <style>
+        html,
+        body {
+            height: 100%;
+            color: #333;
+        }
+		body{
+			padding-top: 150px;
+		}
+
+        .mui-bar-nav {
+            background-color: #10a49c;
+            height: 50px;
+        }
+    </style>
+</head>
+
+<body style="background-color: #10a49c" id="#recruitment">
+    <header class="mui-bar mui-bar-nav" style="background-color: #10a49c">
+        <a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+        <h1 class="mui-title crateTime"></h1>
+    </header>
+    <div id="recruitment-information" style="width:350px;height:400px;"></div>
+    <script src="../js/mui.min.js"></script>
+    <script src="../js/mui.picker.min.js"></script>
+    <script type="text/javascript" src="../js/jquery-1.8.0.min.js"></script>
+    <script src="../js/echarts.min.js"></script>
+    <script src="../js/app.js"></script>
+    <script type="text/javascript">
+		mui.plusReady(function () {
+		       	var view = plus.webview.getWebviewById("monthlyReportDetails");
+				var id = view.monthId;//获得参数
+				var vue = new Vue({
+					    el: '#recruitment',
+					    data: {
+							total:0,//总计
+							dataList:[]
+					    },
+					    methods: {
+						
+					    },
+					    beforeCreate:function() {
+					      
+					    },
+					    created:function() {
+					       
+					    },
+					    beforeMount:function() {
+					     
+					    },
+					    mounted:function() {
+					
+					    },
+					    beforeUpdate:function() {
+					       
+					    },
+					    updated:function() {
+					    },
+					    beforeDestroy:function() {
+					
+					    },
+					    destroyed:function() {
+					
+					    }
+					});
+				month();
+				function month(){
+					$.ajax({
+					    url:'http://ipark.bplusiot.com/iPark/APIs/monthly/getmonthlyinfo',
+					    type: 'get',
+					    data: {
+							//monthlyId:"3406464888167424" 
+							monthlyId:id
+					    },
+					    dataType: "json",
+					    success: function (data) {
+					        //console.log(5555555);
+							//console.log(JSON.stringify(data));
+							var list=data.monthly;
+						    $(".crateTime").html(data.monthly.createDate); //头部日期
+							for(var i in list){
+								if(i=='human'){
+									vue.dataList.push({
+										value: list[i],
+										name: '用工'
+									})
+								}else if(i=='machine'){
+									vue.dataList.push({
+										value: list[i],
+										name: '机械'
+									})
+								}else if(i=='material'){
+									vue.dataList.push({
+										value: list[i],
+										name: '材料'
+									})
+								}else if(i=='others'){
+									vue.dataList.push({
+										value: list[i],
+										name: '间接费'
+									})
+								}else if(i=='total'){
+									vue.total=list[i];
+								}
+							}
+							echartsL(vue.total,vue.dataList);
+					    },
+					    error: function (e) {
+					        console.log(JSON.stringify(e));
+					    }
+					});
+				}
+				
+				function echartsL(total,list){
+					var myChart = echarts.init(document.getElementById('recruitment-information'));
+					// 指定图表的配置项和数据
+					var colorList = ['#36c5d3', '#31dd7b', '#ffa76f', '#ffc86c'];
+					//数字转换
+					function zhuang(srt) {
+					    return srt.toString().replace(/(\d)(?=(\d{3})+$)/g, '$1,')
+					}
+					var option = {
+					    title: {
+					        text: '总计',
+					        subtext: zhuang(total),
+					        x: '40%',
+					        y: '43%',
+					        textStyle: {
+					            fontSize: 14,
+					            color: ['#fff'],
+					            align: 'left'
+					        },
+					        subtextStyle: {
+					            color: '#fff',
+					            fontWeight: 'bold',
+					            fontSize: 20,
+					
+					        },
+					    },
+					    grid: {
+					        bottom: 150,
+					        left: 0,
+					        right: '10%'
+					    },
+					    series: [
+					        // 主要展示层的
+					        {
+					            radius: ['35%', '51%'],
+					            center: ['50%', '50%'],
+					            type: 'pie',
+					            itemStyle: {
+					                normal: {
+					                    color: function (params) {
+					                        return colorList[params.dataIndex]
+					                    }
+					                }
+					            },
+					            labelLine: {
+					                normal: {
+					                    show: true,
+					                    length: 15,
+					                    length2: 50,
+					                    lineStyle: {
+					                        color: '#fff'
+					                    },
+					                    align: 'right'
+					                },
+					                color: "#000",
+					                emphasis: {
+					                    show: true
+					                }
+					            },
+					            label: {
+					                normal: {
+					                    formatter: function (params, b) {
+					                        params.value = zhuang(params.value)
+					                        var str = '';
+					                        switch (params.name) {
+					                            case '材料':
+					                                str = '{b|}\n{nameStyle|材料}\n{rate|'+params.value+'}';
+					                                break;
+					                            case '间接费':
+					                                str = '{c|}\n{nameStyle|间接费}\n{rate|'+params.value+'}';
+					                                break;
+					                            case '用工':
+					                                str = '{d|}\n{nameStyle|用工 }\n{rate|' + params.value + '}';
+					                                break;
+					                            case '机械':
+					                                str = '{e|}\n{nameStyle|机械 }\n{rate|' + params.value + '}';
+					                                break;
+					                        }
+					                        return str
+					                    },
+					                    padding: [0, -50],
+					                    height: 160,
+					                    rich: {
+					
+					                        b: {
+					                            width: 29,
+					                            height: 45,
+					                            lineHeight: 64,
+					                        },
+					                        c: {
+					                            width: 34,
+					                            height: 33,
+					                            lineHeight: 64,
+					                        },
+					                        d: {
+					                            width: 34,
+					                            height: 44,
+					                            lineHeight: 64,
+					                        },
+					                        e: {
+					                            width: 38,
+					                            height: 30,
+					                            lineHeight: 64,
+					
+					                        },
+					                        nameStyle: {
+					                            fontSize: 16,
+					                            color: "#fff",
+					                            align: 'left'
+					                        },
+					                        rate: {
+					                            fontSize: 20,
+					                            color: "#000ff",
+					                            fontWeight: 'bold'
+					                        }
+					                    }
+					                }
+					            },
+					            data:list
+					        },
+					
+					    ]
+					};
+					// 使用刚指定的配置项和数据显示图表。
+					myChart.setOption(option);
+				}
+				})
+		
+
+    </script>
+</body>
+
+</html>

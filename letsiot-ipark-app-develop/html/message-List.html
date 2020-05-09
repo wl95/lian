@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<title>消息列表</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+		<link rel="stylesheet" href="../css/mui.min.css">
+		<link rel="stylesheet" href="../css/ipark.css"/>
+		<script type="text/javascript" src="../js/jquery-1.8.0.min.js" ></script>
+		<style type="text/css">
+			a.mui-table-view-cell {
+			    color: #000000;
+			}
+			html,body {
+				height: 100%;
+			}
+			.mui-input-group:after {
+				background: #FFFFFF;
+			}
+			.mui-input-group .mui-input-row {
+				height: auto;
+				line-height: 1.1;
+				color: #4D4D4D;
+			}
+			.msg-time-style{
+				text-align: center;
+				margin: 20px 0 10px;
+				color: #686868;
+				font-size: 12px;
+			}
+			.mui-input-row .mui-span-height{
+				width: calc(100% - 20px);
+				line-height: 25px;
+				color: #686868;
+				font-size: 14px;
+              	display: inline-block;
+			}
+			.no-read .mui-input-row .mui-span-height{
+				overflow: hidden;
+                text-overflow: ellipsis;
+              	white-space: nowrap;
+              	color: #282828;
+			}
+			.mui-table-view{
+				width: 92%;
+				margin:4% auto 0;
+				background:none;
+				padding-bottom: 4%;
+			}
+			/*取出框架自带样式边框*/
+			.cleraBefore:before{height: 0;}
+			.cleraBefore .mui-input-group:before{height: 0;}
+			.cleraBefore:after{height: 0;}
+			.cleraAfter:after{content:''}
+			.mui-content {
+    			background-color: inherit;
+    		}
+    		.mui-msg-tab{
+				width: 100%;
+				height: 50px;
+				line-height: 50px;
+				background: #fff;
+			}
+			.mui-msg-tab .msg-noread,
+			.mui-msg-tab .msg-readed{
+				float: left;
+				color: #282828;
+				position: relative;
+				text-align: center;
+				width: calc(50% - 75px);
+				margin: 0 25px 0 50px;
+				z-index: 1;
+			}
+			.mui-msg-tab .msg-noread .msg-number{
+				width: 17px;
+				height: 17px;
+				line-height: 17px;
+				position: absolute;
+				top: 9px;
+				text-align: center;
+				background: #F17368;
+				font-size: 9px;
+				border: 1px solid;
+				border-radius: 35px;
+				color: #fff;
+				display: none;
+			}
+			.mui-msg-tab .msg-readed{
+				margin: 0 50px 0 25px;
+			}
+			.mui-msg-tab .msg-noread.active,
+			.mui-msg-tab .msg-readed.active{
+				color: #009E96;
+				border-bottom: 1px solid #009E96;
+			}
+			.mui-content{
+				clear: both;
+			}
+		</style>
+	</head>
+
+	<body>
+		<div class="mui-msg-tab mui-row">
+			<p id="msg-noread" class="msg-noread active">
+				<span>未读</span><span class="msg-number">0</span>
+			</p>
+			<p id="msg-readed" class="msg-readed ">
+				<span>已读</span>
+			</p>
+		</div>
+		<!--下拉刷新容器-->
+		<div id="pullrefresh" class="mui-content mui-scroll-wrapper">
+			<div class="mui-scroll">
+				<!--数据列表-->
+				<ul id="mess-List-page" class="mui-table-view cleraBefore">
+					<!--<li class="mui-input-group">
+						<a class="mui-navigate-right cleraAfter">
+							<div class="mui-col-xs-12 msg-time-style">2018-3-10 23:88:88</div>
+							<div class="mui-row mui-input-row" id="endTimeRow">
+								<div class="mui-col-xs-12" style="margin: 10px;">
+									<span class="mui-span-height">下拉刷新具体业务实现下拉刷新Item 1下拉刷新具体业务实现下拉刷新Item 1</span>
+						      	</div>
+							</div>
+						</a>
+					</li>-->
+				</ul>
+			</div>
+		</div>
+		<div id="noDataWapper" class="mui-content" style="display: none;margin-top: 50px;">
+			<div class="iot-list-nodata-wapper">
+				<div class="iot-list-nodata">
+					<span></span>
+				</div>
+				<p class="iot-list-nodata-text">当前页面暂无数据</p>
+			</div>
+		</div>
+		<script src="../js/mui.min.js"></script>
+		<script src="../js/util.js"></script>
+		<script>
+		(function($, doc) {
+			$.plusReady(function(){
+				
+				var page = 0, size = 10, count = 0,isFirst = 0;
+				var readFalge = "0";
+				
+				mui('body').on('tap', '.mui-navigate-right', function(e) {
+					var _this = this;
+				  	var id = this.getAttribute("data-id");
+					var url = 'message/read?id='+id;
+				  	if(readFalge == '0' && (jQuery(this).attr("class").indexOf('no-read') > -1 )){
+				  		//根据id向服务器请求
+				  		plus.nativeUI.showWaiting();
+					 	Util.ajax({
+							url: url ,
+							type:'post',
+							success: function(data){
+								setTimeout(function(){
+									plus.nativeUI.closeWaiting();
+									var value = jQuery(".msg-number").text();
+									jQuery(".msg-number").text(value - 1);
+									jQuery(_this).removeClass("no-read");
+								},800);
+							}
+						});	
+					}
+				});
+		
+				$.init({
+					pullRefresh: {
+						container: '#pullrefresh',
+						down: {
+							callback: pulldownRefresh
+						},
+						up: {
+							contentrefresh: '正在加载...',
+							callback: pullupRefresh
+						}
+					}
+				});
+				
+				//外部界面调用本页面刷新方法
+				window.addEventListener('resetPage',function(event){
+					readFalge = event.detail.readFalge;
+					pulldownRefresh();
+				});
+				
+				document.getElementById("msg-noread").addEventListener("tap",function(){
+					var view = plus.webview.getWebviewById("message-List");
+					mui.fire(view,'resetPage',{
+					    readFalge:"0"
+					});
+					mui('#pullrefresh').pullRefresh().refresh(true);
+					jQuery(this).addClass('active').siblings('p').removeClass('active');
+				});
+				
+				document.getElementById("msg-readed").addEventListener("tap",function(){
+					var view = plus.webview.getWebviewById("message-List");
+					mui.fire(view,'resetPage',{
+					    readFalge:"1"
+					});
+					mui('#pullrefresh').pullRefresh().refresh(true);
+					jQuery(this).addClass('active').siblings('p').removeClass('active');
+				});
+				
+				load(true);
+				
+				function load(flag){
+					var self = plus.webview.currentWebview();
+					pageType = self.pageType;
+					Util.ajax({
+						url: 'message/querInfoPage',
+						data: {
+							page: page,
+							size: size,
+							readFalge: readFalge,
+							projectId: localStorage.getItem("IPARK_APP_PROJECTID")
+						},
+						success: function(data){
+							page++;
+							count = data.numberOfElements;
+							var totalCount = data.totalElements;
+							if(totalCount == 0 && readFalge == "0"){
+								if(isFirst == 0){
+									var btn = document.getElementById("msg-readed");
+									mui.trigger(btn,'tap');
+								}else{
+									document.getElementById("noDataWapper").style.display="block";
+									document.getElementById("pullrefresh").style.display="none";
+								}
+							}else if(totalCount == 0 && readFalge == "1"){
+								document.getElementById("noDataWapper").style.display="block";
+								document.getElementById("pullrefresh").style.display="none";
+							}else if(readFalge == "0" && totalCount != 0){
+								randerNumber(data.totalElements)
+							}else{
+								document.getElementById("noDataWapper").style.display="none";
+								document.getElementById("pullrefresh").style.display="block";
+							}
+							isFirst++;
+							
+							var table = document.body.querySelector('.mui-table-view');
+							for (var i = 0, len = data.content.length; i < len; i++) {
+								var li = document.createElement('li'),
+									tempData = data.content[i];
+								li.className = 'mui-input-group';
+								li.setAttribute('data-id', tempData.id);
+								var time = new Date(tempData.createTime);
+								var Minutes=time.getMinutes() < 10 ? "0" + time.getMinutes() : time.getMinutes();
+								var getHours=time.getHours() < 10 ? "0" + time.getHours() : time.getHours();
+								var getSeconds=time.getSeconds() < 10 ? "0" + time.getSeconds() : time.getSeconds();
+								time = time.getFullYear() + "-" + (time.getMonth() + 1) + "-" + time.getDate() + " " +getHours+ ":" + Minutes + ":" + getSeconds;
+								var str = '<a class="mui-navigate-right cleraAfter';
+								(readFalge == "0") && (str += ' no-read') 
+								str += '"' +'data-time="'+time+'" data-content="'+tempData.content+'" data-id="'+tempData.id+'">'
+									+'<div class="mui-col-xs-12 msg-time-style">'+time+'</div>'
+									+'<div class="mui-row mui-input-row" style="border-radius:4px;">'
+										+'<div class="mui-col-xs-12" style="margin: 10px;">'
+									   		+'<span class="mui-span-height">'+tempData.content+'</span>'
+							      		+'</div>'
+							      	+'</div>'
+								+'</a>';
+								li.innerHTML = str;
+								table.appendChild(li);
+							}
+							flag ? 
+								(function(){
+									$('#pullrefresh').pullRefresh().endPulldownToRefresh();
+									$('#pullrefresh').pullRefresh().endPullupToRefresh(count<size);
+								})() :
+								$('#pullrefresh').pullRefresh().endPullupToRefresh(count<size); //refresh completed
+								
+						    //nwaiting.close(); 
+						}
+					});
+				}
+				function fomatter(Data){
+					return Data.getFullYear() + "-" + (Data.getMonth() + 1) + "-" + Data.getDate() + " " + Data.getHours() + ":" + Data.getMinutes() + ":" + Data.getSeconds();
+				}
+				/**
+				 * 下拉刷新具体业务实现
+				 */
+				function pulldownRefresh() {
+					setTimeout(function() {
+						page = 0;
+						count = 0;
+						var table = document.body.querySelector('.mui-table-view');
+						table.innerHTML = '';
+						load(true);
+					}, 1500);
+				}
+				/**
+				 * 上拉加载具体业务实现
+				 */
+				function pullupRefresh() {
+					setTimeout(function() {
+						load(true);
+					}, 1500);
+				}
+				
+				/**/
+				function randerNumber(number){
+					jQuery(".msg-number").text(number).show();
+				}
+			})
+			
+		})(mui, document);
+		</script>
+	</body>
+</html>

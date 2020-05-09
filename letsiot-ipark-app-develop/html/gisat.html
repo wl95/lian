@@ -1,0 +1,167 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>喷灌互动</title>
+	<meta name="viewport"
+	    content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+	<link href="../css/mui.min.css" rel="stylesheet" />
+	<link href="../css/mui.picker.min.css" rel="stylesheet" />
+	<link href="../fonts/iconfont/iconfont.css" rel="stylesheet" />
+	<link href="../css/ipark.css" rel="stylesheet" />
+	<script src="../js/mui.min.js"></script>
+	<script src="../js/mui.picker.min.js"></script>
+	<script type="text/javascript" src="../js/jquery-3.1.1.min.js" ></script>
+		<style>
+		/* 	* { touch-action: none; } */
+			html,body {
+				height: 100%;
+				background:#fff;
+				}
+				.mui-ios header{
+					padding-top:0px!important;
+				}
+				.back-white{
+					background: #fff;
+				}
+			.water-pipe{
+			width: 8rem;
+			height: 8rem;
+			border-radius: 999999px;
+			box-shadow: 0px 1px 9px #AAFCD1;
+			}	
+			.pad-top{
+				padding-top: 5rem;
+			}
+			.padding{
+			  padding:10px;
+			}
+			.textalgin-center{
+			  text-align: center;
+			}
+			.cont-txt{
+				font-size: 0.5rem;
+			}
+			/*灰色字体*/
+			.color-gray{
+				color:#a9a9a9;
+			}
+			/* iphone5 */
+			 @media screen and (min-width:320px)and (max-width:568px){
+				.pad-txt{
+					padding:10px 0 10px 0;
+				}
+			}
+		/* 圆形加载进度条 */
+		
+		</style>
+	</head>
+
+	<body>
+		<header class="mui-bar mui-bar-nav padd">
+			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+			<h1 class="mui-title">智能喷灌模拟配置启动页</h1>
+		</header>
+		<div class="mui-content back-white">
+			 <div class="textalgin-center pad-top">
+				 <img class="water-pipe" src="../images/login/waterPipe.png">
+			 </div>
+			 <div class="textalgin-center cont-txt padding color-gray pad-txt"> 智能喷灌系统以节能模式运行，演示请求需切换至快捷模式</div>
+			 <div class="textalgin-center padding color-gray tooltip-txt">预计10分钟内可完成</div>
+			 <div class=" textalgin-center padding">
+				<button type="button" data-loading-text="开启中" class="mui-btn mui-btn-success commint">确定开启</button>
+			 </div>
+		</div>
+		
+		<script src="../js/app.js"></script>
+		<!-- <script src="../js/util.js"></script> -->
+		<!-- <script src="../js/GeoUtils_min.js"></script>
+		<script src="../js/fabric.min.js"></script> -->
+		<script type="text/javascript">
+				mui.init(); 
+			/* 点击确定开启按钮 */
+			$('body').on('tap','.commint',function(){
+				$(".pad-txt").text("");
+				$(".tooltip-txt").text("预计10分钟内可完成，请稍后");
+				/* 
+				更换手动模式
+				请求方式：get
+				入参：{"deviceId" : 设备Id}
+				此处为电磁阀 Id：3254548284065792
+				 */
+				
+				var deviceId="3254548284262400";
+				$.ajax({
+				     url:'http://ipark.bplusiot.com/iPark/APIs/idim/control/action/open/device',
+				     type: 'post',
+				    data: { 
+				        deviceId:deviceId ,
+				    },
+				     dataType: "json",
+					 timeout :60000*12, //超时时间设置，单位毫秒 1分(min)=60000毫秒(ms)
+				    success: function(data){
+					   console.log(5555555);
+					     console.log(JSON.stringify(data));
+				   },
+				     error:function(e){  
+				      console.log(JSON.stringify(e));  
+				     }  
+				 }); 
+				//12分钟 SOME 切页  6分钟 ALL 切
+			//6分钟调次接口
+				var test2 = setInterval(function(){
+					clos(deviceId);
+				   //your codes
+				clearInterval(test3);
+				},60000*12);
+				//12分钟调次接口
+				var test3 = setInterval(function(){
+					clos(deviceId);
+				   //your codes
+				clearInterval(test2);
+				},60000*12); //1分(min)=60000毫秒(ms)
+			function clos(deviceId){
+				//调关接口
+				$.ajax({
+				     url:'http://ipark.bplusiot.com/iPark/APIs/idim/control/checkStatus/device',
+				     type: 'post',
+				    data: { 
+				        deviceId:deviceId ,
+				    },
+				     dataType: "json",
+					 timeout : 60*1000*12, //超时时间设置，单位毫秒
+				    success: function(data){
+					   console.log(666666666666);
+					     console.log(JSON.stringify(data));
+						 if(data=="SOME"|| data=="ALL"){
+							 clearInterval(test2);
+							 clearInterval(test3);
+							 //改变图片路径
+							mui.openWindow({
+								url: './gisation.html',
+								id:'gisation'
+							  });	
+								  
+						 }
+				   },
+				     error:function(e){  
+						 mui.toast("关闭失败:"+JSON.stringify(e));
+				      console.log(JSON.stringify(e));  
+				     }  
+				 }); 
+			
+			}						 
+		/* function (){
+			接口：/iPark/APIs/idim/control/checkStatus
+			入参：{"deviceId" : 设备编号,
+			"type" : some/all} 传 some  	
+		}	*/							 
+							 
+			});			 
+									
+									 
+		
+		</script>
+	</body>
+</html>

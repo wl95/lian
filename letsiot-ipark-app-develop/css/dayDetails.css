@@ -1,0 +1,93 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+
+@font-face {
+    font-family: "楷体";
+    font-weight: normal;
+    font-style: normal;
+    src: url('../fonts/kaiti.ttf') format('truetype');
+}
+
+@font-face {
+    font-family: "RDS";
+    font-weight: normal;
+    font-style: normal;
+    src: url('../fonts/ReznorDownwardSpiral.ttf') format('truetype');
+}
+
+.dayDetails-wrap,
+.dailySub-wrap,
+.monthSub-wrap {
+    width: 100%;
+    height: calc(100% - 44px);
+    margin-top: 44px;
+    overflow-x: hidden;
+    overflow-y: scroll;
+}
+
+.picker-icon {
+    font-size: 28px;
+    color: rgba(0, 153, 102, 1);
+    position: absolute;
+    top: 24px;
+    left: 66px;
+}
+
+a {
+    text-decoration: none;
+}
+
+li {
+    list-style: none;
+}
+
+.mui-bar .mui-pull-left,
+.mui-bar .mui-title {
+    color: #fff;
+}
+
+.picker {
+    padding: 15px 60px;
+	position: relative;
+}
+
+#dtpicker {
+    margin-bottom: 0;
+    padding-left: 45px;
+    border: none;
+    outline: none;
+}
+
+.timeList>li {
+    background: #fff;
+    padding: 15px 10px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 8px;
+}
+
+.mui-btn-success {
+    padding: 5px 30px;
+}
+
+.timeList-right {
+    line-height: 31px;
+    font-size: 14px;
+    width: 91px;
+    color: #aaa;
+    text-align: center;
+}
+
+.footer-title {
+    /* position: absolute;
+    left: 0;
+    bottom: 0; */
+    padding: 8px 10px;
+    width: 100%;
+    font-size: 14px;
+    color: #aaa;
+    text-align: center;
+}

@@ -1,0 +1,75 @@
+#feedback{
+				width:100%;
+				height:100vh;
+			}
+			#feedback .mui-content{
+				   background-color: #e6f1f2;
+			}
+	#feedback		.mui-bar-nav~.mui-content .mui-slider.mui-fullscreen{
+				top:64px;
+			}
+	#feedback	.search{
+			position: absolute;
+			background: #e6f1f2;
+			width: 100%;
+			margin-top: -3px;
+			}
+	#feedback		.padd-search{
+				padding: 13px 10px 0 10px;
+			}
+	#feedback		.heightAbsolutely{
+				height:100%;
+			}
+		#feedback	.allocatedList{
+				height:100%;
+				margin-top:60px;
+			}
+		#feedback	.padd-bott{
+				padding-bottom: 10px!important;
+			}
+		#feedback	.margin-bott{
+				margin-bottom: 10px;
+			}
+			/*灰色底*/
+		#feedback	.background-gray{
+				background-color: #e9ecf1;
+			}
+			/*灰色字体*/
+		#feedback	.color-gray{
+				color:#a9a9a9;
+			}
+			/*橙色字体*/
+		#feedback	.color-orange{
+				color: #FFC86C;
+			}
+			/* 绿色背景 */
+		#feedback	.background-green{
+			background-color:#009e96!important;	
+			}
+			/* 白色背景 */
+		#feedback	.back-white{
+				background: #fff;
+			}
+		#feedback	.allocated-item{
+				padding:10px;
+				background:#FFF;
+			}
+		#feedback	.mui-segmented-control.mui-segmented-control-inverted .mui-control-item.mui-active{
+				color:#009e96;
+			}
+		#feedback	.lineHeig-allocat{
+				line-height: 1.5rem;
+			}
+		#feedback	.lineHeig-stat{
+				line-height: 4.5rem;
+			}
+		#feedback	.lineHeig-state{
+				line-height: 3rem;
+			}
+		#feedback	.index-five{
+				z-index: 5;
+			}
+		#feedback	.postion-scroll{
+				position: initial;
+			}
+			

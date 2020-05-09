@@ -1,0 +1,617 @@
+<!doctype html>
+<html>
+
+<head>
+	<meta charset="UTF-8">
+	<title>查看工单</title>
+	<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+	<link href="../css/mui.min.css" rel="stylesheet" />
+	<link href="../css/mui.picker.min.css" rel="stylesheet" />
+	<link href="../fonts/iconfont/iconfont.css" rel="stylesheet" />
+	<link href="../fonts/iconfont-new/iconfont-new.css" rel="stylesheet" />
+	<link href="../css/ipark.css" rel="stylesheet" />
+	<link href="../css/mui.previewimage.css" rel="stylesheet" />
+	<style>
+		html,body {
+			height: 100%;
+		}
+		.mui-content {
+			background-color: inherit;
+		}
+		form.mui-input-group:after {
+			background: #FFFFFF;
+		}
+		.mui-input-group .mui-input-row {
+			height: auto;
+			padding: 0 15px;
+			margin-bottom: 0;
+		}
+		.mui-input-group .mui-input-row.mui-input-row-overflowV {
+			overflow: visible;
+			height: 50px;
+		}
+		.mui-input-row span {
+			line-height: 50px;
+		}
+		.mui-input-row span.form-full-span {
+			display: inline-block;
+		    height: 36px;
+		    width: 100%;
+		}
+		.mui-input-row .mui-limit-width {
+		    display: inline-block;
+			margin-top:0px;
+			line-height:20px;
+		    width: 100%;
+		}
+		.mui-input-group .mui-input {
+	        height: 32px;
+			margin-top: 4px;
+		}
+		span.endTimeBtn .iconfont {
+			color: #36C6D3;
+			font-size: 20px;
+		}
+		.mui-button-row{
+			display: none;
+		}
+		#imgList img,
+		#photoList img{
+			display: inline-block;
+			width: 60px;
+			height: 60px;
+			float:left;
+			margin: 10px 10px 10px 0;
+		}
+		.musicplay{
+		    position: relative;
+		    left: -10px;
+		}
+		.mui-input-group .mui-input-row:nth-child(2),
+		.mui-input-group .mui-input-row:nth-last-child(1),
+		.mui-input-group .mui-input-row.splitSpace{
+			margin-top: 10px;
+		}
+		.mui-input-group .mui-input-row.splitBottomSpace{
+			margin-bottom: 10px;
+		}
+		.iconfont.icon-space{
+			color:#686868;
+			vertical-align: middle;
+			padding-left: 0px;
+			padding-right: 6px;
+		}
+		.mui-content .sheetText.onlyRead{
+			color:#282828;
+		}
+		.mui-input-row .textnum-tip{
+			font-size: 13px;
+		    color: #9E9E9E;
+		    line-height: 1;
+		    height: 25px;
+		    text-align: right;
+		    clear: both;
+		    margin-bottom: 20px;
+		}
+		.mui-input-row .textnum.error{
+			color:#F17368;
+		}
+		#callPhone{
+			position: absolute;
+			color:#009E96;
+			font-size:22px;
+			right: 0;
+		}
+		.writeOption{
+			color:#009E96 !important;
+		}
+		.split-line {
+		    border-bottom: 0;
+		    border-top: 1px solid #eee;
+		}
+		.mui-flow-btn{
+			position: absolute;
+			right: 15px;
+			color: #9E9E9E;
+		}
+		.mui-flow-btn span{
+			color: #9e9e9e !important;
+		}
+		.iconfont.icon-up{
+			display: inline-block;
+			margin-top: -8px;
+		}
+		.mui-flow-btn-hide{
+			display: none;
+		}
+	</style>
+</head>
+
+<body>
+	<header class="mui-bar mui-bar-nav">
+		<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+		<h1 class="mui-title">工单详情</h1>
+	</header>
+	<div class="mui-content my-sheet">
+		<div id='backdrop' class="mui-backdrop"></div>
+		<div class="mui-content-padded" style="margin:0;">
+			<form class="mui-input-group" onsubmit="return false;">
+				<div class="mui-row mui-input-row mui-flow" style="padding-top: 15px;padding-bottom:10px;">
+					<p class="mui-row">
+						<span class="mui-flow-title">当前流程</span>
+						<span class="mui-flow-btn mui-flow-btn-show"><span class="iconfont icon-space icon-down">&#xe68a;</span>展开</span>
+						<span class="mui-flow-btn mui-flow-btn-hide"><span class="iconfont icon-space icon-up">&#xe68a;</span>收缩</span>
+					</p>
+					<div class="mui-row mui-normal-flow mui-flow-new-contanter">
+						<p class="mui-row mui-flow-show SN DS">
+							<span class="mui-flow-time"></span><span class="mui-point"><i class="iconfont">&#xe691;</i></span><i class="mui-line-down"></i><span class="mui-flow-name">审核</span>
+						</p>
+						<p class="mui-row mui-flow-show CP">
+							<span class="mui-flow-time"></span><i class="mui-line-up"></i><span class="mui-point"><i class="iconfont">&#xe691;</i></span><i class="mui-line-down"></i><span class="mui-flow-name">确认反馈</span>
+						</p>
+						<p class="mui-row mui-flow-show TC">
+							<span class="mui-flow-time"></span><i class="mui-line-up"></i><span class="mui-point"><i class="iconfont">&#xe691;</i></span><i class="mui-line-down"></i><span class="mui-flow-name">结果反馈</span>
+						</p>
+						<p class="mui-row mui-flow-show BP">
+							<span class="mui-flow-time"></span><i class="mui-line-up"></i><span class="mui-point"><i class="iconfont">&#xe691;</i></span><i class="mui-line-down"></i><span class="mui-flow-name">分配工单</span>
+						</p>
+						<p class="mui-row mui-flow-show WD">
+							<span class="mui-flow-time"></span><i class="mui-line-up"></i><span class="mui-point"><i class="iconfont">&#xe691;</i></span><i class="mui-line-down"></i><span class="mui-flow-name">接受工单</span>
+						</p>
+						<p class="mui-row mui-flow-show TA">
+							<span class="mui-flow-time"></span><i class="mui-line-up"></i><span class="mui-point"><i class="iconfont">&#xe691;</i></span><i class="mui-line-down"></i><span class="mui-flow-name">指派工单</span>
+						</p>
+						<p class="mui-row mui-flow-show BA">
+							<span class="mui-flow-time"></span><i class="mui-line-up"></i><span class="mui-point"><i class="iconfont">&#xe691;</i></span><span class="mui-flow-name">新建工单</span>
+						</p>
+					</div>
+					<div class="mui-row mui-disnormal-flow mui-flow-new-contanter">
+						<p class="mui-row mui-flow-show AD">
+							<span class="mui-flow-time"></span><span class="mui-point"><i class="iconfont">&#xe691;</i></span><i class="mui-line-down"></i><span class="mui-flow-name">确认</span>
+						</p>
+						<p class="mui-row mui-flow-show TD">
+							<span class="mui-flow-time"></span><i class="mui-line-up"></i><span class="mui-point"><i class="iconfont">&#xe691;</i></span><i class="mui-line-down"></i><span class="mui-flow-name">拒绝工单</span>
+						</p>
+						<p class="mui-row mui-flow-show TA">
+							<span class="mui-flow-time"></span><i class="mui-line-up"></i><span class="mui-point"><i class="iconfont">&#xe691;</i></span><i class="mui-line-down"></i><span class="mui-flow-name">指派工单</span>
+						</p>
+						<p class="mui-row mui-flow-show BA">
+							<span class="mui-flow-time"></span><i class="mui-line-up"></i><span class="mui-point"><i class="iconfont">&#xe691;</i></span><span class="mui-flow-name">新建工单</span>
+						</p>
+					</div>
+				</div>
+				<div class="mui-row mui-input-row">
+					<label class="title-label form_type"><span class="iconfont icon-space">&#xe67b;</span>类型</label>
+					<div class="mui-col-sm-70t mui-col-xs-12 sheetText onlyRead">
+						<span id="typeText"></span>
+					</div>
+				</div>
+				<div class="mui-row mui-input-row mui-hidden" id="endTimeRow">
+					<div class="mui-row split-line">
+						<label class="title-label form_time"><span class="iconfont icon-space">&#xe66d;</span>截止</label>
+						<div class="mui-col-sm-20t mui-col-xs-12 sheetText onlyRead">
+							<span class="row-span form-full-span endTimeTrigger" id="endTimeInput" data-options='{"type":"time"}'></span>
+						</div>
+						<div class="mui-col-sm-10t mui-col-xs-12">
+							<span class="endTimeBtn endTimeTrigger" data-options='{"type":"time"}'>
+								<i class="iconfont ipark-edit"></i>
+							</span>
+						</div>
+					</div>
+				</div>
+				<div class="mui-row mui-input-row">
+					<div class="mui-row split-line">
+						<label class="title-label form_area"><span class="iconfont icon-space">&#xe665;</span>区域</label>
+						<div class="mui-col-sm-70t mui-col-xs-12 sheetText onlyRead">
+							<span id="projectArea" class="mui-limit-width"></span>
+						</div>
+					</div>
+				</div>
+				<div class="mui-row mui-input-row">
+					<div class="mui-row split-line">
+						<label class="title-label form_maintain"><span class="iconfont icon-space">&#xe67e;</span>动作</label>
+						<div class="mui-col-sm-70t mui-col-xs-12 sheetText onlyRead" id='showUserPicker'>
+							<input type="hidden" name="actionValue" />
+							<span id="actionText">选择动作</span>
+						</div>
+					</div>
+				</div>
+				<div class="mui-row mui-input-row" style="display: none;">
+					<div class="mui-row split-line">
+						<label class="title-label form_worker"><span class="iconfont icon-space">&#xe670;</span>用工</label>
+						<div class="mui-col-sm-70t mui-col-xs-12">
+							<span class="sheetText onlyRead">预计：</span><span id="estimateLabor" class="sheetText onlyRead">0</span><span class="sheetText onlyRead">人</span>
+							<span class="sheetText onlyRead">实际：</span><span id="numberEmployment" class="sheetText onlyRead">0</span><span class="sheetText onlyRead">人</span>
+						</div>
+					</div>
+				</div>
+				<div class="mui-row mui-input-row" style="display: none;">
+					<div class="mui-row split-line">
+						<label class="title-label form_photo"><span class="iconfont icon-space">&#xe67c;</span>照片</label>
+						<div class="mui-col-sm-70t mui-col-xs-12">
+							<div class="mui-img-list">
+								<div id="photoList"></div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="mui-row mui-input-row splitBottomSpace">
+					<div class="mui-row split-line">
+						<label class="title-label form_maintain"><span class="iconfont icon-space">&#xe67a;</span>说明</label>
+						<div class="mui-col-sm-70t mui-col-xs-12 sheetText onlyRead">
+							<span id="reportContent" class="mui-limit-width" style="margin: 15px 0 5px;"></span>
+						</div>
+					</div>
+				</div>
+				<div class="mui-row mui-input-row" style="display: none;">
+					<label class="title-label form_xdz"><span class="iconfont icon-space">&#xe66e;</span>小队长</label>
+					<div class="mui-col-sm-20t mui-col-xs-12 sheetText onlyRead">
+						<span id="allotPersonName" class="mui-limit-width"></span>
+					</div>
+				</div>
+				<div class="mui-row mui-input-row" style="display: none;">
+					<div class="mui-row split-line">
+						<label class="title-label form_bzz"><span class="iconfont icon-space">&#xe683;</span>班组长</label>
+						<div class="mui-col-sm-20t mui-col-xs-12 sheetText onlyRead">
+							<span id="designatedPersonName" class="mui-limit-width"></span>
+						</div>
+					</div>
+				</div>
+				<div class="mui-row mui-input-row" style="display: none;">
+					<div class="mui-row split-line">
+						<label class="title-label form_bzz"><span class="iconfont icon-space">&#xe67e;</span>拒绝理由:</label>
+						<div class="mui-col-sm-70t mui-col-xs-12">
+							<span id="rejectionReason" class="mui-limit-width sheetText onlyRead" style="margin:15px 0 5px"></span>
+						</div>
+					</div>
+				</div>
+				<div class="mui-row mui-input-row splitSpace" style="display: none;">
+					<div class="mui-row split-line">
+						<label class="title-label form_photo"><span class="iconfont icon-space">&#xe67f;</span>现场照片</label>
+						<div class="mui-col-sm-70t mui-col-xs-12">
+							<div class="mui-img-list">
+	                            <div id="imgList"></div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="mui-row mui-input-row" style="display: none;">
+					<div class="mui-row split-line">
+						<label class="title-label form_feedBack"><span class="iconfont icon-space">&#xe679;</span>完成说明</label>
+						<div class="mui-col-sm-70t mui-col-xs-12">
+							<span id="xdzFeedback" class="mui-limit-width sheetText onlyRead"  style="margin:15px 0 5px"></span>
+						</div>
+					</div>
+				</div>
+				<div class="mui-row mui-input-row splitSpace" style="display:none;">
+					<div class="mui-row split-line">
+						<label class="title-label form_idea"><span class="iconfont icon-space">&#xe679;</span>审核意见:</label>
+						<div class="mui-col-sm-70t mui-col-xs-12">
+							<span id="auditRecommendations" class="mui-limit-width sheetText onlyRead" style="margin:15px 0 5px"></span>
+						</div>
+					</div>
+				</div>
+				<div class="mui-row mui-input-row mui-input-row-overflowV">
+					<label class="title-label form_audio"><span class="iconfont icon-space">&#xe66c;</span>语音</label>
+					<div class="mui-col-sm-70t mui-col-xs-12">
+						<img width="50px" height="50px" src="../images/audio_play.png" class="musicplay" />
+					</div>
+				</div>
+			</form>
+			<div class="mui-row mui-button-row" style="margin-top:10px;padding-bottom:20px">
+				<button type="button" class="mui-btn mui-btn-primary newBtnSmall" id="editBtn">编辑</button>
+				<button type="button" class="mui-btn mui-btn-primary newBtnSmall" id="delBtn">删除</button>
+			</div>
+		</div>
+	</div>
+	<script src="../js/mui.min.js"></script>
+	<script src="../js/mui.picker.min.js"></script>
+	<script type="text/javascript" src="../js/jquery-1.8.0.min.js"></script>
+	<script src="../js/app.js"></script>
+	<script src="../js/util.js"></script>
+    <script src="../js/mui.zoom.js"></script>
+	<script src="../js/mui.previewimage.js"></script>
+	<script type="text/javascript">
+		(function ($, doc) {
+			$.init();
+			var sheetId = "";
+			var actionData = [],
+				userPicker = new $.PopPicker(),
+				type = 'N';
+			window.addEventListener('editSheetWithNewId', function (event) {
+				sheetId = event.detail.sheetId;
+				getActionList(sheetId);
+			});
+			$.plusReady(function () {
+				var self = plus.webview.currentWebview();
+				sheetId = self.sheetId;
+				getActionList(sheetId);
+				var role = localStorage.getItem("APP_USERROLE")
+				if (5 == role) {
+					jQuery("#estimateLabor").parent().parent().show();
+				}
+				mui.previewImage();
+			})
+			/*获取动作列表*/
+			function getActionList(sheetId) {
+				Util.ajax({
+					url: 'maintAction/list',
+					success: function (data) {
+						//下拉选择
+						for (var i = 0, len = data.content.length; i < len; i++) {
+							actionData.push({
+								value: data.content[i].id,
+								text: data.content[i].name
+							});
+						}
+						userPicker.setData(actionData);
+						getEndTime(sheetId);
+					}
+				});
+			}
+			var p = null; //语音播放对象
+			var isDownloading = false; //下载语音标志
+			var isplaying = false;
+			$('body').on('tap', '.musicplay', function () {
+				if (jQuery(".musicplay").hasClass("isplay")) {
+					if (isplaying) {
+						isplaying = false;
+						p.pause();
+						jQuery(".musicplay").attr("src", "../images/audio_play.png");
+					} else {
+						p.resume();
+						isplaying = true;
+						jQuery(".musicplay").attr("src", "../images/audio_stop.gif");
+					}
+				} else {
+					if (p != null) {
+						p.stop();
+						p = null;
+						jQuery(".musicplay").attr("src", "../images/audio_play.png");
+						jQuery(".musicplay").removeClass("isplay");
+					}
+					if ($.os.ios) {
+						var url = app.configures.URL + "/iPark/APIs/tts/DownMuisc/" + sheetId + ".wav";
+						var filename = "_doc/audio/" + sheetId + ".wav";
+						if (!isDownloading) {
+							isDownloading = true;
+							var dtask = plus.downloader.createDownload(url, {
+								filename: filename
+							}, function (d, status) {
+								if (status == 200) {
+									startPlay(filename);
+								} else {
+									$.toast("语音播放失败，请稍后再试！");
+								}
+							});
+							dtask.start();
+						}
+					} else {
+						var url = app.configures.URL + "/iPark/APIs/tts/DownMuisc/" + sheetId + ".wav";
+						startPlay(url);
+					}
+				}
+			});
+
+			function startPlay(url) {
+				isDownloading = false;
+				isplaying = true;
+				p = plus.audio.createPlayer(url);
+				jQuery(".musicplay").attr("src", "../images/audio_stop.gif");
+				jQuery(".musicplay").addClass("isplay");
+				p.play(function () {
+					jQuery(".musicplay").attr("src", "../images/audio_play.png");
+					jQuery(".musicplay").removeClass("isplay");
+				}, function (e) {
+					jQuery(".musicplay").attr("src", "../images/audio_play.png");
+					jQuery(".musicplay").removeClass("isplay");
+					$.toast("语音播放失败，请稍后再试！");
+				});
+			}
+
+			//编辑
+			document.getElementById('editBtn').addEventListener('tap', function (event) {
+				var view = plus.webview.getWebviewById("editSheet");
+				if (view) {
+					mui.fire(view, "editSheetWithNewId", {
+						sheetId: sheetId
+					});
+					view.show();
+				} else {
+					$.openWindow({
+						url: './editSheet.html',
+						id: 'editSheet',
+						extras: {
+							sheetId: sheetId
+						}
+					});
+				}
+			});
+
+			//删除
+			document.getElementById('delBtn').addEventListener('tap', function (event) {
+				var btnArray = ['否', '是'];
+				mui.confirm('工单删除后将无法恢复，是否确认删除？', '提示', btnArray, function (e) {
+					if (e.index == 1) {
+						Util.ajax({
+							url: '/workorderManage/deleteWo?status=BA&id=' + sheetId,
+							type: 'delete',
+							success: function (data) {
+								$.openWindow({
+									url: './actionResult.html',
+									id: 'actionResult',
+									extras: {
+										actionId: '16'
+									}
+								});
+							}
+						});
+					}
+				})
+			});
+
+			function getInfo(sheetId, status) {
+				Util.ajax({
+					url: 'workorderManage/listWoInfo',
+					data: {
+						woId: sheetId
+					},
+					success: function (data) {
+						jQuery.each(data, function (i, value) {
+							var dom = jQuery("p." + value.status);
+							var time = value.optionTime.substring(5,16);
+							dom.find('.mui-flow-time').html(time);
+						});
+					}
+				});
+			}
+
+			//获取工单信息
+			function getEndTime(sheetId) {
+				var endTimeRow = doc.getElementById('endTimeRow');
+				Util.ajax({
+					url: 'workorderManage/getWorkorderInfo',
+					data: {
+						id: sheetId
+					},
+					success: function (data) {
+						// console.log(JSON.stringify(data));
+						type = data.woType;
+						var status = data.status;
+						//显示最新流程及它的时间
+						/*	case 'BA':'新建工单'
+							case 'TA':'指派工单'
+							case 'WD':'接收工单'
+							case 'BP':'分配工单'
+							case 'TC':'结果反馈'
+							case 'CP':'确认反馈'
+							case 'SN DS':'审核'
+							case 'TD':"拒绝工单"
+							case 'AD':"确认"*/
+						
+						//1.首先判断展示哪种流程
+						//2.判断之后，折叠时展示当前状态的区域
+						//3.展开时，展示该流程的其他状态区域
+						if ('TD' == status || 'AD' == status) {
+							jQuery(".mui-disnormal-flow").show().siblings('mui-flow-new-contanter').hide();
+						} else {
+							jQuery(".mui-normal-flow").show().siblings('.mui-flow-new-contanter').hide();
+						}
+						var nowDom = jQuery('.mui-flow-time','.'+status);
+						nowDom.text(data.optionTime.substring(5,16)).parent().addClass('active').siblings('p').hide();
+						nowDom.parent().nextAll().addClass('actived');
+						//点击显示流程详情
+						getInfo(sheetId, status);
+						jQuery('.mui-flow-btn').on('click', function () {
+							jQuery(this).hide().siblings('.mui-flow-btn').show();
+							if(jQuery(this).attr('class').indexOf('btn-show') > -1){
+								jQuery('.mui-flow-time','.'+status).parent().siblings('p').show();
+							}else{
+								jQuery('.mui-flow-time','.'+status).parent().siblings('p').hide();
+							}
+						});
+						//根据工单当前的状态，控制界面展示的逻辑
+						var userInfo = app.getState();
+						if ('BA' == status && userInfo.role == "5") {
+							//如果是待指派的工单，则可以进行编辑与删除
+							jQuery(".mui-button-row").show();
+						} else if (status == 'SN' || status == 'DS') {
+							//如果是结束的工单，则显示审核意见
+							jQuery("#auditRecommendations").parents('.mui-input-row').show();
+						}
+						//是否显示实例图片
+						if (!(data.xdzFeedback == null && data.rejectionReason == null)) {
+							imgList(sheetId);
+							jQuery("#imgList").parents('.mui-input-row').show();
+						}
+						//是否显示图片说明
+						if ((null != data.images) && (data.images.length > 0)) {
+							var imageArr = data.images;
+							for (var i = 0; i < imageArr.length; i++) {
+								var mediumSrc = "",src = app.configures.URL + "/iPark/APIs/maintGuide/getImageByPath?imagePath=" + imageArr[i].path;
+								if(imageArr[i].resourceMinimal){
+									src = app.configures.URL + "/iPark/APIs/maintGuide/getImageByPath?imagePath=" + imageArr[i].resourceMinimal;
+									mediumSrc = app.configures.URL + "/iPark/APIs/maintGuide/getImageByPath?imagePath=" + imageArr[i].resourceMedium;
+								}
+								jQuery("#photoList").append("<img class='mui-img-upload' data-preview-group='1' data-preview-src='"+mediumSrc+"' data-src='"+mediumSrc+"' src='"+src+"' />");
+							}
+						} else {
+							jQuery("#photoList").append("<p style='color:#282828;margin-bottom:0px;font-size:14px'>无</p>");
+						}
+						jQuery(".mui-img-upload").on("click", function () {
+							var src = jQuery(this).data('src');
+							(src == "") && (src = jQuery(this).attr('src'))
+							var result = "<img src='" + src + "'/>";
+							jQuery("#backdrop").attr('class', 'mui-backdrop').html(result).show();
+						});
+						jQuery("#backdrop").on("click", function () {
+							jQuery("#backdrop").attr('class', '').html('').hide();
+						});
+						jQuery("#photoList").parents('.mui-input-row').show();
+						//显示项目区域
+						data.areaName ? jQuery("#projectArea").text(data.areaName) : jQuery("#projectArea").text("暂未添加")
+						//工单类型
+						$('#typeText')[0].innerText = data.woTypeStr;
+						//紧急工单
+						if ('U' == data.woType) {
+							endTimeRow.className = 'mui-row mui-input-row';
+							endTimeInput.innerText = data.endTime;
+							endTimeInput.setAttribute('vaue', data.endTime.substring(0, 5));
+						}
+						//养护动作
+						if (data.maintAction) {
+							$("[name='actionValue']")[0].value = data.maintAction;
+							$("#actionText")[0].innerText = data.maintActionName;
+							userPicker.pickers[0].setSelectedValue(data.maintAction, 200);
+						}
+						//班组长
+						data.designatedPersonName && jQuery('#designatedPersonName').text(data.designatedPersonName).parents('.mui-input-row').show()
+						//小队长
+						data.allotPersonName && jQuery("#allotPersonName").text(data.allotPersonName).parents('.mui-input-row').show()
+						//班组长意见
+						data.rejectionReason && jQuery("#rejectionReason").text(data.rejectionReason).parents('.mui-input-row').show()
+						//工单完成情况说明
+						data.xdzFeedback && jQuery("#xdzFeedback").text(data.xdzFeedback).parents('.mui-input-row').show()
+						//实际用工数
+						data.numberEmployment && jQuery("#numberEmployment").text(data.numberEmployment).parents('.mui-input-row').show()
+						//审核意见
+						data.auditRecommendations ? jQuery('#auditRecommendations').text(data.auditRecommendations) : jQuery('#auditRecommendations').text('无审核意见')
+						$("#reportContent")[0].innerText = data.remark;
+						$("#estimateLabor")[0].innerText = data.estimateLabor;
+					}
+				});
+			}
+
+			//获取工单反馈的图片
+			function imgList(sheetId) {
+				Util.ajax({
+					url: 'workorderManage/getWorkorderBackInfo',
+					data: {
+						id: sheetId
+					},
+					success: function (data) {
+						if ((null != data.images) && (data.images.length > 0)) {
+							var imageArr = data.images;
+							for (var i = 0; i < imageArr.length; i++) {
+								var mediumSrc = "",src = app.configures.URL + "/iPark/APIs/maintGuide/getImageByPath?imagePath=" + imageArr[i].path;
+								if(imageArr[i].resourceMinimal){
+									src = app.configures.URL + "/iPark/APIs/maintGuide/getImageByPath?imagePath=" + imageArr[i].resourceMinimal;
+									mediumSrc = app.configures.URL + "/iPark/APIs/maintGuide/getImageByPath?imagePath=" + imageArr[i].resourceMedium;
+								}
+								var imagetemp="<img class='mui-img-upload' data-preview-group='1' data-preview-src='"+mediumSrc+"' src='"+src+"' ></img>";  
+								jQuery("#imgList").append(imagetemp);
+							}
+						} else {
+							jQuery("#imgList").append("<p style='color:#282828;margin-bottom:0px;font-size:14px'>无</p>");
+						}
+						jQuery("#backdrop").on("click", function () {
+							jQuery("#backdrop").attr('class', '').html('').hide();
+						});
+					}
+				});
+			}
+		})(mui, document);
+	</script>
+</body>
+
+</html>

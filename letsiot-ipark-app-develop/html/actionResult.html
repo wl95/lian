@@ -1,0 +1,300 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<link href="../css/mui.min.css" rel="stylesheet" />
+		<link href="../css/ipark.css" rel="stylesheet" />
+		<style>
+			html,body {
+				height: 100%;
+				background: #e6f1f2;
+			}
+			
+			.iot-action-result-wapper {
+				background-color: #e6f1f2;
+			    padding: 50px 0 20px;
+			    text-align: center;
+			}
+			
+			.iot-action-result-addtext {
+				font-size: 16px;
+				margin: 20px auto;
+				color: #686868;
+			}
+			.iot-action-result-icon span{
+				width: 175px;
+				height: 125px;
+				margin-left: -15px;
+				display:inline-block;
+			}
+			.iot-yes{
+				background: url(../images/yes.png);
+				background-size:100%;
+			}
+			.iot-no{
+				background: url(../images/yes.png);
+				background-size:100%;
+			}
+			a{
+				color:#009E96;
+			}
+		</style>
+	</head>
+
+	<body>
+		<header class="mui-bar mui-bar-nav">
+			<h1 class="mui-title"></h1>
+		</header>
+		<div class="mui-content" style="margin:0;"></div>
+		<script id="actionResult" type="text/x-jquery-tmpl">
+		    <div class="iot-action-result-wapper">
+				<div class="iot-action-result-icon">
+					<span class="${icon}"></span>
+				</div>
+				{{each btns}}
+			        {{html $value}}
+			    {{/each}}
+			</div>
+		</script>
+		<script src="../js/mui.min.js"></script>
+		<script src="../js/jquery-1.8.0.min.js"></script>
+		<script src="../js/jquery.tmpl.js"></script>
+		<script type="text/javascript">
+			(function($, _JQ, doc) {
+				$.init();
+				
+				var actionInfoMap = {
+					'1': {
+						'title': '新建工单',
+						'icon':'iot-yes',
+						'success': true,
+						'btns': [
+							'<p class="iot-action-result-addtext">新建成功,点击<a id="returnIndexBtn" >返回主页</a></p>'
+						]
+					},
+					'2': {
+						'title': '编辑工单',
+						'icon':'iot-yes',
+						'success': true,
+						'btns': [
+							'<p class="iot-action-result-addtext">编辑成功,点击<a id="returnIndexBtn" >返回主页</a></p>'
+						]
+					},
+					'3': {
+						'title': '指派工单',
+						'icon':'iot-yes',
+						'success': true,
+						'btns': [
+							'<p class="iot-action-result-addtext">指派成功,点击<a id="returnIndexBtn" >返回主页</a></p>'
+						]
+					},
+					'4': {
+						'title': '确认工单',
+						'icon':'iot-yes',
+						'success': true,
+						'btns': [
+							'<p class="iot-action-result-addtext">已同意，工单已废弃,点击<a id="returnIndexBtn" >返回主页</a></p>'
+						]
+					},
+					'5': {
+						'title': '确认工单',
+						'icon':'iot-no',
+						'success': true,
+						'btns': [
+							'<p class="iot-action-result-addtext">已拒绝，请回<a id="returnIndexBtn">待编辑工单列表</a>修改或者删除</p>'
+						]
+					},
+					'6': {
+						'title': '审核工单',
+						'icon':'iot-yes',
+						'success': true,
+						'btns': [
+							'<p class="iot-action-result-addtext">审核通过，已正常关闭工单,点击<a id="returnIndexBtn" >返回主页</a></p>'
+						]
+					},
+					'7': {
+						'title': '审核工单',
+						'icon':'iot-no',
+						'success': true,
+						'btns': [
+							'<p class="iot-action-result-addtext">审核不通过，异常关闭工单，并已自动新建紧急工单,点击<a id="returnIndexBtn" >返回主页</a></p>'
+						]
+					},
+					'8': {
+						'title': '重大事项',
+						'icon': 'iot-yes',
+						'success': true,
+						'btns': [
+							'<p class="iot-action-result-addtext">新建重大事项成功,点击<a id="returnIndexBtn" >返回主页</a></p>'
+						]
+					},
+					'9': {
+						'title': '新建日报',
+						'icon':'iot-yes',
+						'success': true,
+						'btns': ['<p class="iot-action-result-addtext">新建日报成功,点击<a id="returnIndexBtn" >返回主页</a></p>']
+					},
+					'10':{
+						'title': '添加反馈',
+						'icon':'iot-yes',
+						'success': true,
+						'btns': [
+							'<p class="iot-action-result-addtext">添加反馈成功,点击<a id="returnIndexBtn" >返回主页</a></p>'
+						]
+					},
+					'11': {
+						'title': '详情',
+						'icon':'iot-yes',
+						'success': true,
+						'btns': ['<p class="iot-action-result-addtext">已接受工单,点击<a id="returnAcceptListBtn" >返回待接收列表</a></p>']
+					},
+					'12': {
+						'title': '详情',
+						'icon':'iot-yes',
+						'success': true,
+						'btns': ['<p class="iot-action-result-addtext">已拒绝工单,点击<a id="returnAcceptListBtn" >返回待接收列表</a></p>']
+					},
+					'13': {
+						'title': '详情',
+						'icon':'iot-yes',
+						'success': true,
+						'btns': ['<p class="iot-action-result-addtext">分配成功,点击<a id="returnGroupAssignListBtn" >返回待分配列表</a></p>']
+					},
+					'14': {
+						'title': '详情',
+						'icon':'iot-yes',
+						'success': true,
+						'btns': ['<p class="iot-action-result-addtext">提交成功,点击<a id="returnFeedbackListBtn" >返回待反馈列表</a></p>']
+					},
+					'15': {
+						'title': '详情',
+						'icon':'iot-yes',
+						'success': true,
+						'btns': ['<p class="iot-action-result-addtext">提交成功,点击<a id="returnConfirmFeedbackListBtn" >返回待确认工单列表</a></p>']
+					},
+					'16': {
+						'title': '删除工单',
+						'icon':'iot-yes',
+						'success': true,
+						'btns': ['<p class="iot-action-result-addtext">删除成功,点击<a id="returnIndexBtn" >返回主页</a></p>']
+					}
+				};
+				
+				$.plusReady(function(){
+					var self = plus.webview.currentWebview();
+    				var actionId = self.actionId;
+    				//获取当前用户的信息
+	                var role = localStorage.getItem("APP_USERROLE");
+    				//处理逻辑：按照对应的用户级别返回相应的界面
+	                var first = null;
+	                plus.key.addEventListener('backbutton', function() {
+	                	var index;
+	                    //role:5-项目经理；6-班组长；7-小队长
+	                    if("5" == role){
+	                    	index = plus.webview.getWebviewById("managerIndex");
+	                    }else if("6" == role){
+	                    	index = plus.webview.getWebviewById("groupIndex");
+	                    }else if("7" == role){
+	                    	index = plus.webview.getWebviewById("teamIndex");
+	                    }else if("1" == role || "2" == role || "3" == role|| "4" == role || "9" == role){
+	                    	index = plus.webview.getWebviewById("adminIndex");
+	                    }
+	                    mui.fire(index,'init');
+	                    index.show();
+	                    self.close();
+	                }, false);
+    				
+    				if(actionId){
+    					var info = actionInfoMap[actionId];
+    					$(".mui-title")[0].innerText = info.title;
+    					
+    					_JQ("#actionResult").tmpl(info).appendTo( ".mui-content" );
+    				
+						$('body').on('tap','#addAgainBtn',function(){
+							$.openWindow({
+							    url: './addSheet.html', 
+							    id:'addSheet'
+							});
+							self.close();
+						});
+						$('body').on('tap','#addMatterBtn',function(){
+							var addMatter = plus.webview.getWebviewById('addMatter');
+							mui.fire(addMatter,'resetPage');
+							addMatter.show();
+						});
+						$('body').on('tap','#returnIndexBtn',function(){
+							var index;
+		                    //role:5-项目经理；6-班组长；7-小队长
+		                    if("5" == role){
+		                    	index = plus.webview.getWebviewById("managerIndex");
+		                    }else if("6" == role){
+		                    	index = plus.webview.getWebviewById("groupIndex");
+		                    }else if("7" == role){
+		                    	index = plus.webview.getWebviewById("teamIndex");
+		                    }else if("1" == role || "2" == role || "3" == role|| "4" == role || "9" == role){
+	                    	    index = plus.webview.getWebviewById("adminIndex");
+	                        }
+		                    mui.fire(index,'init');
+		                    index.show();
+		                    self.close();
+						});
+						$('body').on('tap','#returnAcceptListBtn',function(){
+							var acceptSheet = plus.webview.getWebviewById('sheetAcceptList');
+							var sheetAcceptList_sub = plus.webview.getWebviewById('sheetAcceptList_sub');
+							mui.fire(sheetAcceptList_sub,'resetPage');
+							acceptSheet.show();
+							var view = plus.webview.getWebviewById("acceptSheet");
+							if(view){
+								view.close();
+							}
+							self.close();
+						});
+						$('body').on('tap','#returnGroupAssignListBtn',function(){
+							var acceptGroupAssignSheet = plus.webview.getWebviewById('sheetGroupAssignList');
+							var sheetGroupAssignList_sub = plus.webview.getWebviewById('sheetGroupAssignList_sub');
+							mui.fire(sheetGroupAssignList_sub,'resetPage');
+							acceptGroupAssignSheet.show();
+							var view = plus.webview.getWebviewById("groupAssignSheet");
+							if(view){
+								view.close();
+							}
+							self.close();
+						});
+						$('body').on('tap','#returnFeedbackListBtn',function(){
+							var feedbackSheet = plus.webview.getWebviewById('sheetFeedbackList');
+							var sheetFeedbackList_sub = plus.webview.getWebviewById('sheetFeedbackList_sub');
+							mui.fire(sheetFeedbackList_sub,'feedbackResetPage');
+							feedbackSheet.show();
+							var view = plus.webview.getWebviewById("feedbackSheet");
+							if(view){
+								view.close();
+							}
+							self.close();
+						});
+						$('body').on('tap','#returnConfirmFeedbackListBtn',function(){
+							var confirmFeedbackSheet = plus.webview.getWebviewById('sheetConfirmFeedbackList');
+							var sheetConfirmFeedbackList_sub = plus.webview.getWebviewById('sheetConfirmFeedbackList_sub');
+							mui.fire(sheetConfirmFeedbackList_sub,'comfirmFeedbackResetPage');
+							confirmFeedbackSheet.show();
+							var view = plus.webview.getWebviewById("confirmFeedbackSheet");
+							if(view){
+								view.close();
+							}
+							self.close();
+						});
+    				}else{
+    					self.close();
+						$.openWindow({
+						    url: './manager-index.html', 
+						    id:'manager-index'
+						});
+    				}
+				})
+			})(mui, jQuery, document);
+		</script>
+	</body>
+
+</html>

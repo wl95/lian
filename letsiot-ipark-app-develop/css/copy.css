@@ -1,0 +1,313 @@
+form.mui-input-group {
+    font-size: 16px;
+}
+
+form.mui-input-group:after {
+    background: #ffffff;
+}
+
+.mui-input-group .mui-input-row {
+    height: auto;
+    color: #4d4d4d;
+    padding: 0 15px;
+}
+
+.mui-checkbox.mui-left input[type="checkbox"],
+.mui-radio.mui-left input[type="radio"] {
+    left: 0;
+}
+
+.mui-checkbox.mui-left label,
+.mui-radio.mui-left label {
+    padding-left: 35px;
+}
+
+.mui-input-row .mui-col-sm-35t {
+    width: 35%;
+}
+
+.mui-input-row .mui-col-sm-50t {
+    width: 50%;
+}
+
+.mui-input-row .mui-col-sm-20t {
+    width: 20%;
+}
+
+.mui-input-row .mui-col-sm-65t {
+    width: 65%;
+}
+
+.mui-input-row .mui-col-sm-70t {
+    width: 70%;
+}
+
+.mui-input-row .mui-col-sm-10t {
+    width: 10%;
+}
+
+.mui-input-row span {
+    line-height: 40px;
+}
+
+.mui-input-row span.form-full-span {
+    display: inline-block;
+    height: 36px;
+    width: 100%;
+}
+
+.mui-input-row .iot-unit-span {
+    margin-left: 5px;
+    display: inline-block;
+}
+
+.mui-input-row .mui-textarea,
+.mui-input-group .mui-input {
+    padding: 5px;
+    font-size: 14px;
+}
+
+.mui-input-row .mui-textarea {
+    height: 100px;
+    display: inline-block;
+    margin: 10px 0;
+}
+
+.mui-input-group .mui-input {
+    height: 32px;
+    margin-top: 4px;
+}
+
+.mui-input-row .mui-col-sm-70t.padding-right-20 {
+    padding-right: 20px;
+}
+
+img.mui-img-uni {
+    width: 23px;
+    height: 23px;
+    position: absolute;
+    right: 0px;
+}
+
+.mui-btn-uni:enabled:active {
+    background: #01d195;
+}
+
+.mui-input-row .mui-textarea {
+    height: 120px;
+    display: inline-block;
+    margin: 10px 0;
+    font-size: 14px;
+    color: #666;
+}
+
+.unactive.newBtn {
+    color: rgba(255, 255, 255, 0.5);
+}
+
+.mui-backdrop {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 998;
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
+.mui-backdrop img {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    top: 0;
+    margin: auto;
+    width: 80%;
+}
+
+.mui-navigate-right:after,
+.mui-push-right:after {
+    margin-right: -30px;
+    top: 26px;
+}
+
+.mui-input-row .textnum-tip {
+    font-size: 13px;
+    color: #9e9e9e;
+    line-height: 1;
+    height: 25px;
+    text-align: right;
+    clear: both;
+}
+
+.mui-input-row .textnum.error {
+    color: #f17368;
+}
+
+html,
+body {
+    height: 100%;
+}
+
+.mui-content {
+    background-color: inherit;
+}
+
+.mui-input-group .mui-input-row {
+    height: auto;
+    color: #4d4d4d;
+}
+
+.mui-radio input[type="radio"] {
+    display: none;
+}
+
+.mui-radio label {
+    padding: 9px;
+    text-align: center;
+    background: #fff;
+    line-height: 1;
+    width: 90px;
+    color: #282828;
+    border: 1px solid #f0f0f0;
+    border-radius: 35px;
+}
+
+.mui-radio label.active {
+    border-color: #009e96;
+    background-color: #acefe6;
+}
+
+.mui-radio.mui-left input[type="radio"] {
+    left: 0;
+}
+
+.mui-radio.mui-left label {
+    padding-left: 28px;
+}
+
+.mui-input-row span {
+    line-height: 40px;
+}
+
+.mui-input-row span.form-full-span {
+    display: inline-block;
+    height: 36px;
+    width: 100%;
+}
+
+.mui-input-row .iot-unit-span {
+    margin-left: 5px;
+    display: inline-block;
+}
+
+.mui-input-row .mui-textarea {
+    height: 120px;
+    display: inline-block;
+    margin: 10px 0px 0px;
+    font-size: 13px;
+    float: left;
+}
+
+.mui-input-row .textnum-tip {
+    font-size: 13px;
+    color: #9e9e9e;
+    line-height: 25px;
+    height: 25px;
+    text-align: right;
+    clear: both;
+}
+
+.mui-input-row .textnum.error {
+    color: #f17368;
+}
+
+.mui-input-group .mui-input {
+    height: 32px;
+    margin-top: 4px;
+}
+
+span.endTimeBtn .iconfont {
+    color: #36c6d3;
+    font-size: 20px;
+}
+
+.job-budgetTip {
+    background-color: #fdf0da;
+    text-align: center;
+    color: #666666;
+    font-size: 14px;
+}
+
+.job-budgetTip span {
+    line-height: 0;
+}
+
+.job-budgetTip span.dailyBudget {
+    font-size: 17px;
+}
+
+.mui-img-list {
+    line-height: 0;
+}
+
+.mui-img-list a {
+    display: inline-block;
+    position: relative;
+    line-height: 0;
+    width: 70px;
+    height: 70px;
+}
+
+.mui-img-list img {
+    display: inline-block;
+    width: 100%;
+    height: 100%;
+}
+
+img.mui-img-uni {
+    width: 23px;
+    height: 23px;
+    position: absolute;
+    right: 0px;
+}
+
+.iconfont.icon-space {
+    color: #686868;
+    padding-left: 15px;
+    padding-right: 6px;
+}
+
+.iconfont.important {
+    font-size: 7px;
+    color: #f17368;
+    padding-left: 4px;
+    position: absolute;
+}
+
+.unactive.newBtn {
+    color: rgba(255, 255, 255, 0.5);
+}
+
+.mui-img-upload {
+    border-radius: 4px;
+}
+
+.mui-backdrop {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 998;
+    background-color: rgba(0, 0, 0, 0.5);
+}
+.mui-backdrop img {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    top: 0;
+    margin: auto;
+    width: 80%;
+}

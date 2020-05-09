@@ -1,0 +1,589 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>重大事项</title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<link href="../css/mui.min.css" rel="stylesheet" />
+		<link href="../css/mui.picker.min.css" rel="stylesheet" />
+		<link href="../fonts/iconfont/iconfont.css" rel="stylesheet" />
+		<link href="../css/ipark.css" rel="stylesheet" />
+		<link href="../css/mui.previewimage.css" rel="stylesheet" />
+		<link href="../css/mui.imageviewer.css" rel="stylesheet" />
+		<link href="../css/four.css" rel="stylesheet" />
+		<style>
+			.mui-img-upload {
+				width: 60px!important;
+				height: 60px!important;
+				float: left;
+				margin-right: 10px;
+				margin-bottom: 10px;
+			}
+			footer {
+				position: fixed;
+				width: 100%;
+				height: 50px;
+				min-height: 50px;
+				/* border-top: solid 1px #bbb; */
+				left: 0px;
+				bottom: 0px;
+				overflow: hidden;
+  				padding: 0;
+				background-color: #fafafa;
+			}
+			.footer-left {
+				position: absolute;
+				width: 100px;
+				height: 54px;
+				left: 0px;
+				bottom: 0px;
+				text-align: center;
+				vertical-align: middle;
+				line-height: 100%;
+				padding: 12px 4px;
+			}
+			.footer-right {
+				position: absolute;
+    			height: 51px;
+				right: 5px;
+				bottom: 0px;
+				text-align: center;
+				vertical-align: middle;
+				line-height: 100%;
+				padding: 12px 5px;
+				display: inline-block;
+			}
+			.footer-center {
+				height: 100%;
+				padding: 10px;
+			}
+			.footer-center [class*=input] {
+				width: 80%;
+				height: 100%;
+				border-radius: 0;
+				border-top-left-radius: 5px;
+				border-bottom-left-radius: 5px;
+			}
+			.footer-center .input-text {
+				background: #fff;
+				border: solid 1px #ddd;
+				padding: 10px !important;
+				font-size: 16px !important;
+				line-height: 18px !important;
+				font-family: verdana !important;
+				overflow: hidden;
+			}
+			.footer-center .input-sound {
+				background-color: #eee;
+			}
+			
+			form.mui-input-group {
+				padding: 0;
+			    font-size: 16px;
+			}
+			form.mui-input-group:after {
+				background: #FFFFFF;
+			}
+			.mui-input-group .mui-input-row {
+				height: auto;
+				color: #4D4D4D;
+			}
+			.mui-checkbox.mui-left input[type=checkbox], .mui-radio.mui-left input[type=radio] {
+				left: 0;
+			}
+			.mui-checkbox.mui-left label, .mui-radio.mui-left label {
+				padding-left: 35px;
+			}
+			.mui-img-list{
+				overflow: hidden;
+				line-height: 0;
+			}
+			.mui-img-list>a{width: 28%;height: 69px;display:inline-block;margin:0 8px 8px 0}
+			.mui-img-list img{
+				display: inline-block;
+				width: 32%;
+				height: 100%;
+			}
+			span.endTimeBtn .iconfont {
+				color: #36C6D3;
+				font-size: 20px;
+			}
+			.mui-feedBack-list{
+				min-height: 0px;
+				overflow: auto;
+				margin-top: 50px;
+				margin-bottom: 30px;
+			}
+			.mui-user-info{
+				margin-bottom: 10px;
+			}
+			.mui-input-group .mui-input-row {
+				margin-bottom: 0;
+			}
+			.mui-user-info .mui-feedBackUser{
+				float: left;
+        		text-align: center;
+        		margin-right: 5px;
+        		max-width:60px;
+				min-width: 40px;
+				position: absolute;
+			}
+			.feedBackUserWrap{
+				position: relative;
+				display: flex;
+			}
+			.mui-user-info .mui-feedBack{
+				float: left;
+        		display: inline-block;
+        		word-wrap: break-word;
+        		width: 100%;
+			}
+			.mui-feedBackUser .mui-feedBackUser-level{
+				font-size: 12px;
+				margin: 0;
+				font-size: 10px;
+				height:25px;
+				min-width: 40px;
+				color: #686868;
+				padding:0 5px;
+				border-radius:50px;
+				display: inline-block;
+		        line-height:25px;
+			}
+			.mui-feedBackUser .colorone{
+				background-color:#d4f0b7;
+			}
+			.mui-feedBackUser .colortwo{
+				background:#b9dbfa;
+			}
+			.mui-feedBackUser .colorthree{
+				background-color:#fee1cf;
+			}
+			.mui-feedBackUser .mui-feedBackUser-headImage{
+				width: 30px;
+		        height: 30px;
+		        border-radius: 10%;
+			}
+			.mui-feedBack .mui-feedBack-feedBackContent{
+				margin-left: 49px;
+				line-height: 1.5;
+				font-size: 12px;
+				word-wrap: break-word;
+				max-width: 80%;
+				line-height: 25px;
+				border-radius: 5px;
+				padding: 0;
+				display: inline-block;
+				letter-spacing: 1px;
+			}
+			.mui-feedBack .mui-feedBack-feedBackDate{
+				color: #4D4D4D;;
+				line-height: 24px;
+        		font-size: 14px;
+        		letter-spacing: 0px;
+        		/* text-indent: 55px; */
+        		word-wrap: break-word;
+        		width: 100%;
+			}
+			.icon-bg{
+				position: relative;
+				margin: 0 auto;
+				display: inline-block;
+				vertical-align: middle;
+				width: 1.4em;
+				height: 1.4em;
+				margin:-1px 6px 0px -4px;
+			}
+			.mui-btn-uni,.mui-btn-uni-back{
+				width: 35%;
+				font-size: 16px;
+				padding: 8px 35px;
+				border-radius: 100px;
+			}
+			.mui-btn-uni{
+				color: white;
+				border: 1px solid #01D16D;
+				background: #01D16D;
+				margin-right: 30px;
+			}
+			.mui-btn-uni:enabled:active{
+				background: #01d195;
+				border: 1px solid #01d195;
+			}
+			.mui-btn-uni-back{
+				color: #FDA214;
+				background: inherit;
+				border: 1px solid #FDA214;
+			}
+			.mui-btn-uni-back:enabled:active{
+				background: #ddd;
+				color: #FDA214;
+			}
+			#reportContent{width:50%;display: inline-block;word-wrap: break-word;line-height: 20px;margin: 8px 0 8px 0;}
+			.mui-backdrop{ position: fixed;top: 0;right: 0;bottom: 0;left: 0;z-index: 998;background-color: rgba(0,0,0,.5);}
+			.mui-backdrop img{position: absolute;left: 0;right: 0;bottom:0;top: 0;margin:auto;width:80%;}
+			/*取出框架自带样式边框*/
+			.cleraBefore:before{height: 0;}
+			.cleraBefore .mui-input-group:before{height: 0;}
+			.cleraBefore:after{height: 0;}
+			.cleraAfter:after{content:''}
+			.mui-content {
+    			background-color: inherit;
+    		}
+    		.mui-msg-tab{
+				width: 100%;
+				height: 50px;
+				line-height: 50px;
+				background: #fff;
+				position: fixed;
+				z-index: 1;
+				top: 64px;
+			}
+			.mui-msg-tab .xiangqing,
+			.mui-msg-tab .fankui{
+				float: left;
+				color: #282828;
+				position: relative;
+				text-align: center;
+				width: calc(50% - 75px);
+				margin: 0 25px 0 50px;
+				z-index: 1;
+			}
+			.mui-msg-tab .xiangqing .msg-number{
+				width: 17px;
+				height: 17px;
+				line-height: 17px;
+				position: absolute;
+				top: 9px;
+				text-align: center;
+				background: #F17368;
+				font-size: 9px;
+				border: 1px solid;
+				border-radius: 35px;
+				color: #fff;
+				display: none;
+			}
+			.mui-msg-tab .fankui{
+				margin: 0 50px 0 25px;
+			}
+			.mui-msg-tab .xiangqing.active,
+			.mui-msg-tab .fankui.active{
+				color: #009E96;
+				border-bottom: 1px solid #009E96;
+			}
+			.mui-content{
+				clear: both;
+			}
+			.mui-input-row {
+				padding: 0 15px;
+			}
+			.sheetText {
+				color: #282828!important;
+			}
+			.mui-btn-warning {
+				height: 28.5px;
+				width: 71px;
+				border-radius: 0;
+				border-top-right-radius: 3px;
+				border-bottom-right-radius: 3px;
+				line-height: 3px;
+				background-color: #009E96;
+				border: none;
+			}
+			.si-user-img {
+				width: 40px;
+				height: 40px;
+			}
+			.feedBackUserWrap {
+				display: flex;
+				justify-content: space-between;
+			}
+			.mui-row>[class*=mui-col-] {
+				float: none;
+			}
+            #matterTitle {
+                display: inline-block;
+                width: 230px;
+                margin-top: 15px;
+                line-height: 20px;
+            }
+		</style>
+	</head>
+
+	<body>
+		<header class="mui-bar mui-bar-nav">
+			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+			<h1 class="mui-title">重大事项</h1>
+		</header>
+		<div class="mui-content my-sheet">
+			<!-- <div id='backdrop'></div> -->
+			<div class="mui-msg-tab mui-row">
+				<p id="xiangqing" class="xiangqing active">
+					<span>详情</span><span class="msg-number">0</span>
+				</p>
+				<p id="fankui" class="fankui">
+					<span>反馈</span>
+				</p>
+			</div>
+			<div class="mui-content-padded" style="margin: 60px 0;" id="xiangqingContent">
+				<form class="mui-input-group" onsubmit="return false;">
+					<div class="mui-row mui-input-row">
+						<label class="title-label">
+							<span class="iconfont icontitle ico-left"></span>标题</span>
+						</label>
+						<div class="sheetText">
+                            <span id="matterTitle"></span>
+                        </div>
+					</div>
+					<div class="mui-row mui-input-row" id="endTimeRow">
+						<label class="title-label">
+							<span class="iconfont icontime ico-left"></span>开始</span>
+						</label>
+						<div class="mui-col-sm-65t mui-col-xs-12 sheetText">
+							<span id="startTime"></span>
+							</div>
+					</div>
+					<div class="mui-row mui-input-row" id="endTimeRow">
+						<label class="title-label">
+							<span class="iconfont icontime ico-left"></span>结束</span>
+						</label>
+						<div class="mui-col-sm-65t mui-col-xs-12 sheetText">
+							<span id="endTime"></span>
+							</div>
+					</div>
+					<div class="mui-row mui-input-row">
+						<label class="title-label">
+							<span class="iconfont iconnote1 ico-left"></span>说明</span>
+						</label>
+						<div class="sheetText">
+							<span id="reportContent"></span>
+                        </div>
+					</div>
+					<div class="mui-row mui-input-row">
+						<label class="title-label">
+							<span class="iconfont iconphoto ico-left"></span>照片</span>
+						</label>
+						<div class="mui-col-xs-12 sheetText">
+							<div class=" mui-img-list" id="imgList">
+
+							</div>
+						</div>
+					</div>
+				</form>
+                <div class="mui-row mui-button-row" style="margin-top: 20px;">
+                    <button type="button" class="mui-btn mui-btn-primary unactive newBtn" id="wo-view">查看工单</button>
+                </div>
+			</div>
+			<div id="fankuiContent" style="display: none; margin: 10px 0;" class="mui-content-padded">
+				<div>
+					<div class="mui-row mui-input-row">
+						<div class="mui-col-sm-65t mui-col-xs-12 sheetText">
+							<div class="mui-feedBack-list">
+								<!-- <div class="mui-row mui-user-info">
+									<div class="feedBackUserWrap">
+										<div class="mui-feedBackUser">
+											<img src="../images/default_user.png" class="si-user-img">
+										</div>
+										<div class="mui-feedBack">
+											<p class="mui-feedBack-feedBackContent">
+												<span class="mui-feedBackUser-level colorStyle">国士无双</span>
+												<span class="mui-feedBack-feedBackDate" style="color: #686868;font-size: 12px;">2019年3月22日08:55:18</span>
+											</p>
+											<p class="mui-feedBack-feedBackContent" style="background: #fff; margin-top: -10px; padding: 5px 10px; display: inline-block!important;">
+												<span class="mui-feedBack-feedBackDate sheetText">我有很多话想对你说我有很多话想对你说我有很多话想对你说我有很多话想对你说</span>
+											</p>
+										</div>
+									</div>
+								</div> -->
+							</div>
+						</div>
+					</div>
+					<footer>
+						<div class="footer-center">
+						<textarea id='msg-text' type="text" class='input-text' name='feedBackContent'></textarea>
+						</div>
+						<div class="footer-right">
+							<button type="button" class="mui-btn mui-btn-warning" id="add-back">发送</button>
+						</div>
+					</footer>
+				</div>
+			</div>
+		</div>
+		<script type="text/javascript" src="../js/jquery-1.8.0.min.js" ></script>
+		<script src="../js/mui.min.js"></script>
+		<script src="../js/mui.picker.min.js"></script>
+		<script src="../js/util.js"></script>
+		<script src="../js/app.js"></script>
+		<script src="../js/mui.zoom.js"></script>
+	    <script src="../js/mui.previewimage.js"></script>
+		<script type="text/javascript">
+			(function($, doc) {
+				$.init();
+				var matterId = "";
+				window.addEventListener('resetPage',function(event){
+					plus.webview.currentWebview().reload();
+				});
+				//mui.previewImage();
+				$.plusReady(function(){
+					var self = plus.webview.currentWebview();
+    				matterId = self.matterId;
+					getMatterInfo(matterId);
+					getMatterFeedBack(matterId);
+					mui.previewImage();
+				})
+
+				document.getElementById("xiangqing").addEventListener("tap",function(){
+					var view = plus.webview.getWebviewById("message-List");
+					mui.fire(view,'resetPage',{
+					    readFalge:"0"
+					});
+					jQuery(this).addClass('active').siblings('p').removeClass('active');
+					jQuery('#xiangqingContent').show();
+					jQuery('#fankuiContent').hide();
+				});
+				
+				document.getElementById("fankui").addEventListener("tap",function(){
+					var view = plus.webview.getWebviewById("message-List");
+					mui.fire(view,'resetPage',{
+					    readFalge:"1"
+					});
+					jQuery(this).addClass('active').siblings('p').removeClass('active');
+					jQuery('#xiangqingContent').hide();
+					jQuery('#fankuiContent').show();
+				});
+
+				/*获取重大事项的内容*/
+				function getMatterInfo(matterId){
+					Util.ajax({
+						url: 'ImportantMatter/getInfoById',
+						type: 'get',
+						data:{'id':matterId},
+						success: function(data){
+							if(data){
+								jQuery("#wo-view").attr("data", data.woId);
+								$("#matterTitle")[0].innerText = data.title;
+								$("#startTime")[0].innerText = data.startTime;
+								$("#endTime")[0].innerText = data.endTime;
+								$("#reportContent")[0].innerText = data.reportContent;
+								if((null != data.images) && (data.images.length >0)){
+									for(var i=0;i<data.images.length;i++){
+										var mediumSrc = "",src = app.configures.URL + "/iPark/APIs/maintGuide/getImageByPath?imagePath=" + data.images[i].path;
+										if(data.images[i].resourceMinimal){
+											src = app.configures.URL + "/iPark/APIs/maintGuide/getImageByPath?imagePath=" + data.images[i].resourceMinimal;
+											mediumSrc = app.configures.URL + "/iPark/APIs/maintGuide/getImageByPath?imagePath=" + data.images[i].resourceMedium;
+										}
+										var imagetemp="<img class='mui-img-upload' data-preview-group='1' data-preview-src='"+mediumSrc+"' src='"+src+"' ></img>";  
+										jQuery("#imgList").append(imagetemp);
+									}
+								}else{
+									jQuery("#imgList").append("<p style='margin-top: 24px; color:#4D4D4D; font-size:16px'>"+'无'+"</p>");
+								}
+							}
+						}
+					});	
+				}
+				
+				/*获取重大事项反馈的内容*/
+				function getMatterFeedBack(matterId){
+					Util.ajax({
+						url: 'matterFeedback/list',
+						type: 'get',
+						data:{'id':matterId},
+						success: function(data){
+							if(data){
+	                            if(data.content){
+	                                var userList = data.content;
+	                                var result = '';
+	                                var index = 0;
+	                                for(var a = 0;a < userList.length;a++){ 
+	                                	var infoList = userList[a].info;
+	                                	var arr = ["colorone","colortwo","colorthree"]
+	                                	var colorStyle = arr[0];
+	                                	if(a%3==1){
+	                                		colorStyle =arr[1];
+	                                	}else if(a%3==2){
+	                                		colorStyle =arr[2];
+	                                	}
+	                                	for(var b = 0;b < infoList.length;b++){
+	                                		var time = infoList[b].feedbackTime;
+											if (time.length > 6) {
+												time = time.substring(5);
+											}
+											
+											if (userList[a].photoPath) {
+												imgstr = '<img class="si-user-img" src="' + app.configures.URL + '/iPark/APIs/maintGuide/getImageByPath?imagePath=' + userList[a].photoPath + '">'
+											} else {
+												imgstr = '<img src="../images/default_user.png" class="si-user-img">'
+											}
+	                                		result += 	'<div class="mui-row mui-user-info">'+
+															'<div class="feedBackUserWrap">'+
+															'	<div class="mui-feedBackUser">'+ imgstr +
+															'	</div>'+
+															'	<div class="mui-feedBack">'+
+															'		<p class="mui-feedBack-feedBackContent">'+
+															'			<span class="mui-feedBackUser-level colorStyle">' + userList[a].name + '</span>'+
+															'			<span class="mui-feedBack-feedBackDate" style="color: #686868;font-size: 12px;">' + time +
+															'		</p>'+
+															'		<p class="mui-feedBack-feedBackContent" style="background: #fff; margin-top: -10px; padding: 5px 10px;">'+
+															'			<span class="mui-feedBack-feedBackDate sheetText">' + infoList[b].feedbackContent + '</span>'+
+															'		</p>'+
+															'	</div>'+
+															'</div>'+
+														'</div>';
+			                            	index++;
+	                                	}
+	                                }
+								    jQuery(".mui-feedBack-list").html(result);
+	                            }
+	                        }
+						}
+					});
+				}
+				
+				//查看工单
+			    document.getElementById('wo-view').addEventListener('tap', function(event) {
+			    	var id = jQuery("#wo-view")[0].getAttribute("data");
+			    	if(id){
+			    		$.openWindow({
+					    url: './querySheet.html', 
+					    id:'query',
+					    extras:{
+							sheetId: id
+						}
+					  });
+			    	}else{
+			    		mui.toast('未关联工单'); 
+			    	}
+				});
+				//新增反馈
+			    document.getElementById('add-back').addEventListener('tap', function(event) {
+					var content = jQuery("textarea[name='feedBackContent']").val();
+					//判断当前的内容是否正常
+					if(!(content && content.length > 0)){
+						mui.toast("提交的反馈内容不能为空");
+						return;
+					}
+					var param = {
+						"matterId":matterId,
+						"feedbackContent":content
+					}
+					
+					Util.ajax({
+						url: 'matterFeedback/feedback',
+						type: 'post',
+						data: param,
+						success: function(data){
+							jQuery("textarea[name='feedBackContent']").val('');
+							 mui.toast('反馈成功！') 
+							 getMatterFeedBack(matterId);
+						}
+					});
+			    });
+				
+				
+			})(mui, document);
+			
+		</script>
+	</body>
+</html>

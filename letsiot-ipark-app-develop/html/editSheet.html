@@ -1,0 +1,455 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>编辑工单</title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<link href="../css/mui.min.css" rel="stylesheet" />
+		<link href="../css/mui.picker.min.css" rel="stylesheet" />
+		<link href="../fonts/iconfont/iconfont.css" rel="stylesheet" />
+		<link href="../css/ipark.css" rel="stylesheet" />
+		<style>
+			html,body {
+				height: 100%;
+			}
+			.mui-input-group .mui-input-row {
+				height: auto;
+				color: #4D4D4D;
+			}
+			.mui-input-row span {
+				line-height: 40px;
+			}
+			.mui-input-row span.form-full-span {
+				display: inline-block;
+			    height: 36px;
+			    width: 100%;
+			}
+			.mui-input-row .mui-textarea {
+			    height: 120px;
+			    display: inline-block;
+			    margin: 10px 0px 0px;
+			    font-size: 13px;
+			    float: left;
+			}
+			.mui-input-row .textnum-tip{
+				font-size: 13px;
+			    color: #9E9E9E;
+			    line-height: 1;
+			    height: 25px;
+			    text-align: right;
+			    clear: both;
+			}
+			.mui-input-row .textnum.error{
+				color:#F17368;
+			}
+			.mui-input-group .mui-input {
+		        height: 30px;
+    			margin-top: 4px;
+			}
+			span.endTimeBtn .iconfont {
+				color: #36C6D3;
+				font-size: 20px;
+			}
+			.mui-img-list{
+				margin-top: 13px;
+				line-height: 0;
+			}
+			.mui-img-list a{
+				display: inline-block;
+				position: relative;
+				line-height:0;
+				width:28%;
+				height:69px;
+				margin: 0 8px 8px 0;
+			}
+			.mui-img-list img{
+				display: inline-block;
+				width: 100%;
+				height: 100%;
+			}
+			img.mui-img-uni{
+				width: 23px;
+				height: 23px;
+				position: absolute;
+				right: 0px;
+			}
+			.iconfont.icon-space{
+				color:#686868;
+				padding-left: 15px;
+				padding-right: 6px;
+			}
+			.iconfont.important{
+				font-size: 7px;
+				color:#F17368;
+				padding-left: 4px;
+				position: absolute;
+			}
+			.unactive.newBtn{
+				color:rgba(255,255,255,0.5);
+			}
+			.mui-img-upload{
+				border-radius: 4px;
+			}
+			.mui-input-group .mui-input-row.mui-input-row-overflowV {
+				overflow: visible;
+				height: 50px;
+			}
+			.iot-unit-span{
+				padding-left: 5px;
+				color:#282828;
+				font-size: 14px;
+			}
+		</style>
+	</head>
+
+	<body>
+		<header class="mui-bar mui-bar-nav">
+			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+			<h1 class="mui-title">编辑工单</h1>
+		</header>
+		<div class="mui-content my-sheet">
+			<div class="mui-content-padded" style="margin: 0;">
+				<form class="mui-input-group" onsubmit="return false;">
+					<div class="mui-row mui-input-row">
+						<label class="title-label">
+							<span class="iconfont icon-space">&#xe67b;</span>类型
+						</label>
+						<div class="mui-col-sm-70t mui-col-xs-12 sheetText">
+							<span id="typeText"></span>
+				      	</div>
+					</div>
+					<div class="mui-row mui-input-row mui-hidden" id="endTimeRow">
+						<label class="title-label">
+							<span class="iconfont icon-space">&#xe66d;</span>截止<span class="iconfont important">&#xe677;</span>
+						</label>
+						<div class="mui-col-sm-20t mui-col-xs-12 sheetText">
+							<span class="row-span form-full-span endTimeTrigger" id="endTimeInput" data-options='{"type":"time"}'></span>
+				       </div>
+						<div class="mui-col-sm-10t mui-col-xs-12 sheetText">
+							<span class="endTimeBtn endTimeTrigger" data-options='{"type":"time"}'>
+								<i class="iconfont ipark-edit"></i>
+							</span>
+				       </div>
+					</div>
+					<div class="mui-row mui-input-row">
+						<label class="title-label">
+							<span class="iconfont icon-space">&#xe665;</span>区域<span class="iconfont important">&#xe677;</span>
+						</label>
+						<div class="mui-col-sm-70t mui-col-xs-12" id='showAreaPicker'>
+							<input type="hidden" name="areaValue" />
+							<span class="mui-navigate-right sheetText" id="areaText">
+								请选择项目区域
+							</span>
+				      	</div>
+					</div>
+					<div class="mui-row mui-input-row">
+						<label class="title-label">
+							<span class="iconfont icon-space">&#xe67e;</span>动作<span class="iconfont important">&#xe677;</span>
+						</label>
+						<div class="mui-col-sm-70t mui-col-xs-12 sheetText" id='showUserPicker'>
+							<input type="hidden" name="actionValue" />
+							<span class="mui-navigate-right sheetText" id="actionText">
+								请选择养护动作
+							</span>
+				      	</div>
+					</div>
+					<div class="mui-row mui-input-row">
+						<label class="title-label form_desc">
+							<span class="iconfont icon-space">&#xe67a;</span>说明
+						</label>
+					    <div class="mui-col-sm-70t mui-col-xs-12 sheetText" style="padding-right:15px ;">
+							<textarea class="mui-textarea" name="remark" rows="10" maxlength="250" placeholder="请输入养护说明（不超过250个字）"></textarea>
+							<p class="textnum-tip"><span class="textnum">0</span>/250</p>
+				      	</div>
+					</div>
+					<div class="mui-row mui-input-row">
+						<label class="title-label">
+							<span class="iconfont icon-space">&#xe670;</span>用工<span class="iconfont important">&#xe677;</span>
+						</label>
+						<div class="mui-col-sm-20t mui-col-xs-12 sheetText">
+							<input class="mui-input sheetText" type="number" name="estimateLabor" id="estimateLabor" />
+				      	</div><span class="iot-unit-span">人</span>
+					</div>
+					<div class="mui-row mui-input-row mui-input-row-overflowV">
+						<label class="title-label form_audio">
+							<span class="iconfont icon-space">&#xe66c;</span>语音
+						</label>
+						<div class="mui-col-sm-70t mui-col-xs-12">
+							<img width="50px" height="50px" src="../images/audio_play.png" class="musicplay"/>
+				      	</div>
+					</div>
+				</form>
+				<div class="mui-row mui-button-row" style="margin-top: 15px;">
+					<button type="button" class="mui-btn mui-btn-primary iot-submit-btn newBtn" id="submitBtn">确认</button>
+				</div>
+			</div>
+		</div>
+		<script type="text/javascript" src="../js/mui.min.js"></script>
+		<script type="text/javascript" src="../js/mui.picker.min.js"></script>
+		<script type="text/javascript" src="../js/jquery-1.8.0.min.js" ></script>
+		<script type="text/javascript" src="../js/app.js"></script>
+		<script type="text/javascript" src="../js/util.js"></script>
+		<script type="text/javascript">
+			(function($, doc) {
+				$.init();
+				var sheetId = "";
+				var actionData = [], userPicker = new $.PopPicker(), type = 'N';
+				var areaData = [], areaPicker = new $.PopPicker();
+				window.addEventListener('editSheetWithNewId',function(event){
+    				sheetId = event.detail.sheetId;
+    				getActionList(sheetId);
+    				getArea();
+				});
+				
+				//对textarea绑定输入文字长度检查
+				jQuery("[name='remark']").on("input",function(){
+					checkWordNum();
+				});
+				
+				$.plusReady(function(){
+					var self = plus.webview.currentWebview();
+    				sheetId = self.sheetId;
+    				getActionList(sheetId);
+    				getArea();
+				})
+				//获取项目区域
+				function getArea(){
+					//获取项目区域下拉列表
+					Util.ajax({
+						url: 'iparkProjectArea/getAll',
+						data: {
+							projectId:localStorage.getItem("IPARK_APP_PROJECTID")
+						},
+						success: function(data){						
+							for (var i = 0,len = data.length;i<len;i++) {
+								areaData.push({
+									value: data[i].id,
+									text: data[i].areaName
+								});
+							}
+							areaPicker.setData(areaData);
+							doc.getElementById('showAreaPicker').addEventListener('tap', function(event) {
+								areaPicker.show(function(items) {
+									if(items[0].text==undefined){
+										$("[name='assignValue']")[0].value = '';
+									}else{
+										$("[name='areaValue']")[0].value = items[0].value;
+										$("#areaText")[0].innerText = items[0].text;
+									}
+								});
+							}, false);
+						},
+						error:function(data){
+							console.log(JSON.stringify(data));
+						}
+					});
+				}
+				/*获取动作列表*/
+				function getActionList(sheetId){
+					Util.ajax({
+						url: 'maintAction/list',
+						success: function(data){
+							//下拉选择
+							for (var i = 0,len = data.content.length;i<len;i++) {
+								actionData.push({
+									value: data.content[i].id,
+									text: data.content[i].name
+								});
+							}
+							userPicker.setData(actionData);
+							var showUserPickerButton = doc.getElementById('showUserPicker');
+							showUserPickerButton.addEventListener('tap', function(event) {
+								userPicker.show(function(items) {
+									$("[name='actionValue']")[0].value = items[0].value;
+									$("#actionText")[0].innerText = items[0].text;
+								});
+							}, false);
+							
+							//时间选择
+							var endTimeInput = $('#endTimeInput')[0];
+							var btns = $('.endTimeTrigger');
+							btns.each(function(i, btn) {
+								btn.addEventListener('tap', function() {
+									var _self = this;
+									if(_self.picker) {
+										_self.picker.show(function (rs) {
+											endTimeInput.innerText = rs.text+":00";
+											endTimeInput.setAttribute('vaue', rs.text);
+											_self.picker.dispose();
+											_self.picker = null;
+										});
+									} else {
+										var optionsJson = this.getAttribute('data-options') || '{}';
+										var options = JSON.parse(optionsJson);
+										var id = this.getAttribute('id');
+										_self.picker = new $.DtPicker(options);
+										_self.picker.show(function(rs) {
+											endTimeInput.innerText = rs.text+":00";
+											endTimeInput.setAttribute('vaue', rs.text);
+											_self.picker.dispose();
+											_self.picker = null;
+										});
+									}
+									
+								}, false);
+							});
+							getEndTime(sheetId);
+						}
+					});	
+				}
+				
+				var submitButton = doc.getElementById('submitBtn');
+				submitButton.addEventListener('tap', function(event) {
+					var param = {
+						"id": sheetId,
+						"projectId": localStorage.getItem("IPARK_APP_PROJECTID"),
+						"maintAction": $("[name='actionValue']")[0].value,
+						"projectArea": $("[name='areaValue']")[0].value,
+						"remark": $("[name='remark']")[0].value,
+						"estimateLabor": $("[name='estimateLabor']")[0].value
+					};
+					if(!param.projectArea){
+						$.alert("项目区域不能为空");
+						return;
+					}
+					if(!param.maintAction){
+						$.alert("养护动作不能为空");
+						return;
+					}
+					if(!param.remark){
+						$.alert("养护说明不能为空");
+						return;
+					}
+					if(!param.estimateLabor){
+						$.alert("预计用工不能为空");
+						return;
+					}else{
+						var reg = /^[0-9]+([.]{1}[0-9]{0,1}){0,1}$/; 
+                		if (!reg.test(param.estimateLabor)){
+                			$.alert("预计用工请输入正确的数值,精确到小数点后一位");
+							return;
+                		}
+					}
+					if('U' == type){
+						param.endTime = $('#endTimeInput')[0].getAttribute('vaue');
+						if(!param.endTime){
+							$.alert("截止时间不能为空");
+							return;
+						}
+					}
+					Util.ajax({
+						url: 'workorderManage/updateWO',
+						type: 'put',
+						data: param,
+						success: function(data){
+							$.openWindow({
+							    url: './actionResult.html', 
+							    id:'actionResult',
+							    extras:{
+							    	actionId: '2'
+							    }
+							});
+						}
+					});
+				});
+				
+				function checkWordNum(){
+					var number = jQuery("[name='remark']").val().length;
+					if(number == 250){
+						jQuery('.textnum-tip .textnum').addClass('error').text(number);
+					}else{
+						jQuery('.textnum-tip .textnum').removeClass('error').text(number);
+					}
+				}
+				
+				function getEndTime(sheetId){
+					var endTimeRow = doc.getElementById('endTimeRow');		
+					Util.ajax({
+						url: 'workorderManage/getWorkorderInfo',
+						data: {id:sheetId},
+						success: function(data){
+							type = data.woType;
+							$('#typeText')[0].innerText = data.woTypeStr;
+							if('U' == data.woType){
+								endTimeRow.className = 'mui-row mui-input-row';
+								endTimeInput.innerText = data.endTime;
+								endTimeInput.setAttribute('vaue', data.endTime.substring(0, 5));
+							}
+							if(data.projectArea){
+								$("[name='areaValue']")[0].value = data.projectArea;
+								$("#areaText")[0].innerText = data.areaName;
+							}
+							if(data.maintAction){
+								$("[name='actionValue']")[0].value = data.maintAction;
+								$("#actionText")[0].innerText = data.maintActionName;
+								userPicker.pickers[0].setSelectedValue(data.maintAction, 200);
+							}
+							$("[name='remark']")[0].value = data.remark;
+							checkWordNum();
+							$("[name='estimateLabor']")[0].value = data.estimateLabor;
+						}
+					});
+				}
+				var p = null; //语音播放对象
+				var isDownloading = false; //下载语音标志
+				var isplaying = false; 
+				$('body').on('tap','.musicplay',function(){
+					if(jQuery(".musicplay").hasClass("isplay")){
+						if(isplaying){
+							isplaying = false;
+							p.pause();
+							jQuery(".musicplay").attr("src","../images/audio_play.png");
+						}else{
+							p.resume();
+							isplaying = true;
+							jQuery(".musicplay").attr("src","../images/audio_stop.gif");
+						}
+					}else{
+						if(p!=null){
+							p.stop();
+							p=null;
+							jQuery(".musicplay").attr("src","../images/audio_play.png");
+							jQuery(".musicplay").removeClass("isplay");
+						}
+						if($.os.ios){
+							var url = app.configures.URL+"/iPark/APIs/tts/DownMuisc/"+sheetId+".wav";
+							var filename = "_doc/audio/"+ sheetId +".wav";
+							if(!isDownloading){
+								isDownloading = true;
+								var dtask = plus.downloader.createDownload(url, {filename: filename}, function(d, status) {
+									if(status == 200) {
+										startPlay(filename);
+									} else {
+										$.toast("语音播放失败，请稍后再试！");
+									}
+								});
+								dtask.start();
+							}
+						}else{
+							var url = app.configures.URL+"/iPark/APIs/tts/DownMuisc/"+sheetId+".wav";
+							startPlay(url);
+						}
+						
+					}
+					
+				});
+				function startPlay(url){
+					isDownloading = false;
+					isplaying = true;
+					p = plus.audio.createPlayer(url); 
+					jQuery(".musicplay").attr("src","../images/audio_stop.gif");
+					jQuery(".musicplay").addClass("isplay");
+					p.play(function() {
+						jQuery(".musicplay").attr("src","../images/audio_play.png");
+						jQuery(".musicplay").removeClass("isplay");
+					}, function(e) {
+						jQuery(".musicplay").attr("src","../images/audio_play.png");
+						jQuery(".musicplay").removeClass("isplay");
+						$.toast("语音播放失败，请稍后再试！");
+					});
+				}
+			})(mui, document);
+		</script>
+	</body>
+</html>

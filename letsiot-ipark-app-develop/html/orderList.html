@@ -1,0 +1,675 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<title>待分配</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+	<meta name="apple-mobile-web-app-capable" content="yes">
+	<meta name="apple-mobile-web-app-status-bar-style" content="black">
+	<link rel="stylesheet" href="../fonts/iconfont/iconfont.css" />
+	<link rel="stylesheet" href="../css/mui.min.css" />
+	<link rel="stylesheet" href="../css/ipark.css" />
+	<link rel="stylesheet" href="../css/base.css">
+	<link href="../css/mui.picker.min.css" rel="stylesheet" />
+	<script type="text/javascript" src="../js/vue.min.js"></script>
+	<script src="../js/mui.min.js"></script>
+	<script type="text/javascript" src="../js/jquery-1.8.0.min.js"></script>
+	<style type="text/css">
+		html,
+		body {
+			width: 100%;
+			height: 100%;
+			overflow: hidden;
+		}
+
+		.mui-col-xs-6 {
+			float: left;
+		}
+
+		.mui-pull-top-pocket {
+			top: 54px !important;
+		}
+
+		.mui-icon.emptyFilter {
+			position: absolute;
+			right: 0;
+			font-size: 20px;
+			padding: 0 10px;
+		}
+
+		#cont {
+			width: 100%;
+			height: auto;
+		}
+
+		.mui-bar-nav~.mui-content .mui-slider.mui-fullscreen {
+			top: 65px;
+		}
+
+		.padd-search {
+			padding: 10px;
+		}
+
+		/* .heightAbsolutely,
+		.allocatedList {
+			height: 100%;
+		} */
+
+		/*灰色底*/
+		.background-gray {
+			background-color: #e9ecf1;
+		}
+
+		.allocated-item {
+			padding: 10px;
+			font-size: 18px;
+			margin-top: 20px;
+			background: #FFF;
+
+		}
+
+		.mui-segmented-control.mui-segmented-control-inverted .mui-control-item.mui-active {
+			color: #009e96;
+		}
+
+		.background-green {
+			background-color: #009e96 !important;
+		}
+
+		.workersSinglerow {
+			font-size: 14px;
+			color: #cccccc;
+			list-style: none;
+			padding: 0;
+		}
+
+		.assignedPersonnel {
+			padding: 20px;
+			background-color: #FFF;
+		}
+
+		.allocated-sublime {
+			margin: 30px auto;
+			width: 50%;
+			text-align: center;
+			color: #ffffff;
+			background: rgba(0, 204, 153, 1);
+			line-height: 45px;
+			border-radius: 4px;
+			font-size: 18px;
+		}
+
+		.allocated-item .people {
+			padding: 0;
+			color: rgba(0, 204, 153, 1);
+		}
+
+		.mui-navigate-right {
+			padding: 0 !important;
+			line-height: 2;
+		}
+
+		.mui-navigate-right:after,
+		.mui-push-right:after {
+			color: #ccc !important;
+		}
+
+		/* 工单详情  时间线*/
+		.timeBar {
+			padding: 5vw 0 2vw 9vw;
+
+		}
+
+		.timeBar .line {
+			width: 100%;
+			height: 1px;
+			margin-top: 10px;
+			margin-left: 5px;
+			background-color: #cccccc;
+		}
+
+		.timeBar .title {
+			padding-top: 10px;
+
+		}
+
+		.timeBar .circular {
+			color: #ccc;
+			font-size: 80px;
+		}
+
+		#scroll2 {
+			overflow-y: scroll;
+			overflow-x: hidden;
+		}
+
+		.allocated-item .mui-row {
+			margin-bottom: 20px;
+		}
+
+		/* 自适应ipark */
+		@media screen and (min-width: 1280px) {
+			.hua {
+				width: 8%;
+			}
+
+			.huh {
+				width: 92%;
+			}
+
+		}
+		.color-blue{
+			color:#3366FF;
+		}
+		@media screen and (width:768px) {
+			.hua {
+				width: 13%;
+			}
+
+			.huh {
+				width: 87%;
+			}
+
+		}
+
+		.mui-slider-indicator.mui-segmented-control {
+			background-color: #fff;
+		}
+		.public{
+			display: none;
+		}
+	</style>
+</head>
+
+<body style="position:relative;z-index:100000">
+	<header class="mui-bar mui-bar-nav">
+		<input type="hidden" name="typeValue" value="" />
+		<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+		<h1 id="title" class="mui-title"><span id="typeText"></span>工单</h1>
+	</header>
+	<div id="contes" class="mui-content">
+		<div id="slider" class="mui-slider mui-fullscreen heightAbsolutely ">
+			<div id="sliderSegmentedControl" class="mui-slider-indicator mui-segmented-control mui-segmented-control-inverted">
+				<a class="mui-control-item tabStyle mui-active" href="#item1mobile">
+					分配工单
+				</a>
+				<a class="mui-control-item tabStyle" href="#item2mobile">
+					工单详情
+				</a>
+			</div>
+			<div id="sliderProgressBar" class="mui-slider-progress-bar mui-col-xs-6 background-green">
+				<div class="bottomStrip"></div>
+			</div>
+			<div class="mui-slider-group bottomStyle">
+				<div id="item1mobile" class="mui-slider-item mui-control-content mui-active">
+					<div id="scroll1" class="mui-content mui-scroll-wrapper">
+						<div class="mui-scroll content1 list-content heightAbsolutely">
+							<div class="itemContent">
+								<div class="allocatedList">
+									<div class="allocated-item">
+										<span>{{cated.maintActionStr}}</span>
+										<ul class="workersSinglerow">
+											<li>
+												<span>开始时间:</span>
+												<span>{{cated.startTime}}</span>
+											</li>
+											<li>
+												<span>结束时间:</span>
+												<span>{{cated.endTime}}</span>
+											</li>
+										</ul>
+									</div>
+									<div class="allocated-item">
+										<ul class="mui-table-view people">
+											<li class="mui-table-view-cell" id="addna" style="padding: 0;" >
+												<span>指派人员:</span>
+												<span style="color: #000000;" id="name"></span>
+												<span class="mui-navigate-right"></span>
+											</li>
+										</ul>
+									</div>
+									<div class="allocated-sublime">提交</div>
+								</div>
+							</div>
+
+						</div>
+					</div>
+				</div>
+				<div id="item2mobile" class="mui-slider-item mui-control-content">
+					<div id="scroll2" class="mui-content  mui-scroll-wrapper">
+						<div class="mui-scroll content2 list-content heightAbsolutely">
+							<div class="itemContent">
+								<div class="timeBar">
+									<div class="mui-row">
+										<div class="mui-col-xs-3">
+											<div class="mui-row">
+												<div class="mui-col-xs-1 circular">&bull;</div>
+												<div class="mui-col-xs-11">
+													<div class="line"></div>
+												</div>
+											</div>
+											<div class="title">待分配</div>
+
+										</div>
+										<div class="mui-col-xs-3">
+											<div class="mui-row">
+												<div class="mui-col-xs-1 circular">&bull;</div>
+												<div class="mui-col-xs-11">
+													<div class="line"></div>
+												</div>
+											</div>
+											<div class="title">待处理</div>
+
+										</div>
+										<div class="mui-col-xs-3">
+											<div class="mui-row">
+												<div class="mui-col-xs-1 circular">&bull;</div>
+												<div class="mui-col-xs-11">
+													<div class="line"></div>
+												</div>
+											</div>
+											<div class="title">待反馈</div>
+										</div>
+										<div class="mui-col-xs-3">
+											<div class="circular">&bull;</div>
+											<div class="title">待确认</div>
+										</div>
+									</div>
+								</div>
+								<div class="allocated-item">
+									<div class="mui-row">
+										<div class="mui-col-xs-4 hua">
+											养护动作:
+										</div>
+										<div class="mui-col-xs-8  huh">
+											{{cated.maintActionStr}}
+										</div>
+									</div>
+									<div class="mui-row">
+										<div class="mui-col-xs-4 hua">
+											养护类别:
+										</div>
+										<div class="mui-col-xs-8  huh">
+										{{cated.maintTypeName}}
+										</div>
+									</div>
+									<div class="mui-row">
+										<div class="mui-col-xs-4 hua">
+											任务详情:
+										</div>
+										<div class="mui-col-xs-8  huh">
+											{{cated.remark}}
+										</div>
+									</div>
+									<div class="mui-row">
+										<div class="mui-col-xs-4 hua">
+											养护区域:
+										</div>
+										<div class="mui-col-xs-8  huh">
+											{{cated.operatingArea}} 
+										</div>
+									</div>
+									<div class="mui-row">
+										<div class="mui-col-xs-4 hua">
+											作业量:
+										</div>
+										<div class="mui-col-xs-8  huh">
+											{{cated.estimateLabor}} 
+										</div>
+									</div>
+									<div class="mui-row zyzds">
+										<div class="mui-col-xs-4 hua">
+											作业指导书:
+										</div>
+										<div id="vide" class="mui-col-xs-8  color-blue  huh">
+											{{maintGuideBook}}
+										</div>
+									</div>
+									<div class="mui-row">
+										<div class="mui-col-xs-4 hua">
+											任务状态:
+										</div>
+										<div class="mui-col-xs-8  huh">
+											{{cated.statusStr}}
+										</div>
+									</div>
+									<div class="mui-row">
+										<div class="mui-col-xs-4 hua">
+											开始时间:
+										</div>
+										<div class="mui-col-xs-8  huh">
+											{{cated.startTime}}
+										</div>
+									</div>
+									<div class="mui-row">
+										<div class="mui-col-xs-4 hua">
+											结束时间:
+										</div>
+										<div class="mui-col-xs-8  huh">
+											{{cated.endTime}}
+										</div>
+									</div>
+								</div>
+								<div class="dataStatis">
+									<div class="dataStatis-item">
+										<div class="dataStatis-item-title">用工统计</div>
+										<div class="dataStatis-item-content flexaj">
+											<div class="content-left">
+												<span class="left-title">用工{{workerNumber}}人</span>
+												<span class="left-s">{{workArea}}</span>
+											</div>
+											<div class="content-right">
+												<span class="right-money money-red">{{workerSalary}}</span>
+											</div>
+										</div>
+									</div>
+									<div class="dataStatis-item">
+										<div class="dataStatis-item-title">机械统计</div>
+										
+											
+									<div v-for="(item,index) in mechanical" :key="index">
+										<div class="dataStatis-item-content">
+											<div class="content-top flexaj">
+												<span class="left-title">{{item.machineUsed}}:{{item.taiBan}}个小时</span>
+												<span class="right-money money-red">{{item.price}}</span>
+											</div>
+											<div class="content-bottom flexaj">
+												<span class="left-title">{{item.workArea}}</span>
+												<!-- <span class="left-s">含油</span> -->
+											</div>
+										</div>
+									</div>
+									<!-- 	<div class="dataStatis-item-content">
+											<div class="content-top flexaj">
+												<span class="left-title">小余农用机械 割草机 C30:8个小时</span>
+												<span class="right-money money-red">800.00</span>
+											</div>
+											<div class="content-bottom flexaj">
+												<span class="left-title">花园中心广场草坪</span>
+												<span class="left-s">含油</span>
+											</div>
+										</div> -->
+									</div>
+
+									<div class="dataStatis-item">
+										<div class="dataStatis-item-title">材料统计</div>
+										<div v-for="(item,index) in material" :key="index">
+											<div class="dataStatis-item-content">
+												<div class="content-top flexaj">
+													<span class="left-title">{{item.materialUsed}}:{{item.materialAmount}}个</span>
+													<span class="right-money money-red">{{item.price}}</span>
+												</div>
+												<div class="content-bottom flexaj">
+													<span class="left-title">{{item.workArea}}</span>
+													<!-- <span class="left-s">易耗</span> -->
+												</div>
+											</div>
+										</div>
+										
+										<!-- <div class="dataStatis-item-content">
+											<div class="content-top flexaj">
+												<span class="left-title">小王五金百货 铁丝 直径0.5: 20米</span>
+												<span class="right-money money-red">800.00</span>
+											</div>
+											<div class="content-bottom flexaj">
+												<span class="left-title">固定广场树枝</span>
+												<span class="left-s">易耗</span>
+											</div>
+										</div> -->
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+
+			</div>
+		</div>
+	</div>
+	<script src="../js/mui.picker.min.js"></script>
+	
+
+	<script>
+		//WD-待分配;FE-待反馈;BP-处理中;RE-再处理;OD-延期;TC-待确认;CO-完成;CA-取消
+		//startTime" : 开始时间,"endTime" : 结束时间,"deliveryTime" : 分配时间,"backTime" : 反馈时间,
+		//optionTime最近操作时间,//延期
+		//reworkTime返工时间，//再处理
+		//confirmTime 已完成 //确认,取消
+		//接收页面参数
+		mui.plusReady(function () { 
+		       	var view = plus.webview.getWebviewById("orderList");
+				var id = view.workid;//获得参数
+			});
+			detailAjx();
+			laborStatistics();
+		var vue = new Vue({
+			    el: '#contes',
+			    data: {
+			        cated: [ ///待分配
+			          
+			        ],
+					//用工统计
+					workerNumber:0,//用工人数
+					workArea:'',//作业区域
+					workerSalary:0,//工资
+					//作业指导书
+					maintGuideBook:'',
+					mechanical:[],//机械统计
+					material:[],//材料统计
+			    },
+			    methods: {
+				
+			    },
+			    beforeCreate:function() {
+			      
+			    },
+			    created:function() {
+			       
+			    },
+			    beforeMount:function() {
+			     
+			    },
+			    mounted:function() {
+			
+			    },
+			
+			   
+			    beforeUpdate:function() {
+			       
+			    },
+			    updated:function() {
+			    },
+			    beforeDestroy:function() {
+			
+			    },
+			    destroyed:function() {
+			
+			    }
+			});
+		/* 指派人员 */
+		mui("body").on('tap', '#addna', function () {
+			var picker = new mui.PopPicker();
+			$.ajax({
+			    url:'http://ipark.bplusiot.com/iPark/APIs/project/getUsersByProject',
+			    type: 'get',
+			    data: {
+					 projectId:localStorage.getItem("IPARK_APP_PROJECTID")
+			        
+			    },
+			    dataType: "json",
+			    success: function (data) {
+			        console.log(5555555);
+					//JSON.stringify(data);
+					//var arr=data.content;
+					//console.log(JSON.stringify(data.content));
+					var arr=data.content;
+					var narr=[];
+					for(var i=0;i<arr.length;i++){
+						//console.log(arr[i])
+						var uid=arr[i].userId;
+						var utext=arr[i].userName;
+						narr.push({
+							userid:uid,
+							text:utext
+						})
+					}
+					picker.setData(narr);
+					picker.show(function (success) {
+						console.log(JSON.stringify(success))
+						var item = success[0].text;
+						var userId=success[0].userid;
+						console.log(item);
+						document.getElementById('name').innerHTML = item;
+						document.getElementById('name').setAttribute('userid',userId);//指派人员添加 userid
+						picker.dispose();
+					});
+			    },
+			    error: function (e) {
+			        console.log(JSON.stringify(e));
+			    }
+			});
+		});
+		//提交
+		mui("body").on('tap', '.allocated-sublime', function () {
+			var userid=	document.getElementById('name').getAttribute('userid');//指派人员获取 userid
+			// console.log(id)
+			$.ajax({
+			    url: 
+				//'http://ipark.bplusiot.com/iPark/APIs/project/getUsersByProjectId',
+			    'http://ipark.bplusiot.com/iPark/APIs/workorderManage/allotWO',
+			    type: 'put',
+			    data: {
+			        id:"3362171672701953", //{"id" : 工单编号,"userId" : 要分配给的用户}
+					userId:userid
+			    },
+			    dataType: "json",
+			    success: function (data) {
+			        console.log(5555555);
+			        mui.toast("提交成功");
+			        console.log(JSON.stringify(data));
+			    },
+			    error: function (e) {
+					 mui.toast("提交失败");
+			        console.log(JSON.stringify(e)); 
+			    }
+			});
+		});
+		//获取工单详情
+		function detailAjx(){
+			$.ajax({
+				url: 'http://ipark.bplusiot.com/iPark/APIs/workorderManage/getWorkorderInfo',
+				type: 'post',
+				data: {
+					woId:"3403829750212608" ,//工单编号
+				},
+				dataType: "json",
+				success: function(data) {
+					console.log(5555555);
+					console.log(JSON.stringify(data));
+					vue.cated=data;
+					
+				},
+				error: function(e) {
+					console.log(JSON.stringify(e));
+				}
+			});
+		}
+		//获取工单详情的用工统计
+		function laborStatistics(){
+			$.ajax({
+				url: 'http://ipark.bplusiot.com/iPark/APIs/monthProducePlan/getOneMonthProducePlan',
+				type: 'get',
+				data: {
+					id:"3403829750212608" ,//工单编号
+				},
+				dataType: "json",
+				success: function(data) {
+					console.log("zzzzz");
+					console.log(JSON.stringify(data));
+					if(JSON.stringify(data)=="{}"){
+						$(".dataStatis").addClass("public")
+					}else{
+						//用工统计
+						vue.workerNumber=data.workerNumber;
+						vue.workArea=data.workArea;
+						vue.workerSalary=data.workerSalary;
+						//作业指导书
+						vue.maintGuideBook=data.maintGuideBook;
+						vue.mechanical=data.machineDetailList;//机械统计
+						vue.material=data.materialDetailList;//材料统计
+					}
+					
+					
+				},
+				error: function(e) {
+					console.log(JSON.stringify(e));
+				}
+			});
+		}
+		 mui('body').on('tap', '#vide', function() {  
+		//点击作业指导书跳转至相应的视频
+		var vide=$('#vide').text();
+		 	if(vide=="栽植草花"){
+				flag="1";
+				mui.openWindow({
+				    url: './videoTeachDetail.html',
+				    id: 'videoTeachDetail',
+				    extras: {  
+				        flag: flag
+				    } 
+				});
+			}else if(vide=="退化草坪改造"){
+				flag="2";
+				mui.openWindow({
+				    url: './videoTeachDetail.html',
+				    id: 'videoTeachDetail',
+				    extras: {  
+				        flag: flag
+				    } 
+				});
+			}else if(vide=="浇水作业指导"){
+				flag="3";
+				mui.openWindow({
+				    url: './videoTeachDetail.html',
+				    id: 'videoTeachDetail',
+				    extras: {  
+				        flag: flag
+				    } 
+				});
+			}else if(vide=="修剪动作指导"){
+				flag="4";
+				mui.openWindow({
+				    url: './videoTeachDetail.html',
+				    id: 'videoTeachDetail',
+				    extras: {  
+				        flag: flag
+				    } 
+				});
+			}else if(vide=="化学除草"){
+				flag="5";
+				mui.openWindow({
+				    url: './videoTeachDetail.html',
+				    id: 'videoTeachDetail',
+				    extras: {  
+				        flag: flag
+				    } 
+				});
+			}else if(vide=="全年及春季养护管理"){
+				flag="6";
+				mui.openWindow({
+				    url: './videoTeachDetail.html',
+				    id: 'videoTeachDetail',
+				    extras: {  
+				        flag: flag
+				    } 
+				});
+			}else{
+				$(".zyzds").hide();
+			}
+			   
+		    });
+	</script>
+</body>
+
+</html>

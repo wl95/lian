@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<title>工单查看列表</title>
+		<meta name="viewport"
+			  content="width=device-width,initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, minimal-ui, user-scalable=no">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="format-detection" content="telephone=no">
+		<link rel="stylesheet" href="../fonts/iconfont/iconfont.css" />
+		<link rel="stylesheet" href="../css/mui.min.css" />
+		<link rel="stylesheet" href="../css/ipark.css" />
+		<link rel="stylesheet" href="../css/workOrderList.css" />
+		<script src="../js/mui.min.js"></script>
+		<script type="text/javascript" src="../js/jquery-1.8.0.min.js"></script>
+		<script type="text/javascript" src="../js/vue.min.js"></script>
+		<style type="text/css">
+			.mui-col-xs-6 {
+				float: left;
+			}
+
+			.mui-pull-top-pocket {
+				top: 54px !important;
+			}
+
+			.mui-icon.emptyFilter {
+				position: absolute;
+				right: 0;
+				font-size: 20px;
+				padding: 0 10px;
+			}
+		</style>
+	</head>
+
+	<body style="position:relative;z-index:100000">
+		<header class="mui-bar mui-bar-nav">
+			<input type="hidden" name="typeValue" value="" />
+			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+			<h1 id="title" class="mui-title"><span id="typeText"></span>工单</h1>
+		</header>
+		<div id="cont" class="mui-content">
+			<div id="slider" class="mui-slider  heightAbsolutely ">
+				<div id="sliderSegmentedControl" class="back-white mui-segmented-control mui-segmented-control-inverted index-five">
+					<a class="mui-control-item tabStyle mui-active" href="#item1mobile">
+						待分配
+					</a>
+					<a class="mui-control-item tabStyle" href="#item2mobile">
+						待确认
+					</a>
+					<a class="mui-control-item tabStyle" href="#item3mobile">
+						全部
+					</a>
+				</div>
+				<div id="sliderProgressBar" class="mui-slider-progress-bar mui-col-xs-4 background-green">
+					<div class="bottomStrip"></div>
+				</div>
+				<div class="mui-slider-group bottomStyle heightAbsolutely">
+					<div id="item1mobile" class="mui-slider-item mui-control-content mui-active">
+						<div class="content1 list-content heightAbsolutely">
+							<div class="itemContent">
+								<!-- 搜索框 -->
+								<div class="padd-search index-five search">
+									<div class="mui-input-row mui-search index-five">
+										<input type="search" class="mui-input-clear" placeholder="搜索工单">
+									</div>
+								</div>
+								<div id="scroll1" class="mui-content mui-scroll-wrapper postion-scroll">
+									<div class="mui-scroll">
+										<div class="allocatedList allocated">
+											<div v-for="(item,index) in allocated" :key="index">
+												<div class="allocated-item mui-row margin-bott lineHeig-allocat">
+													<div class="mui-col-xs-10">
+														<div>{{item.maintActionName}}</div>
+														<div class="color-gray">开始时间：<span>{{item.startTime}}</span></div>
+														<div class="color-gray">结束时间：<span>{{item.endTime}}</span></div>
+													</div>
+													<div class="mui-col-xs-2 lineHeig-stat color-orange" runStatus={{item.runStatus}}>
+														{{item.runStatusStr}}
+													</div>
+												</div>
+											</div>
+
+
+
+										</div>
+
+									</div>
+								</div>
+							</div>
+						</div>
+
+					</div>
+					<div id="item2mobile" class="mui-slider-item mui-control-content">
+						<div class="content2 list-content heightAbsolutely">
+							<div class="itemContent">
+								<!-- 搜索框 -->
+								<div class="padd-search index-five search">
+									<div class="mui-input-row mui-search index-five">
+										<input type="search" class="mui-input-clear" placeholder="搜索工单">
+									</div>
+								</div>
+								<div id="scroll2" class="mui-content mui-scroll-wrapper postion-scroll">
+									<div class="mui-scroll">
+										<div class="allocatedList  confirmed">
+											<div v-for="(item,index) in confirmed" :key="index">
+												<div class="allocated-item mui-row margin-bott">
+													<div class="mui-col-xs-10">
+														<div class="padd-bott">{{item.maintActionName}}</div>
+														<div class="color-gray">反馈时间：<span>{{item.backTime}}</span></div>
+													</div>
+													<div class="mui-col-xs-2 lineHeig-state color-orange" runStatus="{{item.runStatus}}">
+													 {{item.runStatusStr}}
+													</div>
+												</div>
+											</div>
+
+
+										</div>
+
+									</div>
+								</div>
+
+							</div>
+						</div>
+
+					</div>
+					<div id="item3mobile" class="mui-slider-item mui-control-content">
+						<div class="content3 list-content heightAbsolutely">
+							<div id="scroll3" class="mui-content mui-scroll-wrapper postion-scroll">
+								<div class="mui-scroll">
+									<!-- 搜索框 -->
+									<div class="padd-search index-five search">
+										<div class="mui-input-row mui-search index-five">
+											<input type="search" class="mui-input-clear" placeholder="搜索工单">
+										</div>
+									</div>
+									<div class="allocatedList  whole">
+										<div class="allocated-item mui-row margin-bott lineHeig-allocat">
+											<div class="mui-col-xs-10">
+												<div>修剪</div>
+												<div class="color-gray">开始时间：<span>2018-12-20 07:30</span></div>
+												<div class="color-gray">结束时间：<span>2018-12-20 18:30</span></div>
+											</div>
+											<div class="mui-col-xs-2 lineHeig-stat color-orange">
+												待分配
+											</div>
+										</div>
+										<div class="allocated-item mui-row margin-bott">
+											<div class="mui-col-xs-10">
+												<div class="padd-bott">修剪</div>
+												<div class="color-gray">反馈时间：<span>2018-12-20 07:30</span></div>
+											</div>
+											<div class="mui-col-xs-2 lineHeig-state color-orange">
+												待确认
+											</div>
+										</div>
+										<div class="allocated-item mui-row margin-bott">
+											<div class="mui-col-xs-10">
+												<div class="padd-bott">修剪</div>
+												<div class="color-gray">确认时间：<span>2018-12-20 07:30</span></div>
+											</div>
+											<div class="mui-col-xs-2 lineHeig-state color-gray">
+												已关闭
+											</div>
+										</div>
+
+
+									</div>
+
+								</div>
+							</div>
+						</div>
+
+					</div>
+				</div>
+			</div>
+
+		</div>
+
+
+
+		<script src="../js/workOrder/workOrderList.js"></script>
+
+		<script>
+			mui(".mui-slider").slider(); // 激活滑动事件
+			document.getElementById('slider').addEventListener('slide', function(e) {
+				console.log(e);
+				 if (e.detail.slideNumber === 1) {
+					console.log("待确定");
+
+				} else if (e.detail.slideNumber === 2) {
+					console.log("全部");
+				}else{
+					console.log("待分配");
+				}
+			});
+
+
+			//下拉上拉
+			var scroll = mui('#scroll1').pullRefresh({
+
+				down: {
+					contentdown: "加载中", //可选，在下拉可刷新状态时，下拉刷新控件上显示的标题内容
+					contentover: "加载中", //可选，在释放可刷新状态时，下拉刷新控件上显示的标题内容
+					contentrefresh: "Loading...",
+					callback: function() {
+						alert("刷新");
+
+					}
+				},
+				up: {
+					contentrefresh: "加载中...", //可选，正在加载状态时，上拉加载控件上显示的标题内容
+					contentnomore: "没有更多数据", //可选，请求完毕若没有更多数据时显示的提醒内容；
+					callback: function() {
+						alert("加载");
+
+					}
+				}
+			});
+			var scrol2 = mui('#scroll2').pullRefresh({
+
+				down: {
+					contentdown: "加载中", //可选，在下拉可刷新状态时，下拉刷新控件上显示的标题内容
+					contentover: "加载中", //可选，在释放可刷新状态时，下拉刷新控件上显示的标题内容
+					contentrefresh: "Loading...",
+					callback: function() {
+						alert("刷新");
+
+					}
+				},
+				up: {
+					contentrefresh: "加载中...", //可选，正在加载状态时，上拉加载控件上显示的标题内容
+					contentnomore: "没有更多数据", //可选，请求完毕若没有更多数据时显示的提醒内容；
+					callback: function() {
+						alert("加载");
+
+					}
+				}
+			});
+			var scrol3 = mui('#scroll3').pullRefresh({
+
+				down: {
+					contentdown: "加载中", //可选，在下拉可刷新状态时，下拉刷新控件上显示的标题内容
+					contentover: "加载中", //可选，在释放可刷新状态时，下拉刷新控件上显示的标题内容
+					contentrefresh: "Loading...",
+					callback: function() {
+						alert("刷新");
+
+					}
+				},
+				up: {
+					contentrefresh: "加载中...", //可选，正在加载状态时，上拉加载控件上显示的标题内容
+					contentnomore: "没有更多数据", //可选，请求完毕若没有更多数据时显示的提醒内容；
+					callback: function() {
+						alert("加载");
+
+					}
+				}
+			});
+		</script>
+	</body>
+</html>

@@ -1,0 +1,222 @@
+<html lang="zh-CN" style="font-size: 13px;">
+<head>
+    <title>视频培训</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    <meta http-equiv="Cache-control" content="no-cache">
+    <meta property="appGuid" content="ea35eadf-06e4-4b6f-89b6-76cb6d9fa95d">
+    <meta property="htmlType" content="0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=350, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <meta content="yes" name="apple-mobile-web-app-capable">
+    <meta content="black" name="apple-mobile-web-app-status-bar-style">
+    <meta name="format-detection" content="telephone=no">
+    <meta http-equiv="cache-control" content="no-cache">
+    <meta name="x5-orientation" content="portrait">
+    <meta name="screen-orientation" content="portrait">
+    <meta name="x5-fullscreen" content="true">
+    <meta name="full-screen" content="yes">
+    <link rel="stylesheet" type="text/css" href="../platform/css/css.css?20181018100809">
+    <link rel="stylesheet" href="../css/mui.min.css">
+    <link rel="stylesheet" href="../css/ipark.css">
+    <script src="../js/mui.min.js"></script>
+    <script src="../js/util.js"></script>
+    <script src="../js/jquery-1.8.0.min.js"></script>
+    <style>
+        body {
+            font-family: 'Droid Sans Fallback', 'STXihei', 'SimSun', 'Microsoft Yahei';
+        }
+
+        .swiper-container {
+            margin: 0;
+        }
+
+        .swiper-slide {
+            background-position: center;
+            background-size: 100% 100% !important;
+        }
+
+
+        .videoDescription {
+            width: 100%;
+            height: 100%;
+        }
+
+        .videoContent {
+            left: 10%;
+            top: 58%;
+            width: 80%;
+            height: 10%;
+            text-align: left;
+        }
+
+        #videoTitle {
+            text-align: center;
+        }
+
+        #videoContent {
+            display: inline-block;
+        }
+        .parseButton{
+        	display: inline-block;
+        	color: #AAAAAA;
+        	font-size: 22px;
+        	border: 0;
+        }
+        .parseButton img{
+        	height: 25px;
+        	margin-right: 6px;
+        	vertical-align: sub;
+        }
+    </style>
+</head>
+
+<body style="font-size: 13px;">
+    <header class="mui-bar mui-bar-nav">
+        <a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+        <h1 id="title" class="mui-title">详 情</h1>
+    </header>
+    <div>
+        <img id="backgroundImg" style="width:100%; height:100%;position: fixed;top: 0;left: 0;" src="../platform/img/1.png">
+        <div class="parentdiv ani  none animated" style="left: 2.5%; top: 18%; width: 95%; height: 30%;">
+            <video id="videoContainer" playsinline="" autoplay="autoplay" x-webkit-airplay="" webkit-playsinline="" src="" controls="" 
+                style="object-fit: fill; position: absolute; height: 100%; width: 100%; left: 0px; top: 0px;"
+            >
+            </video>
+        </div>
+        <div class="parentdiv" style="width: 100%;top: 50%;text-align: right;padding-right: 5%;">
+        	<div class="parseButton"><img src="../videoImg/good.png"><span class="number">0</span></div>
+        </div>
+       	<div class="videoContent parentdiv">
+            <div id="videoTitle" style="width:100%; height:50%; color:#000000; font-size:1.5em; line-height:1;"></div>
+            <div id="videoContent" style="color:#000000; font-size:1.125em; line-height:2;">
+                1.整平土地<br><br>2.土壤施好底肥<br><br>3.设计好花草摆放土壤
+            </div>
+        </div>
+    </div>
+    <script>
+		mui.plusReady(function () {
+			var primaryBack = mui.back;
+	        mui.back = function() {
+	           	var view = plus.webview.getWebviewById("videoTeach");
+                mui.fire(view, "init");
+                setTimeout(function () {
+                    view.show("slide-in-right", 300);
+                }, 150);
+                primaryBack();
+	        }
+			var osName = plus.os.name;  
+		    if(osName === 'Android') {  
+		        fullScreenOfAndroid();  
+		    } else if(osName === 'iOS') {  
+		        var videoElem = document.getElementById('myPlayer');  
+		        fullScreenOfIos(videoElem);  
+		    }
+		    
+		    // iOS平台的视频全屏旋转  
+			function fullScreenOfIos(videoElem) {  
+			    // 监听的事件与Android平台有很大区别  
+			    videoElem.addEventListener('webkitbeginfullscreen', function() {  
+			        plus.screen.lockOrientation('landscape'); //锁死屏幕方向为横屏  
+			    });  
+			    videoElem.addEventListener('webkitendfullscreen', function() {  
+			        plus.screen.lockOrientation('portrait-primary'); //锁死屏幕方向为竖屏  
+			    });  
+			};  
+			
+			// Android平台的视频全屏旋转  
+			function fullScreenOfAndroid() {  
+			    if(true) {  
+			        // 最新5+API的支持  
+			        var self = plus.webview.currentWebview();  
+			        self.setStyle({  
+			            videoFullscreen: 'landscape'  
+			        });  
+			    }else{  
+	                document.addEventListener('webkitfullscreenchange', function() {  
+	                    var el = document.webkitFullscreenElement; //获取全屏元素  
+	                    if(el) {  
+	                        plus.screen.lockOrientation('landscape'); //锁死屏幕方向为横屏  
+	                    } else {  
+	                        plus.screen.lockOrientation('portrait-primary'); //锁死屏幕方向为竖屏  
+	                    }  
+	                });  
+			    }  
+			};
+			
+			var flag = plus.webview.currentWebview().flag,
+				videoTitle = $('#videoTitle'),
+				videoContent = $('#videoContent'),
+				videoContainer = $('#videoContainer'),
+				praiseCount = '0';
+			var video = videoContainer[0];
+	        video.addEventListener("timeupdate",function(){
+	            var currentTime = Math.floor(video.currentTime);
+	            localStorage.setItem("currentTime"+flag,currentTime);
+	        });
+			Util.ajax({
+	            type: 'get', 
+	            url: '/video/getVideo',
+	            data:{
+	            	flag:flag
+	            },
+	            success:function(res){
+	            	praiseCount = res.praiseCount;
+	            	$('.parseButton span').text(res.praiseCount);
+	            	videoTitle.text(res.videoTitle);
+					videoContent.html(res.videoContent);
+					videoContainer.attr('src', res.videoSrc);//res.videoSrc
+					videoContainer.attr('poster', res.imgSrc);
+					if(localStorage.getItem("currentTime"+flag)){
+				        video.currentTime = localStorage.getItem("currentTime"+flag);
+				        video.play();
+			       }
+					var ml = (140 - videoContent[0].clientWidth / 2) + 'px';
+					videoContent.css({
+					    marginLeft: ml
+					})
+					if(res.isPraise == "Y"){
+						$('.parseButton').addClass('active');
+						$('.parseButton img').attr('src','../videoImg/good_hover.png')
+					}
+					$('.parseButton').on("tap", function (event) {
+						if($(this).attr('class').indexOf('active') < 0){
+							updateStatus('Y');
+						}else{
+							updateStatus('N');
+						}
+					});	
+	            }
+	     	});
+	     	
+	     	function updateStatus(isPraise){
+	     		console.log('flag',flag);
+	     		console.log('isPraise',isPraise)
+		     	Util.ajax({
+		            type: 'post', 
+		            url: '/video/saveVideoVisit',
+		            data:{
+		            	flag:flag,
+		            	isPraise:isPraise
+		            },
+		            success:function(res){
+		            	if(isPraise == "Y"){
+		            		mui.toast("已点赞");
+		            		$('.parseButton').addClass('active');
+		            		$('.parseButton img').attr('src','../videoImg/good_hover.png')
+		            		$('.parseButton span').text($('.parseButton span').text()-(-1));
+		            	}else{
+		            		mui.toast("取消点赞");
+		            		$('.parseButton').removeClass('active');
+		            		$('.parseButton img').attr('src','../videoImg/good.png')
+		            		$('.parseButton span').text($('.parseButton span').text()-1);
+		            	}
+		            }
+		      	});
+	     	}
+		})
+    </script>
+</body>,
+
+</html>

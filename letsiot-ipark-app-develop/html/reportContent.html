@@ -1,0 +1,321 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>日报详情</title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<link href="../css/mui.min.css" rel="stylesheet" />
+		<link href="../css/mui.picker.min.css" rel="stylesheet" />
+		<link href="../fonts/iconfont/iconfont.css" rel="stylesheet" />
+		<link href="../css/ipark.css" rel="stylesheet" />
+	    <link href="../css/mui.previewimage.css" rel="stylesheet" />
+		<link href="../css/four.css" rel="stylesheet" />
+		<style>
+			.mui-content-padded {
+				margin: 0!important;
+			}
+			form.mui-input-group {
+				padding: 0;
+			    font-size: 16px;
+			}
+			form.mui-input-group:after {
+				background: #FFFFFF;
+			}
+			.mui-input-group .mui-input-row {
+				height: auto;
+				color: #4D4D4D;
+			}
+			.mui-radio.mui-left input[type=radio] {
+				left: 0;
+			}
+			.mui-radio.mui-left label {
+				padding-left: 25px;
+			}
+			.mui-input-row .title-label {
+				width: 35%;
+				color: #686868;
+			}
+			.mui-input-row .mui-col-sm-30t {
+				width: 30%;
+			}
+			.mui-input-row .mui-col-sm-35t {
+				width: 35%;
+			}
+			.mui-input-row .mui-col-sm-50t {
+				width: 50%;
+			}
+			.mui-input-row .mui-col-sm-20t {
+				width: 20%;
+			}
+			.mui-input-row .mui-col-sm-65t {
+				width: 65%;
+			}
+			.mui-input-row .mui-col-sm-70t {
+				width: 70%;
+			}
+			.mui-input-row .mui-col-sm-10t {
+				width: 10%;
+			}
+			.mui-input-row span {
+				line-height: 40px;
+			}
+			.mui-input-row span.form-full-span {
+				display: inline-block;
+			    height: 36px;
+			    width: 100%;
+			}
+			.mui-input-row .iot-unit-span {
+				margin-left: 5px;
+				display: inline-block;
+			}
+			.mui-input-row .mui-textarea{
+			    border: 1px solid #DCDCDC;
+			    border-radius: 4px;
+			    padding: 5px;
+			}
+			.mui-input-row .mui-textarea {
+			    height: 160px;
+			    display: inline-block;
+			    margin: 10px 0;
+			    width: 93%;
+			    font-size: 14px;
+			}
+			.iot-submit-btn {
+			    padding: 10px 50px;
+			    font-size: 16px;
+			}
+			.mui-radio input[type=radio]:checked:before ,.mui-radio input[type=radio]:before{
+				width: 12px;
+				height: 12px;
+				border-width: 2px;
+				top: 6px;
+			    left: 1px;
+			}
+			.mui-radio input[type=radio]:checked:before{
+				content: '';
+			    background: none;
+			    border-color: #01D16D;
+			}
+			.icon-bg{
+				position: relative;
+				margin: 0 auto;
+				display: inline-block;
+				vertical-align: middle;
+				width: 1.4em;
+				height: 1.4em;
+				margin:-1px 6px 0px -4px;
+			}
+			.mui-btn-uni{
+				width: 60%;
+				font-size: 16px;
+				padding: 8px 35px;
+				border-radius: 100px;
+				color: white;
+				border: 1px solid #01D16D;
+				background: #01D16D;
+			}
+			.mui-btn-uni:enabled:active{
+				background: #01d195;
+				border: 1px solid #01d195;
+			}
+			.mui-span-number{
+				/* min-width: 55px; */
+				margin-right: 5px;
+				display: inline-block;
+			}
+			.mui-span-tip{
+				min-width:70px;
+				width: auto;
+				display: inline-block;
+			}
+			.mui-bill-list input {
+			    line-height: 40px;
+			    width: 75px;
+			    padding: 0;
+			}
+			.mui-bill-list li{
+				list-style: none;
+			}
+			.mui-icon-minus{
+				color: orange;
+				margin-left: 5px;
+				font-size: 20px;
+			}
+			.mui-img-list{
+				line-height: 0;
+			}
+			.mui-img-list img{
+				display: inline-block;
+				width: 30%;
+				height: 100%;
+			}
+			.mui-backdrop{ position: fixed;top: 0;right: 0;bottom: 0;left: 0;z-index: 998;background-color: rgba(0,0,0,.5);}
+			.mui-backdrop img{position: absolute;left: 0;right: 0;bottom:0;top: 0;margin:auto;width:80%;}
+			.mui-input-row {
+				padding: 0 15px;
+			}
+			#reportContent {
+				line-height: 1.2;
+				display: inline-block;
+				margin-top: 18px;
+			}
+			.sheetText {
+				color: #282828!important;
+			}
+			#imgList {
+				padding: 10px 0;
+				min-height: 50px;
+			}
+			.mui-img-upload {
+				width: 60px!important;
+				height: 60px!important;
+				margin-right: 10px;
+				margin-top: 10px;
+			}
+			.mui-img-upload:nth-child(1),
+			.mui-img-upload:nth-child(2),
+			.mui-img-upload:nth-child(3){
+				margin-top: 0px;
+			}
+			.mui-img-upload:nth-child(3n){
+				margin-right: 0px;
+			}
+		</style>
+	</head>
+
+	<body>
+		<header class="mui-bar mui-bar-nav">
+			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+			<h1 class="mui-title">日报详情</h1>
+		</header>
+		<div class="mui-content my-sheet">
+			<div id='backdrop'>
+			
+			</div>
+			<div class="mui-content-padded" style="margin: 5px 0;">
+				<form class="mui-input-group" onsubmit="return false;">
+					<div class="mui-row mui-input-row">
+						<label class="title-label">
+								<span class="iconfont icondata1 ico-left"></span>日期
+						</label>
+						<div class="mui-col-sm-65t mui-col-xs-12 sheetText">
+							<span id="reportTime" class="mui-span-number"></span>
+						</div>
+					</div>
+					<div class="mui-row mui-input-row">
+						<label class="title-label">
+							<span class="iconfont iconworker ico-left"></span>用工
+						</label>
+						<div class="mui-col-sm-65t mui-col-xs-12 sheetText">
+							<span id="peopleNum" class="mui-span-number">0</span>人
+				      	</div>
+					</div>
+					<div class="mui-row mui-input-row">
+						<label class="title-label">
+							<span class="iconfont iconmoney ico-left"></span>结算
+						</label>
+						<div class="mui-col-sm-65t mui-col-xs-12 sheetText">
+							<div class="mui-bill-list"></div>
+							<!-- <span class="mui-span-tip sheetText">总计：</span><span id="totalBill" class="mui-span-number sheetText">0</span>元 -->
+						</div>
+						  
+						<label class="title-label">
+							<span class="iconfont iconsun ico-left"></span>总计
+						</label>
+						
+						<div class="mui-col-sm-65t mui-col-xs-12 sheetText">
+							<div class=""></div>
+							<span id="totalBill" class="mui-span-number sheetText">0</span>元
+						</div>
+					</div>
+					<div class="mui-row mui-input-row">
+						<label class="title-label">
+							<span class="iconfont iconphoto ico-left"></span>照片
+						</label>
+						<div class="mui-col-sm-65t mui-col-xs-12 sheetText">
+							<div class="mui-img-list mui-limit-width">
+							    <div class="mui-content-padded" id="imgList"></div>
+							</div>
+				      	</div>
+					</div>
+					<div class="mui-row mui-input-row">
+						<label class="title-label">
+								<span class="iconfont iconnote1 ico-left"></span>日报
+						</label>
+						<div class="mui-col-sm-65t mui-col-xs-12 sheetText si-rizhi-content">
+							<span id="reportContent" class="mui-limit-width"></span>
+				      	</div>
+					</div>
+				</form>
+			</div>
+		</div>
+		<script type="text/javascript" src="../js/jquery-1.8.0.min.js"></script>
+		<script src="../js/mui.min.js"></script>
+		<script src="../js/mui.picker.min.js"></script>
+		<script src="../js/app.js"></script>
+		<script src="../js/util.js"></script>
+	    <script src="../js/mui.zoom.js"></script>
+	    <script src="../js/mui.previewimage.js"></script>
+		<script type="text/javascript">
+			(function($, doc) {
+				$.init();
+				window.addEventListener('resetPage',function(event){
+					plus.webview.currentWebview().reload();
+				});
+				var reportId;
+				$.plusReady(function(){
+					var projectId = localStorage.getItem("IPARK_APP_PROJECTID");
+					var self = plus.webview.currentWebview();
+    				reportId = self.reportId;
+					//获取日报内容
+					getDailyReportInfo(reportId);
+                    mui.previewImage();
+					//获取日报内容并进行渲染
+					function getDailyReportInfo(reportId){
+						Util.ajax({
+							url: 'guideDay/querDayInfo',
+							type:'get',
+							data:{
+								'id':reportId
+							},
+							success: function(data){
+								jQuery('#peopleNum').text(data.peopleNumber);
+								jQuery("#createTime").text(data.createTime);
+								jQuery('#reportTime').text(data.day);
+								jQuery("#reportContent").text(data.content);
+								if ((null != data.images) && (data.images.length >0)) {
+									for(var i=0;i<data.images.length;i++){
+										var mediumSrc = "",src = app.configures.URL + "/iPark/APIs/maintGuide/getImageByPath?imagePath=" +  data.images[i].path;
+										if( data.images[i].resourceMinimal){
+											src = app.configures.URL + "/iPark/APIs/maintGuide/getImageByPath?imagePath=" +  data.images[i].resourceMinimal;
+											mediumSrc = app.configures.URL + "/iPark/APIs/maintGuide/getImageByPath?imagePath=" +  data.images[i].resourceMedium;
+										}
+										var imagetemp="<img class='mui-img-upload' data-preview-group='1' data-preview-src='"+mediumSrc+"' src='"+src+"' />";  
+										jQuery("#imgList").append(imagetemp);
+									}
+								} else {
+									jQuery("#imgList").append("<p style='margin-top:14px; color:#4D4D4D; font-size:16px'>无</p>");
+									
+								}
+		
+								jQuery("#backdrop").on("click", function () {
+									jQuery("#backdrop").attr('class', '').html('').hide();
+								});
+								var result = '',totalBill = 0;
+								jQuery.each(data.details,function(i,value){
+									result += '<li><span class="mui-span-tip">'+value.itemName+'：</span><span class="mui-span-number">'+value.cost+'</span>元</li>';
+									totalBill -= -(value.cost);
+								});
+								jQuery('.mui-bill-list').empty().append(result);
+								jQuery('#totalBill').text(totalBill);
+							}
+						});
+					}
+					
+				});
+				
+			})(mui, document);
+		</script>
+	</body>
+</html>

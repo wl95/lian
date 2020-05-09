@@ -1,0 +1,1232 @@
+  <!doctype html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>智能喷灌</title>
+    <meta name="viewport"
+    	  content="width=device-width,initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, minimal-ui, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="format-detection" content="telephone=no">
+    <link href="../css/mui.min.css" rel="stylesheet" />
+    <link href="../css/mui.picker.min.css" rel="stylesheet" />
+    <link href="../fonts/iconfont/iconfont.css" rel="stylesheet" />
+    <link href="../css/ipark.css" rel="stylesheet" />
+    <style>
+        * {
+            touch-action: pan-y;
+        }
+
+        html,
+        body {
+            height: 100%;
+            overflow: hidden;
+        }
+
+        canvas {
+            margin-top: 64px;
+            width: 100% !important;
+            height: calc(100% - 64px) !important;
+        }
+
+        .irrigtion-container {
+            width: 100%;
+            height: 100%;
+            display: block;
+            position: relative;
+        }
+
+        #myobject {
+            width: 100%;
+            height: 100%;
+        }
+
+        .bottom-container {
+            background-color: #fff;
+            width: 250px;
+            height: 65px;
+            position: absolute;
+            bottom: 25px;
+            left: calc(50% - 250px/2);
+            border-radius: 50px;
+            display: none;
+            z-index: 1;
+        }
+
+        .bottom-container-center {
+            height: 85px;
+            width: 85px;
+            border-radius: 50%;
+            background: #fff;
+            position: absolute;
+            top: -10px;
+            left: calc(50% - 85px/2);
+        }
+
+        .plan-button {
+            height: 75px;
+            width: 75px;
+            border-radius: 50%;
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            margin: auto;
+            background: linear-gradient(-24deg, rgba(18, 175, 167, 1), rgba(43, 215, 206, 1));
+        }
+
+        .icon_plan {
+            width: 24px;
+            position: absolute;
+            top: 0;
+            bottom: 20px;
+            left: 0;
+            right: 0;
+            margin: auto;
+        }
+
+        .plan-button>span {
+            font-size: 12px;
+            color: rgba(248, 248, 248, 1);
+            position: absolute;
+            bottom: 10px;
+            width: 28px;
+            text-align: center;
+            left: calc(50% - 14px);
+        }
+
+        .mui-switch-mini {
+            width: 39px;
+            height: 23px;
+        }
+
+        .mui-switch .mui-switch-handle {
+            width: 20px;
+            height: 20px;
+        }
+
+        .mui-switch {
+            border: 2px solid rgba(43, 215, 206, 1);
+        }
+
+        .mui-switch.mui-active {
+            border-color: rgba(43, 215, 206, 1);
+            background-color: rgba(43, 215, 206, 1);
+        }
+
+        .bottom-container-left {
+            position: absolute;
+            left: 25px;
+            top: 14px;
+            height: 50px;
+        }
+
+        .bottom-container-right {
+            position: absolute;
+            right: 25px;
+            top: 14px;
+            /* outline: #000 solid 1px; */
+            height: 50px;
+            width: 50px;
+        }
+
+        #mui-switch-describe {
+            font-size: 12px;
+            color: rgba(88, 88, 88, 1);
+            text-align: center;
+            line-height: 2;
+        }
+
+        .icon_record {
+            width: 22px;
+            position: absolute;
+            top: 0;
+            bottom: 30px;
+            left: 0;
+            right: 0;
+            margin: auto;
+        }
+
+        #mui-record-describe {
+            font-size: 12px;
+            color: rgba(88, 88, 88, 1);
+            text-align: center;
+            line-height: 5.9;
+        }
+
+        .locationTime {
+            font-size: 8px;
+            color: #fff;
+            text-align: center;
+            line-height: 6px;
+            margin-top: 20px;
+            margin-left: -2px;
+        }
+
+        .my-cover {
+            width: 100%;
+            height: 110%;
+            position: absolute;
+            top: 0;
+            display: none;
+        }
+
+        #mySwitch {
+            pointer-events: none;
+        }
+
+        .record-container {
+            position: absolute;
+            bottom: 100px;
+            font-size: 12px;
+            color: #585858;
+            width: 96%;
+            margin: 0 2%;
+            overflow: hidden;
+            display: none;
+            z-index: 1;
+        }
+
+        .record-container ul,
+        li {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        .box {
+            --lineHeight: 40px;
+            /* 行高 */
+            --fontSize: 12px;
+            /* 字号 */
+            --circleSize: 11px;
+            /* 圆点宽高（用单数） */
+            --circleColor: #E6E6E6;
+            /* 圆点及竖线颜色 */
+            --background: #fff;
+            /* box背景色及遮挡物背景色 */
+            --boxPadding: 20px;
+            /* 左边距 */
+            --TopPadding: 20px;
+            /* 上下边距 */
+
+            padding: var(--TopPadding) 0 var(--TopPadding) var(--boxPadding);
+            position: relative;
+            background: var(--background);
+            border-radius: 4px;
+            max-height: 300px;
+            overflow: auto;
+        }
+
+        .box::-webkit-scrollbar {
+            display: none;
+        }
+
+        .circle_list {
+            border-left: 1px solid var(--circleColor);
+            line-height: var(--lineHeight);
+            font-size: var(--fontSize);
+        }
+
+        .circle_list li {
+            display: flex;
+            align-items: center;
+        }
+
+        .circle_list li span:nth-child(1) {
+            width: var(--circleSize);
+            height: var(--circleSize);
+            border-radius: 50%;
+            background: var(--circleColor);
+            margin-left: calc(var(--circleSize) / 2 * (-1) - 0px);
+        }
+
+        .circle_list li span:nth-child(2) {
+            margin-left: 20px;
+        }
+
+        .hidden_icon {
+            position: absolute;
+            left: var(--boxPadding);
+            top: var(--TopPadding);
+            background: var(--background);
+            height: calc(var(--lineHeight) / 2 - var(--circleSize) / 2);
+            width: var(--circleSize);
+        }
+
+        .circle_list li span {
+            display: inline-block;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .record-time {
+            width: 130px;
+        }
+
+        .record-name {
+            width: 75px;
+        }
+
+        .progress-box {
+            --circleWidth: 37.5px;
+            /* 圆环大小 */
+            --borderWidth: 4px;
+            /* 圆环大小 */
+            --outsideColor: #15b4ac;
+            /* 外圈颜色 */
+            --insideColor: #fff;
+            /* 圆环大小 */
+
+            width: var(--circleWidth);
+            height: var(--circleWidth);
+            margin: 10px auto;
+            position: absolute;
+            top: -10px;
+            left: -4px;
+            right: 0;
+            bottom: 0;
+            margin: auto;
+            display: none;
+        }
+
+        .progress-box div {
+            position: absolute;
+            top: 0;
+            left: 0;
+            border-radius: 50%;
+            height: var(--circleWidth);
+            width: var(--circleWidth);
+            -webkit-transition: all .2s ease-in-out;
+            -moz-transition: all .2s ease-in-out;
+        }
+
+        .progress-box .bg {
+            border: var(--outsideColor) var(--borderWidth) solid
+        }
+
+        .progress-box .bg2 {
+            border: var(--outsideColor) var(--borderWidth) solid;
+            clip: rect(0, calc(var(--circleWidth) / 2), var(--circleWidth), 0);
+        }
+
+        .progress-box .rount {
+            border: var(--insideColor) var(--borderWidth) solid;
+            clip: rect(0, calc(var(--circleWidth) / 2), var(--circleWidth), 0);
+            -webkit-transform: rotate(0deg);
+        }
+
+        .progress-box .rount2 {
+            border: var(--insideColor) var(--borderWidth) solid;
+            clip: rect(0, var(--circleWidth), var(--circleWidth), calc(var(--circleWidth) / 2));
+            -webkit-transform: rotate(0deg);
+            display: none;
+        }
+
+        .box {
+            padding: 20px 0 20px 20px;
+            position: relative;
+            background: #fff;
+            border-radius: 4px;
+            max-height: 300px;
+            overflow: auto;
+        }
+
+        .box::-webkit-scrollbar {
+            display: none;
+        }
+
+        .circle_list {
+            border-left: 1px solid #E6E6E6;
+            line-height: 40px;
+            font-size: 12px;
+        }
+
+        .circle_list li {
+            display: flex;
+            align-items: center;
+        }
+
+        .circle_list li span:nth-child(1) {
+            width: 11px;
+            height: 11px;
+            border-radius: 50%;
+            background: #E6E6E6;
+            margin-left: calc(11px / 2 * (-1) - 0px);
+        }
+
+        .circle_list li span:nth-child(2) {
+            margin-left: 20px;
+        }
+
+        .hidden_icon {
+            position: absolute;
+            left: 20px;
+            top: 20px;
+            background: #fff;
+            height: calc(40px / 2 - 11px / 2);
+            width: 11px;
+        }
+
+        .circle_list li span {
+            display: inline-block;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .record-time {
+            width: 130px;
+        }
+
+        .record-name {
+            width: 75px;
+        }
+
+        .progress-box {
+            width: 37.5px;
+            height: 37.5px;
+            margin: 10px auto;
+            position: absolute;
+            top: -10px;
+            left: -4px;
+            right: 0;
+            bottom: 0;
+            margin: auto;
+            display: none;
+        }
+
+        .progress-box div {
+            position: absolute;
+            top: 0;
+            left: 0;
+            border-radius: 50%;
+            height: 37.5px;
+            width: 37.5px;
+            -webkit-transition: all .2s ease-in-out;
+            -moz-transition: all .2s ease-in-out;
+        }
+
+        .progress-box .bg {
+            border: #15b4ac 4px solid
+        }
+
+        .progress-box .bg2 {
+            border: #15b4ac 4px solid;
+            clip: rect(0, calc(37.5px / 2), 37.5px, 0);
+        }
+
+        .progress-box .rount {
+            border: #fff 4px solid;
+            clip: rect(0, calc(37.5px / 2), 37.5px, 0);
+            -webkit-transform: rotate(0deg);
+        }
+
+        .progress-box .rount2 {
+            border: #fff 4px solid;
+            clip: rect(0, 37.5px, 37.5px, calc(37.5px / 2));
+            -webkit-transform: rotate(0deg);
+            display: none;
+        }
+
+        .changeMode {
+            background-color: #fff;
+            position: absolute;
+            width: 40px;
+            height: 40px;
+            top: 25%;
+            right: 0;
+            border-bottom-left-radius: 50%;
+            border-top-left-radius: 50%;
+            padding: 3px;
+            display: block;
+            z-index: 10;
+        }
+
+        .modeImg {
+            height: 100%;
+        }        
+        
+        .water-container {
+            width: 300px;
+            height: 80px;
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            margin: auto;
+            background-color: #fff;
+            padding: 12px;
+            color: #9E9E9E;
+            display: none;
+        }
+
+        .water-content {
+            float: right;
+        }
+
+        .water-count {
+            width: 150px;
+            display: flex;
+            justify-content: space-between;
+            padding-top: 10px;
+            float: left;
+        }
+        
+        .water-count-item {
+            color: #fff;
+            background-color: #26D0C7;
+            width: 20px;
+            height: 24px;
+            text-align: center;
+            line-height: 24px;
+            font-size: 24px;
+        }
+
+        .water-dot {
+            font-size: 24px;
+        }
+
+        .water-unit {
+            float: right;
+            line-height: 55px;
+            padding-left: 10px;
+        }
+		#modeImg2{
+			display:none;
+		}
+    </style>
+</head>
+
+<body>
+    <header class="mui-bar mui-bar-nav">
+        <a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+        <h1 class="mui-title">智能喷灌</h1>
+    </header>
+    <div class="irrigtion-container">
+        <!-- <object id="myobject" data="../icon/home.svg" onload="findSVGElements()"></object> -->
+        <canvas id="map-canvas" width="375" height="600"></canvas>
+        <div class="my-cover">
+            <div class="water-container">
+                <div class="water-time">
+                    截至：<span id="waterTime">06-17 12:00</span>
+                </div>
+                <div class="water-content">
+                    <div class="water-count">
+                        <div class="water-count-item">0</div>
+                        <div class="water-count-item">0</div>
+                        <div class="water-count-item">0</div>
+                        <div class="water-count-item">0</div>
+                        <div class="water-count-item">0</div>
+                        <div class="water-dot">.</div>
+                        <div class="water-count-item">0</div>
+                    </div>
+                    <div class="water-unit">立方米</div>
+                </div>
+            </div>
+        </div>
+        <div class="bottom-container">
+            <div class="bottom-container-left">
+                <div class="mui-switch mui-switch-mini" id="mySwitch">
+                    <div class="mui-switch-handle"></div>
+                </div>
+                <div id="mui-switch-describe">关 闭</div>
+            </div>
+            <div class="bottom-container-center">
+                <div class="plan-button">
+                    <img class="icon_plan" src="../icon/icon_plan.svg">
+                    <span>计 划</span>
+                    <!-- <span>计 划</span> -->
+                </div>
+            </div>
+            <div class="bottom-container-right">
+                <img class="icon_record" src="../icon/icon_record.svg">
+                <div id="mui-record-describe">记 录</div>
+            </div>
+        </div>
+        <div class="record-container">
+            <div class="box">
+                <ul class="circle_list">
+                </ul>
+                <div class="hidden_icon"></div>
+            </div>
+        </div>
+       <div class="changeMode">
+           <img id="modeImg" class="modeImg" src="../icon/icon_sd.png">
+			<img id="modeImg2" class="modeImg" src="../icon/icon_ks.png">
+        </div>
+    </div>
+    <script src="../js/jquery-1.8.0.min.js"></script>
+    <script src="../js/mui.min.js"></script>
+    <script src="../js/mui.picker.min.js"></script>
+    <script src="../js/util.js"></script>
+    <script src="../js/GeoUtils_min.js"></script>
+    <script src="../js/fabric.min.js"></script>
+    <script>
+		mui.init(); 
+        var projectId = localStorage.getItem("IPARK_APP_PROJECTID");
+		var bgImg = '';
+        var chooseDeviceId = '';
+        var arrFM = [];
+        var canvas = new fabric.Canvas('map-canvas');
+        mui.plusReady(function(){
+			 var areaId = plus.webview.currentWebview().areaId;
+            console.log(areaId);
+            if (areaId == '3254787787851776') {
+                bgImg = '../icon/bgGrass.png';
+            } else {
+                bgImg = '../icon/bgRose.png';
+            }
+
+            canvas.selection = false;
+            // 绘制背景
+            fabric.Image.fromURL(bgImg, function(oImg) {
+                oImg.scale(0.5);
+                oImg.set({
+                    left: 0,
+                    top: 0,
+                    selectable: false,
+                    description: 'bg'
+                });
+                lockEvent(oImg);
+                canvas.add(oImg);
+            });
+            // canvas添加电磁阀
+            function drawCanvasFM(selectDeviceId) {
+                Util.ajax({
+                    url: '/idim/valve/getareadevice/v1',
+                    data: {
+                        areaId: areaId,
+                        deviceType: 'VA'
+                    },
+                    success: function (data) {
+                        var _loop = function _loop(i) {
+                            var deviceObj = data[i];
+                            // console.log(JSON.stringify(deviceObj));
+                            if (deviceObj.deviceType == 'VA') {
+                                var FMimg = '';
+                                if (deviceObj.abscissa != '0' && deviceObj.ordinate != '0') {
+                                    if (deviceObj.id == selectDeviceId) {
+                                        if (deviceObj.status == 'D') {
+                                            FMimg = '../icon/switchOFF80.png';
+                                        } else if (deviceObj.status == 'O') {
+                                            FMimg = '../icon/switchOn80.png';
+                                        } else if (deviceObj.status == 'B') {
+                                            FMimg = '../icon/switchLost80.png';
+                                        }
+                                        fabric.Image.fromURL(FMimg, function (oImg) {
+                                            arrFM.push(oImg);
+                                            addPT(oImg, deviceObj.abscissa, deviceObj.ordinate, 0.5, false);
+                                            canvas.add(oImg);
+                                        });
+                                    } else {
+                                        if (deviceObj.status == 'D') { // 电磁阀关
+                                            FMimg = '../icon/switchOFF80.png';
+                                        } else if (deviceObj.status == 'O') {// 电磁阀开 
+                                            FMimg = '../icon/switchOn80.png';
+                                        } else if (deviceObj.status == 'B') { // 电磁阀异常(不在线)
+                                            FMimg = '../icon/switchLost80.png';
+                                        }
+                                        fabric.Image.fromURL(FMimg, function (oImg) {
+                                            arrFM.push(oImg);
+                                            addPT(oImg, deviceObj.abscissa, deviceObj.ordinate, 0.35, false);
+                                            oImg.on('selected', function (e) {
+                                                chooseDeviceId = deviceObj.id;
+												console.log(88888888888)
+                                                console.log(chooseDeviceId);
+                                                showBottom(deviceObj.id, deviceObj.deviceName);
+                                                var offsetX = oImg.width * 0.5 / 2;
+                                                var offsetY = oImg.width * 0.5 / 2;
+                                                oImg.scale(0.5).set({
+                                                    left: deviceObj.abscissa - offsetX,
+                                                    top: deviceObj.ordinate - offsetY,
+                                                });
+                                            });
+                                            canvas.add(oImg);
+                                        });
+                                    }
+                                }
+                            }
+                        };
+                        for (var i = 0; i < data.length; i++) {
+                            _loop(i);
+                        }
+                    }
+                })
+            }
+            drawCanvasFM();
+            setInterval(function (){
+                for (var i = 0; i < arrFM.length; i++) {
+                    canvas.remove(arrFM[i]);
+                }
+                drawCanvasFM(chooseDeviceId);
+            }, 10000)
+
+            // canvas添加水表
+            function drawCanvasSB() {
+                Util.ajax({
+                    url: '/idim/valve/getareadevice/v1',
+                    data: {
+                        areaId: areaId,
+                        deviceType: 'WM'
+                    },
+                    success: function (data) {
+                        console.log(JSON.stringify(data))
+                        var _loop = function _loop(i) {
+                            var waterItem = data[i];
+                            fabric.Image.fromURL('../icon/icon_WM.png', function (oImg) {
+                                oImg.scale(0.35);
+                                var offsetX = oImg.width * 0.35 / 2;
+                                var offsetY = oImg.width * 0.35 / 2;
+                                oImg.set({
+                                    left: waterItem.abscissa - offsetX,
+                                    top: waterItem.ordinate - offsetY,
+                                });
+                                lockEvent(oImg);
+                                oImg.on('selected', function (e) {
+                                    // console.log(waterItem.id)
+                                    Util.ajax({
+                                        url: '/water/getWaterMeter',
+                                        data: {
+                                            deviceId: waterItem.id,
+                                        },
+                                        success: function (res) {
+                                            if (res) {
+                                                countContainer = $('.water-count-item');
+                                                for (var i = 0; i < countContainer.length; i++) {
+                                                    $(countContainer[i]).text('0');
+                                                }
+                                                var wmLacc = res.wmLacc;
+                                                if (wmLacc == Math.round(wmLacc)) {
+                                                    wmLacc = wmLacc.toString();
+                                                    for (var i = 0; i < wmLacc.length; i++) {
+                                                        $(countContainer[countContainer.length - 1 - wmLacc.length + i]).text(wmLacc[i]);
+                                                    }
+                                                } else {
+                                                    wmLacc = wmLacc.toString().replace(/\./g,'');
+                                                    for (var i = 0; i < wmLacc.length; i++) {
+                                                        $(countContainer[countContainer.length - wmLacc.length + i]).text(wmLacc[i]);
+                                                    }
+                                                }
+                                                var wmRdtime = dateFtt("MM-dd hh:mm", new Date(res.wmRdtime));
+                                                $('#waterTime').text(wmRdtime);
+                                                $('.my-cover').css({
+                                                    display: 'block',
+                                                    background: 'rgba(0, 0, 0, 0.5)',
+                                                    'z-index': '1'
+                                                })
+                                                $('.water-container').css({
+                                                    display: 'block'
+                                                })
+                                            } else {
+                                                mui.toast('暂无数据')
+                                            }
+                                        }
+                                    })
+                                });
+                                canvas.add(oImg);
+                            });
+                        };
+                        for (var i = 0; i < data.length; i++) {
+                            _loop(i);
+                        }
+                    },
+                })
+            }
+            drawCanvasSB();
+
+            // 禁止fabric默认拖拽等功能
+            function lockEvent(canvasObj) {
+                canvasObj.hasBorders = false;
+                canvasObj.hasControls = false;
+                canvasObj.lockMovementX = true;
+                canvasObj.lockMovementY = true;
+                canvasObj.lockRotation = true;
+                canvasObj.lockScalingX = true;
+                canvasObj.lockScalingY = true;
+            }
+
+            // 在canvas中添加元素
+            function addPT(oImg, left, top, scaleLevel, selectable) {
+                oImg.scale(scaleLevel);
+                var offsetX = oImg.width * scaleLevel / 2;
+                var offsetY = oImg.width * scaleLevel / 2;
+                oImg.set({
+                    left: left - offsetX,
+                    top: top - offsetY,
+                    // selectable: selectable
+                });
+                lockEvent(oImg);
+            }
+            
+            // 添加点击事件
+            $('.my-cover').on("tap", function (event) {
+                hideBottom();
+            })
+            $('.bottom-container-left').on("tap", function (event) {
+                showToast(this);
+            })
+            $('.bottom-container-center').on("tap", function (event) {
+                var deviceId = $(this).attr('deviceId');
+                var deviceName = $(this).attr('deviceName');
+                var view = plus.webview.getWebviewById("irrigationTaskList");
+                if (view) {
+                    mui.fire(view, "init");
+                    setTimeout(function () {
+                        view.show("slide-in-right", 300);
+                    }, 150);
+                } else {
+                    mui.openWindow({
+                        url: './irrigationTaskList.html',
+                        id: 'irrigationTaskList',
+                        extras: {  
+                            deviceId: deviceId,
+                            deviceName: deviceName
+                        } 
+                    });
+                }
+            })
+            $('.bottom-container-right').on("tap", function (event) {
+                showRecord(this);
+            })
+           $('.changeMode').on("tap", function (event) {
+                //modeChange(this);
+				// 初始化系統
+				/*let deviceId="3251711287366656";
+				$.ajax({
+				     url:'http://ipark.bplusiot.com/iPark/APIs/idim/init/v1',
+				     type: 'get',
+					   data: {
+						   deviceId: deviceId,
+					   },
+				     dataType: "json",  
+				    success: function(data){
+					 console.log(JSON.stringify(data));
+				    },
+				                  
+				     error:function(e){  
+				      console.log(JSON.stringify(e));  
+				     }  
+				 }); 
+				 */
+						//获取输入框的内容
+						//info.innerText = '谢谢你的评语：' + e.value;
+						//调开的接口
+						$.ajax({
+						     url:'http://ipark.bplusiot.com/iPark/APIs/idim/control/action/open/area',
+						     type: 'post',
+						    data: { 
+						        areaId:areaId ,
+						    },
+						     dataType: "json",
+							 timeout : 60*1000*11, //超时时间设置，单位毫秒
+						    success: function(data){
+							   console.log(5555555);
+							     console.log(JSON.stringify(data));
+						   },
+						     error:function(e){  
+								 //mui.toast("开启失败:"+JSON.stringify(e));
+						      console.log(JSON.stringify(e));  
+						     }  
+						 }); 
+						//6分钟调次接口
+						var test2 = setInterval(function(){
+							clos();
+						   //your codes
+						clearInterval(test3);
+						},60000*6);
+						//12分钟调次接口
+						var test3 = setInterval(function(){
+							clos();
+						   //your codes
+						clearInterval(test2);
+						},60000*12); //1分(min)=60000毫秒(ms)
+					function clos(){
+						//调关接口
+						$.ajax({
+						     url:'http://ipark.bplusiot.com/iPark/APIs/idim/control/checkStatus/area',
+						     type: 'post',
+						    data: { 
+						        areaId:areaId ,
+						    },
+						     dataType: "json",
+							 timeout : 60*1000*12, //超时时间设置，单位毫秒
+						    success: function(data){
+							   console.log(666666666666);
+							     console.log(JSON.stringify(data));
+								 if(data=="SOME"|| data=="ALL"){
+									 //改变图片路径
+									 document.getElementById("modeImg").style.display="none";
+									 document.getElementById("modeImg2").style.display="block";
+								 }else{
+									 //显示电量图片
+									 //document.getElementById("modeImg").style.display="block";
+									 document.getElementById("modeImg2").style.display="none";
+								 }
+						   },
+						     error:function(e){  
+								 mui.toast("关闭失败:"+JSON.stringify(e));
+						      console.log(JSON.stringify(e));  
+						     }  
+						 }); 
+											
+					}
+						
+				
+				
+            })
+
+
+
+
+            var muiSwitchDescribe = $('#mui-switch-describe');
+            var myCover = $('.my-cover');
+
+            $('#mySwitch')[0].addEventListener("toggle", function (event) {
+                if (event.detail.isActive) {
+                    muiSwitchDescribe.text('开 启');
+                } else {
+                    muiSwitchDescribe.text('关 闭');
+                }
+            })
+
+
+            // 切换模式
+            function modeChange(e) {
+                var btnArray = ['否', '是'];
+                var modeImg = $('.modeImg');
+                var nowMode = '';
+                
+                Util.ajax({
+                    url: '/idim/valve/projectControllerStatus/v1',
+                    type: 'GET',
+                    data: {
+                        projectId: projectId
+                    },
+                    success: function(data){
+                        nowMode = data.status;
+                        if (nowMode == 'O') {
+                            mui.confirm('是否切换为省电模式', '提示', btnArray, function(e) {
+                                if (e.index == 1) {
+                                    Util.ajax({
+                                        url: '/idim/controller/actionByProjectId/v1?projectId=' + projectId + '&action=C',
+                                        type: 'POST',
+                                        success: function(res){
+                                            var timer = setInterval(function () {
+                                                getNowMode();
+                                            }, 10000)
+                                        },
+                                        error: function (res) {
+                                        }
+                                    })
+                                }
+                            })
+                        } else {
+                            mui.confirm('是否切换为快速模式', '提示', btnArray, function(e) {
+                                if (e.index == 1) {
+                                    Util.ajax({
+                                        url: '/idim/controller/actionByProjectId/v1?projectId=' + projectId + '&action=O',
+                                        type: 'POST',
+                                        success: function(res){
+                                            var timer = setInterval(function () {
+                                                getNowMode();
+                                            }, 10000)
+                                        },
+                                        error: function (res) {
+                                        }
+                                    })
+                                }
+                            })
+                        }
+                    }
+                })
+            }
+
+            // 获取选中电磁阀对应当前的模式
+            function getNowMode() {
+                Util.ajax({
+                    url: '/idim/valve/projectControllerStatus/v1',
+                    type: 'GET',
+                    data: {
+                        projectId: projectId
+                    },
+                    success: function(data){
+                        if (data.status == 'O') {
+                            $('.modeImg').attr('src', '../icon/icon_ks.png');
+                        } else {
+                            $('.modeImg').attr('src', '../icon/icon_sd.png');
+                        }
+                    }
+                })
+            }
+            
+            /* getNowMode(); */
+
+            var bottomContainer = $('.bottom-container');
+            var myCover = $('.my-cover');
+            // 展示下方功能菜单
+            function showBottom(number, name) {
+                // console.log(number);
+                // console.log(name);
+                Util.ajax({
+                    url: '/idim/valve/list/v1',
+                    data: {
+                        projectId: projectId
+                    },
+                    success: function (data) {
+                        for (var i = 0; i < data.length; i++) {
+                            if (data[i].id == number) {
+                                // console.log(JSON.stringify(data[i].status));
+                                if (data[i].status == 'D') {
+                                    closeSwitch();
+                                } else if (data[i].status == 'O') {
+                                // } else {
+                                    // console.log(data[i].status);
+                                    openSwitch();
+                                }
+                            }
+                        }
+                    }
+                })
+                // 挂载deviceId到下方按钮区域
+                $('.bottom-container .bottom-container-left').attr('deviceId', number);
+                $('.bottom-container .bottom-container-center').attr('deviceId', number);
+                $('.bottom-container .bottom-container-right').attr('deviceId', number);
+                $('.bottom-container .bottom-container-left').attr('deviceName', name);
+                $('.bottom-container .bottom-container-center').attr('deviceName', name);
+                $('.bottom-container .bottom-container-right').attr('deviceName', name);
+                bottomContainer.css({
+                    display: 'block'
+                })
+                if (bottomContainer[0].style.display == 'block') {
+                    myCover.css({
+                        display: 'block',
+                        background: 'rgba(0, 0, 0, 0.5)',
+                        'z-index': '1'
+                    })
+                }
+            }
+
+            // 隐藏下方功能菜单
+            function hideBottom() {
+                for (var i = 0; i < arrFM.length; i++) {
+                    canvas.remove(arrFM[i]);
+                }
+                chooseDeviceId = '';
+                drawCanvasFM();
+                // 点击蒙层关闭开关和去除浮窗样式
+                $('.icon_record').attr('src', '../icon/icon_record.svg');
+                bottomContainer.css({
+                    display: 'none'
+                })
+                $('.record-container').css({
+                    display: 'none'
+                })
+                myCover.css({
+                    display: 'none',
+                    background: 'rgba(0 , 0 , 0, 0)',
+                    'z-index': '0'
+                })
+                $('.water-container').css({
+                    display: 'none'
+                })
+                closeSwitch();
+            }
+
+            // switch开启事件
+            function openSwitch(switchDeviceId, selectDuration) {
+                if (switchDeviceId && selectDuration) {
+                    console.log('开启' + switchDeviceId);
+					$.ajax({
+					     url:'http://ipark.bplusiot.com/iPark/APIs/idim/valve/action/open',
+					     type: 'post',
+						   data: {
+							   deviceId: switchDeviceId,
+							sprayDuration:selectDuration 
+						   },
+					     dataType: "json",  
+					    success: function(data){
+							
+						 console.log(JSON.stringify(data));  
+					    },
+					                  
+					     error:function(e){  
+							 console.log(999999999999);
+					      console.log(e);  
+					     }  
+					 });  
+                }
+                $('#mySwitch').addClass('mui-active');
+                $('.mui-switch-handle').attr('style', 'transition-duration: 0.2s; transform: translate(16px, 0px);');
+                $('#mui-switch-describe').text('开 启');
+            }
+
+            // switch关闭事件
+            function closeSwitch(switchDeviceId, selectDuration) {
+                if (switchDeviceId && selectDuration) {
+                    console.log('关闭' + switchDeviceId);
+					$.ajax({
+					     url:'http://ipark.bplusiot.com/iPark/APIs/idim/valve/action/close',
+					     type: 'post',
+						   data: {
+							   deviceId: switchDeviceId,
+						   },
+					     dataType: "json",  
+					    success: function(data){
+						 console.log(JSON.stringify(data));
+					    },
+					                  
+					     error:function(e){  
+							  console.log(8888888888888888);
+					      console.log(JSON.stringify(e));  
+					     }  
+					 }); 
+                   
+                }
+                $('#mySwitch').removeClass('mui-active');
+                $('.mui-switch-handle').attr('style', '');
+                $('#mui-switch-describe').text('关 闭');
+                $('#mySwitch').css({
+                    'pointer-events': 'none'
+                })
+            }
+
+            // 弹出选择时间窗口
+            function showToast(e) {
+                var deviceId = $(e).attr('deviceId');
+                // 如果当前内容为 关闭 则弹出选择框
+                if ($('#mui-switch-describe').text() == '关 闭') {
+                    var picker = new mui.PopPicker();
+                    var arr = [
+                            {
+                                value: '10',
+                                text: '10分钟'
+                            },
+                            {
+                                value: '15',
+                                text: '15分钟'
+                            },
+                            {
+                                value: '20',
+                                text: '20分钟'
+                            },
+                        ]
+                    picker.setData(arr);
+                    picker.show(function (selectItems) {
+                        openSwitch(deviceId, selectItems[0].value);
+                    })
+                } else {
+                    $('#mySwitch').css({
+                        'pointer-events': 'auto'
+                    })
+                    closeSwitch(deviceId, '0');
+                }
+            }
+
+            // 打开记录按钮
+            function showRecord(e) {
+                $('.circle_list').html('');
+                var deviceId = $(e).attr('deviceId');
+                Util.ajax({
+                    url: '/idim/valve/commandrecords/v1',
+                    data: {
+                        deviceId: deviceId
+                    },
+                    success: function(data){
+                        console.log(JSON.stringify(data));
+                        if (data.length > 0) {
+                            for (var i = 0; i < data.length; i++) {
+                                $('<li>' +
+                                    '<span></span>' +
+                                    '<span class="record-time">' + data[i].execTime + '</span>' +
+                                    // '<span class="record-name">手动模式</span>' +
+                                    '<span class="record-duration">' + data[i].description + '</span>' +
+                                '</li>').appendTo($('.circle_list'))
+                            }
+                        } else {
+                            $('.record-container').css({
+                                display: 'none'
+                            })
+                        }
+                    }
+                })
+                // 记录列表已存在 关闭列表
+                if ($('.record-container')[0].style.display == 'block') {
+                    $('.icon_record').attr('src', '../icon/icon_record.svg');
+                    $('.record-container').css({
+                        display: 'none'
+                    })
+                } else {
+                    $('.icon_record').attr('src', '../icon/icon_record_hover.svg');
+                    $('.record-container').css({
+                        display: 'block'
+                    })
+                    myCover.css({
+                        display: 'block',
+                        background: 'rgba(0, 0, 0, 0.5)',
+                        'z-index': 1
+                    })
+                }
+            }
+
+
+            function dateFtt(fmt, date) {
+                var o = {
+                    "M+": date.getMonth() + 1,                 //月份
+                    "d+": date.getDate(),                    //日
+                    "h+": date.getHours(),                   //小时
+                    "m+": date.getMinutes(),                 //分
+                    "s+": date.getSeconds(),                 //秒
+                    "q+": Math.floor((date.getMonth() + 3) / 3), //季度
+                    "S": date.getMilliseconds()             //毫秒
+                };
+                if (/(y+)/.test(fmt))
+                    fmt = fmt.replace(RegExp.$1, (date.getFullYear() + "").substr(4 - RegExp.$1.length));
+                for (var k in o)
+                    if (new RegExp("(" + k + ")").test(fmt))
+                        fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
+                return fmt;
+            }
+        })
+    </script>
+    <script>
+        // 进度条
+        var n = 0;
+        function anim(n, m) {
+            var rount;
+            var rount2;
+            if (m == 1) {
+                rount = $('#rount1');
+                rount2 = $('#rount12');
+            } else if (m == 2) {
+                rount = $('#rount2');
+                rount2 = $('#rount22');
+            } else if (m == 3) {
+                rount = $('#rount3');
+                rount2 = $('#rount32');
+            }
+
+
+            if (n <= 50) {
+                rount.css('-webkit-transform', 'rotate(' + 3.6 * n + 'deg)');
+                rount2.css('display', 'none');
+            } else {
+                rount.css('-webkit-transform', 'rotate(180deg)');
+                rount2.css('display', 'block');
+                rount2.css('-webkit-transform', 'rotate(' + 3.6 * (n - 50) + 'deg)');
+            }
+            if (n < 100) {
+                setTimeout(function () {
+                    anim(n += 10, m);
+                }, 1000)
+            }
+        };
+        anim(n, 1);
+    </script>
+</body>
+</html>

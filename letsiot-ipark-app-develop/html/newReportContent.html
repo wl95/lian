@@ -1,0 +1,592 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>智 库</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <link rel="stylesheet" href="../css/mui.min.css">
+    <link rel="stylesheet" href="../css/ipark.css">
+    <link rel="stylesheet" href="../css/copy.css">
+    <script src="../js/mui.min.js"></script>
+    <script src="../js/app.js"></script>
+    <script src="../js/util.js"></script>
+    <script src="../js/formatNum.js"></script>
+    <script src="../js/jquery-1.8.0.min.js"></script>
+    <style>
+        @font-face{
+            font-family: 'MicrosoftYaHei'; 
+            src: url('../fonts/msyh.ttf');
+        }
+
+        html, body {
+            width: 100%;
+            height: 100%;
+        }
+
+        body {
+            font-family: 'MicrosoftYaHei';
+            font-weight: 100;
+            font-size: 14px;
+        }
+
+        .mui-bar {
+            background-color: rgba(0, 0, 0, 0);
+        }
+
+        .top-container {
+            width: 100%;
+            height: 260px;
+            background: linear-gradient(#019E96, #71C7C0);
+            position: fixed;
+            color: #fff;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-around;
+            padding-top: 90px;
+        }
+
+        .totalCost {
+            font-size: 40px;
+        }
+
+        .partCostContainer {
+            width: 100%;
+            display: flex;
+            justify-content: space-around;
+        }
+
+        .partCostItemCost {
+            font-size: 18px;
+        }
+
+        .hideContainer {
+            position: absolute;
+            width: 100%;
+            height: calc(100% - 244px);
+            background-color: rgba(0, 0, 0, 0);
+            top: 244px;
+            z-index: 1;
+            overflow: hidden;
+        }
+
+        .con {
+            width: 100%;
+            height: 100%;
+            overflow-y: auto;
+        }
+
+        .con::-webkit-scrollbar {
+            display: none;
+        }
+
+        .detailContainer {
+            padding: 0 15px;
+        }
+
+        .detailItem {
+            background-color: #fff;
+            border-radius: 4px;
+            color: #282828;
+            margin-bottom: 10px;
+        }
+
+        .detailItem .detailItem-item:last-child {
+            border: none;
+        }
+
+        .left-content {
+            max-width: 70%;
+        }
+
+        .detailItemTitle, .left-content-content, .right-description, .detailItem-description-title, .detailItem-description-detail {
+            color: #9E9E9E;
+            font-size: 12px;
+        }
+
+        .matterItem {
+            padding: 10px 0;
+            border-bottom: 1px dashed #E6F1F2;
+        }
+
+        .detailItem-description-detail {
+            display: flex;
+            justify-content: flex-end;
+        }
+
+        .left-content-content, .left-content-title {
+            width: 100%;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap
+        }
+
+        .detailItem-item {
+            padding: 10px 10px;
+            border-bottom: 1px dashed #E6F1F2;
+            position: relative;
+        }
+
+        .detailItem-description {
+            padding: 10px 10px;
+            border-bottom: 1px dashed #E6F1F2;
+        }
+
+        .detailItemContent {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .right-content {
+            text-align: right;
+        }
+
+        .right-price {
+            color: #F17368;
+        }
+
+        .mui-slider, .mui-slider-indicator.mui-segmented-control {
+            height: 100px;
+        }
+
+        .angryImg {
+            width: 105px;
+            height: 105px;
+            background-size: cover;
+            background-position: 50% 50%;
+            display: inline-block;
+        }
+
+        .requestContent {
+            padding: 10px 10px 0;
+        }
+
+        .matterItem:last-child {
+            border: none;
+        }
+    </style>
+</head>
+
+<body>
+    <header class="mui-bar mui-bar-nav">
+        <a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+        <h1 id="title" class="mui-title">xxxx-xx-xx</h1>
+    </header>
+    <div id='backdrop'></div>
+    <div class="top-container">
+        <div>
+            总费用
+            <h1 class="totalCost"></h1>
+        </div>
+        <div class="partCostContainer">
+            <div class="partCostItem">
+                <div>用工费</div>
+                <div class="partCostItemCost partCostItemCost1">--</div>
+            </div>
+            <div class="partCostItem">
+                <div>机械费</div>
+                <div class="partCostItemCost partCostItemCost2">--</div>
+            </div>
+            <div class="partCostItem">
+                <div>材料费</div>
+                <div class="partCostItemCost partCostItemCost3">--</div>
+            </div>
+        </div>
+    </div>
+    <div class="hideContainer">
+        <div class="con">
+            <div class="detailContainer">
+                <div class="costsContainer">
+                    <!-- <div class="detailItem">
+                        <div class="detailItem-item detailItemTitle">
+                            用工费
+                        </div>
+                        <div class="costsItem">
+                            <div class="detailItem-item detailItemContent">
+                                <div class="left-content">
+                                    <div class="left-content-title">
+                                        员工：13人
+                                    </div>
+                                    <div class="left-content-content">
+                                        病虫害防治 完成：100%
+                                    </div>
+                                </div>
+                                <div class="right-content">
+                                    <div class="right-price">1,000.24</div>
+                                    <div class="right-description">不含油</div>
+                                </div>
+                            </div>
+                            <div class="detailItem-item detailItemContent">
+                                <div class="left-content">
+                                    <div class="left-content-title">
+                                        李伟团队点工：20人
+                                    </div>
+                                    <div class="left-content-content">
+                                        马路两侧树木刷白 完成：100%
+                                    </div>
+                                </div>
+                                <div class="right-content">
+                                    <div class="right-price">1,000.24</div>
+                                    <div class="right-description"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div> -->
+                </div>
+                
+                <div class="detailItem">
+                    <div class="detailItem-item angryImgContainer" style="border: none">
+                        <div class="mui-slider">
+                            <div class="mui-scroll-wrapper mui-slider-indicator mui-segmented-control mui-segmented-control-inverted">
+                                <div class="mui-scroll">
+                                    <!-- <div class="angryImg" style="background-image: url('../images/default.png')"></div>
+                                    <div class="angryImg" style="background-image: url('../images/projectBg.png')"></div>
+                                    <div class="angryImg" style="background-image: url('../images/default.png')"></div>
+                                    <div class="angryImg" style="background-image: url('../images/default.png')"></div> -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="problemCotainer">
+                        <!-- <div class="detailItem-description">
+                            <div class="detailItem-description-title">
+                                人员问题点与分析
+                            </div>
+                            <div class="detailItem-description-content">
+                                九龙湖街道需打扫,南京交通职业技术学院绿化街道京市浦口区科工园浦滨路绿化养
+                            </div>
+                        </div>
+                        <div class="detailItem-description">
+                            <div class="detailItem-description-title">
+                                人员问题点与分析
+                            </div>
+                            <div class="detailItem-description-content">
+                                九龙湖街道需打扫,南京交通职业技术学院绿化街道京市浦口区科工园浦滨路绿化养
+                            </div>
+                        </div> -->
+                    </div>
+                </div>
+                <div class="detailItem">
+                    <div class="detailItem-item requestContent">
+                        <div class="detailItem-description-title">
+                            业主及监理要求
+                        </div>
+                        <!-- <div class="matterItem">
+                            <div class="detailItem-description-content matterItem-content">
+                                要求，对秀山东路的整改.刷白，栽树
+                            </div>
+                            <div class="detailItem-description-detail">
+                                <div class="detailItem-description-detail-author">
+                                    负责人：张秀秀&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                </div>
+                                <div class="detailItem-description-detail-time">
+                                    计划完成时间：2019-05-29
+                                </div>
+                            </div>
+                        </div> -->
+                    </div>
+                </div>
+                <div class="detailItem">
+                    <div class="detailItem-item">
+                        <div class="detailItem-description-title">
+                            安全文明施工记录
+                        </div>
+                        <div class="detailItem-description-content" id="security"></div>
+                    </div>
+                </div>
+                <div class="detailItem">
+                    <div class="detailItem-item">
+                        <div class="detailItem-description-title">
+                            明日计划
+                        </div>
+                        <div class="detailItem-description-content" id="plan"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        (function(mui, doc) {
+            mui.init();
+            window.addEventListener('resetPage',function(event){
+                plus.webview.currentWebview().reload();
+            });
+
+            var dailyId = '';
+            mui.plusReady(function(){
+                var projectId = localStorage.getItem("IPARK_APP_PROJECTID");
+                var self = plus.webview.currentWebview();
+                dailyId = self.dailyId;
+                //获取日报内容
+                getDailyReportInfo(dailyId);
+                //获取日报内容并进行渲染
+                function getDailyReportInfo(dailyId){
+                    Util.ajax({
+                        url: '/daily/getdailyinfo',
+                        type: 'get',
+                        data:{
+                            dailyId: dailyId
+                        },
+                        success: function(res){
+                            console.log(JSON.stringify(res));
+                            var daily = res.daily;
+                            var human = res.human;
+                            var costs = res.costs;
+                            var resource = res.resource;
+                            var problems = res.problems;
+                            var dailystatis = res.dailystatis;
+                            var matters = res.matters;
+
+                            // 渲染顶部日期价格容器数据
+                            $('#title').text(daily.createDate);
+                            $('.totalCost').text(formatNum(daily.total));
+                            for (var i = 0; i < dailystatis.length; i++) {
+                                if (dailystatis[i].type == 1) {
+                                    $('.partCostItemCost1').text(formatNum(dailystatis[i].value));
+                                }
+                                if (dailystatis[i].type == 2) {
+                                    $('.partCostItemCost2').text(formatNum(dailystatis[i].value));
+                                }
+                                if (dailystatis[i].type == 3) {
+                                    $('.partCostItemCost3').text(formatNum(dailystatis[i].value));
+                                }
+                            }
+
+                            // 渲染费用模块
+                            var costsType2 = [];
+                            var costsType3 = [];
+                                // 构建 - 机械 & 材料 - 数组
+                            if (costs.length > 0) {
+                                for (var i = 0; i < costs.length; i++) {
+                                    if (costs[i].type == 2) {
+                                        costsType2.push(costs[i]);
+                                    }
+                                    if (costs[i].type == 3) {
+                                        costsType3.push(costs[i]);
+                                    }
+                                }
+                            }
+                                // 添加人员
+                            if (human.length > 0) {
+                                $(
+                                    '                    <div class="detailItem">'+
+                                    '                        <div class="detailItem-item detailItemTitle">'+
+                                    '                            用工费'+
+                                    '                        </div>'+
+                                    '                        <div id="costsItemHum">'+
+                                    '                        </div>'+
+                                    '                    </div>'
+                                ).appendTo($('.costsContainer'));
+                                for (var i = 0; i < human.length; i++) {
+                                    $(
+                                        '                            <div class="detailItem-item detailItemContent">'+
+                                        '                                <div class="left-content">'+
+                                        '                                    <div class="left-content-title">'+
+                                        '                                        ' + human[i].costsName + '：' + human[i].amount + '人'+
+                                        '                                    </div>'+
+                                        '                                    <div class="left-content-content">'+
+                                        '                                        ' + human[i].job + ' 完成：' + human[i].progress + '%'+
+                                        '                                    </div>'+
+                                        '                                </div>'+
+                                        '                                <div class="right-content">'+
+                                        '                                    <div class="right-price">' + formatNum(human[i].total) + '</div>'+
+                                        '                                </div>'+
+                                        '                            </div>'
+                                    ).appendTo($('#costsItemHum'));
+                                }
+                            }
+                                // 添加机械
+                            if (costsType2.length > 0) {
+                                $(
+                                    '                    <div class="detailItem">'+
+                                    '                        <div class="detailItem-item detailItemTitle">'+
+                                    '                            机械费'+
+                                    '                        </div>'+
+                                    '                        <div id="costsItemType2">'+
+                                    '                        </div>'+
+                                    '                    </div>'
+                                ).appendTo($('.costsContainer'));
+                                for (var i = 0; i < costsType2.length; i++) {
+                                    var alternative = costsType2[i].alternative == 'Y' ? '含油' : '不含油'
+                                    $(
+                                        '                            <div class="detailItem-item detailItemContent">'+
+                                        '                                <div class="left-content">'+
+                                        '                                    <div class="left-content-title">'+
+                                        '                                        '+ costsType2[i].supplierName + ' ' + costsType2[i].costsName + '：' + costsType2[i].amount + costsType2[i].unit +
+                                        '                                    </div>'+
+                                        '                                    <div class="left-content-content">'+
+                                        '                                        ' + costsType2[i].job +
+                                        '                                    </div>'+
+                                        '                                </div>'+
+                                        '                                <div class="right-content">'+
+                                        '                                    <div class="right-price">' + formatNum(costsType2[i].total) + '</div>'+
+                                        '                                    <div class="right-description">' + alternative + '</div>'+
+                                        '                                </div>'+
+                                        '                            </div>'
+                                    ).appendTo($('#costsItemType2'));
+                                }
+                            }
+                                // 添加材料
+                            if (costsType3.length > 0) {
+                                $(
+                                    '                    <div class="detailItem">'+
+                                    '                        <div class="detailItem-item detailItemTitle">'+
+                                    '                            材料费'+
+                                    '                        </div>'+
+                                    '                        <div id="costsItemType3">'+
+                                    '                        </div>'+
+                                    '                    </div>'
+                                ).appendTo($('.costsContainer'));
+                                for (var i = 0; i < costsType3.length; i++) {
+                                    var alternative = costsType3[i].alternative == 'Y' ? '含油' : '不含油'
+                                    $(
+                                        '                            <div class="detailItem-item detailItemContent">'+
+                                        '                                <div class="left-content">'+
+                                        '                                    <div class="left-content-title">'+
+                                        '                                        '+ costsType3[i].supplierName + ' ' + costsType3[i].costsName + '：' + costsType3[i].amount + costsType3[i].unit +
+                                        '                                    </div>'+
+                                        '                                    <div class="left-content-content">'+
+                                        '                                        ' + costsType3[i].job +
+                                        '                                    </div>'+
+                                        '                                </div>'+
+                                        '                                <div class="right-content">'+
+                                        '                                    <div class="right-price">' + formatNum(costsType3[i].total) + '</div>'+
+                                        '                                    <div class="right-description">' + alternative + '</div>'+
+                                        '                                </div>'+
+                                        '                            </div>'
+                                    ).appendTo($('#costsItemType3'));
+                                }
+                            }
+
+                            // 渲染图片轮播
+                            if (resource.length > 0) {
+                                for (var i = 0; i < resource.length; i++) {
+                                    var src = app.configures.URL + "/iPark/APIs/maintGuide/getImageByPath?imagePath=" + resource[i].resourceMinimal;
+                                    var srcMedium = app.configures.URL + "/iPark/APIs/maintGuide/getImageByPath?imagePath=" + resource[i].resourceMedium;
+                                    $('<div class="angryImg" srcMedium="' + srcMedium + '" style="background-image: url(\'' + src + '\')"></div>').appendTo($('.mui-scroll'))
+                                }
+                                var angryImg = $('.angryImg');
+                                for (var i = 0; i < angryImg.length; i++) {
+                                    $(angryImg[i]).on('tap', function (e){
+                                        var srcMedium = $(this).attr('srcMedium');
+                                        var result = "<img src='" + srcMedium + "'/>";
+                                        $("#backdrop").attr('class', 'mui-backdrop').html(result).show();
+                                    })
+                                }
+                                $("#backdrop").off();
+                                $("#backdrop").on("tap", function () {
+                                    $("#backdrop").attr('class', '').html('').hide();
+                                });
+                            } else {
+                                $('.mui-slider').remove();
+                                $('.angryImgContainer').css({
+                                    padding: 0
+                                })
+                            }
+
+                            // 渲染重大事项
+                            if (matters.length > 0) {
+                                for (var i = 0; i < matters.length; i++) {
+                                    $(
+                                        '                        <div class="matterItem">'+
+                                        '                            <div class="detailItem-description-content matterItem-content">'+
+                                        '                                ' + matters[i].reportContent +
+                                        '                            </div>'+
+                                        '                            <div class="detailItem-description-detail">'+
+                                        '                                <div class="detailItem-description-detail-author">'+
+                                        '                                    负责人：' + matters[i].projectManager + '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'+
+                                        '                                </div>'+
+                                        '                                <div class="detailItem-description-detail-time">'+
+                                        '                                    计划完成时间：' + dateFtt("yyyy-MM-dd", new Date(matters[i].endTime)) + ''+
+                                        '                                </div>'+
+                                        '                            </div>'+
+                                        '                        </div>'
+                                    ).appendTo($('.requestContent'));
+                                }
+                            } else {
+                                $('.requestContent').remove();
+                            }
+
+                            // 渲染问题分析模块
+                            if (problems.length > 0) {
+                                for (var i = 0; i < problems.length; i++) {
+                                    if (problems[i].type == 1) {
+                                        $(
+                                            '                        <div class="detailItem-description">'+
+                                            '                            <div class="detailItem-description-title">'+
+                                            '                                人员问题点与分析'+
+                                            '                            </div>'+
+                                            '                            <div class="detailItem-description-content">'+
+                                            '                                ' + problems[i].problemDesc +
+                                            '                            </div>'+
+                                            '                        </div>'
+                                        ).appendTo($('.problemCotainer'))
+                                    }
+                                    if (problems[i].type == 2) {
+                                        $(
+                                            '                        <div class="detailItem-description">'+
+                                            '                            <div class="detailItem-description-title">'+
+                                            '                                机械问题点与分析'+
+                                            '                            </div>'+
+                                            '                            <div class="detailItem-description-content">'+
+                                            '                                ' + problems[i].problemDesc +
+                                            '                            </div>'+
+                                            '                        </div>'
+                                        ).appendTo($('.problemCotainer'))
+                                    }
+                                    if (problems[i].type == 3) {
+                                        $(
+                                            '                        <div class="detailItem-description">'+
+                                            '                            <div class="detailItem-description-title">'+
+                                            '                                材料问题点与分析'+
+                                            '                            </div>'+
+                                            '                            <div class="detailItem-description-content">'+
+                                            '                                ' + problems[i].problemDesc +
+                                            '                            </div>'+
+                                            '                        </div>'
+                                        ).appendTo($('.problemCotainer'))
+                                    }
+                                }
+                                $($('.detailItem-description')[0]).css({
+                                    padding: '0 10px 10px'
+                                })
+                                $($('.detailItem-description')[problems.length - 1]).css({
+                                    border: 'none'
+                                })
+                            }
+
+                            // 渲染安全文明施工记录 & 明日计划
+                            $('#security').text(daily.security ? daily.security : '未填写')
+                            $('#plan').text(daily.plan ? daily.plan : '未填写')
+                        }
+                    });
+                }
+            });
+            
+        })(mui, document);
+
+        // 格式化时间方法
+        function dateFtt(fmt, date) {
+            var o = {
+                "M+": date.getMonth() + 1,                 //月份
+                "d+": date.getDate(),                    //日
+                "h+": date.getHours(),                   //小时
+                "m+": date.getMinutes(),                 //分
+                "s+": date.getSeconds(),                 //秒
+                "q+": Math.floor((date.getMonth() + 3) / 3), //季度
+                "S": date.getMilliseconds()             //毫秒
+            };
+            if (/(y+)/.test(fmt))
+                fmt = fmt.replace(RegExp.$1, (date.getFullYear() + "").substr(4 - RegExp.$1.length));
+            for (var k in o)
+                if (new RegExp("(" + k + ")").test(fmt))
+                    fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
+            return fmt;
+        }
+    </script>
+</body>
+
+</html>

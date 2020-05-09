@@ -1,0 +1,567 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>智能喷灌模拟配置</title>
+ <meta name="viewport"
+	  content="width=device-width,initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, minimal-ui, user-scalable=no">
+ <meta name="apple-mobile-web-app-capable" content="yes">
+ <meta name="apple-mobile-web-app-status-bar-style" content="black">
+ <meta http-equiv="X-UA-Compatible" content="IE=edge">
+ <meta name="format-detection" content="telephone=no">
+  <link href="../css/mui.min.css" rel="stylesheet" />
+  <link href="../css/mui.picker.min.css" rel="stylesheet" />
+  <link href="../fonts/iconfont/iconfont.css" rel="stylesheet" />
+  <link href="../css/ipark.css" rel="stylesheet" />
+  <script src="../js/mui.min.js"></script>
+  <script src="../js/mui.picker.min.js"></script>
+  <script type="text/javascript" src="../js/jquery-3.1.1.min.js" ></script>
+  <link href="https://vjs.zencdn.net/7.4.1/video-js.css" rel="stylesheet">
+      <script src='https://vjs.zencdn.net/7.4.1/video.js'></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/videojs-contrib-hls/5.15.0/videojs-contrib-hls.min.js" type="text/javascript"></script>
+  <style>
+   html,body {
+      height: 100%;
+      background:#fff;
+      touch-action: none;
+    }
+    .mui-ios header{
+      padding-top:0px!important;
+    }
+    .back-white{
+      background-color: #fff!important;
+    }
+    .vide{
+      width: 100%;
+	  height:5%!important;
+	  min-height:5vh;
+      position: relative;
+      margin-top: 0;
+      box-sizing: border-box;
+      z-index: 0 !important;
+    }
+    .textalgin-center{
+      text-align: center;
+    }
+    .mui-input-row.mui-input-range {
+      padding-right: 0px;
+    }
+    .lineHeight{
+      line-height: 2rem!important;
+    }
+    .color-rose{/* 玫红色 */
+      color: #FF2C9C!important;
+    }
+    .color-blue{/* 蓝色 */
+      color: #63CDF7!important;
+    }
+    .color-orange-yelllow{/* 橙黄色 */
+      color: #FFC86C!important;
+    }
+    .color-green{/* 绿色 */
+      color: #AADC80!important;
+    }
+    .background-rose{/* 玫红色 */
+      background: #FF2C9C!important;
+    }
+    .background-blue{/* 蓝色 */
+      background: #63CDF7!important;
+    }
+    .background-orange-yelllow{/* 橙黄色 */
+      background: #FFC86C!important;
+    }
+    .background-green{/* 绿色 */
+      background: #AADC80!important;
+    }
+    .inputCon{
+      height:5px!important;
+    }
+    .mui-input-range input[type='range']::-webkit-slider-thumb
+    {
+      width: 28px;
+      height: 28px;
+      border-color:#dce1e8;
+      border-radius: 50%;
+      background-color: #fff; /* 滑块上圆点的颜色 */
+      box-shadow: 0 0 10px #dce1e8 ;
+      background-clip: padding-box;
+      -webkit-appearance: none !important;
+    }
+    .padTop-content{
+      padding-top: 44px!important;
+    }
+
+    .border{
+      border-radius: 5px;
+      border: 1px solid #dce1e8;
+      box-shadow: 0 0 10px #dce1e8 ;
+    }
+    .padding{
+      padding:10px;
+    }
+    .icon-size{
+      font-size:2rem;
+    }
+    .cont-bot{
+      font-size: 0.5rem;
+    }
+    .pad-time{
+      padding:3px;
+    }
+    .icon-img{
+      width: 2.5rem;
+      height: 2.5rem;
+    }
+	.pad-img{
+		padding:0 10px 0 10px;
+	}
+    /* iphone5 */
+    @media screen and (max-width:320px){
+      .cont-bot{
+        font-size: 17px;
+      }
+
+    }
+    .pad{
+      padding-left:10px;
+      padding-top:10px;
+    }
+    .pading{
+      padding:0 10px 10px 0;
+    }
+	  .video-js .vjs-tech {position: relative !important;}
+  </style>
+</head>
+
+<body>
+<header class="mui-bar mui-bar-nav padd">
+  <a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+  <h1 class="mui-title">智能喷灌模拟配置</h1>
+</header>
+
+<div class="mui-content back-white padTop-content">
+	<div class="vide">
+		  <video id="myVideo" class="video-js vjs-default-skin vjs-big-play-centered" controls preload="auto" data-setup='{}' style='width: 100%;height: auto'>
+		  </video>
+	</div>
+ 
+  <div class="botCon">
+	<div class="mui-row pad">
+      <div class="mui-col-sm-6 mui-col-xs-6 pading">
+        <div class="border padding">
+          <div class="textalgin-center pad-img"><img class="icon-img" src="../images/img/wdj.png"/></div>
+          <div id="sliderCont" class="textalgin-center lineHeight"></div>
+          <div class="mui-input-row mui-input-range textalgin-center ">
+            <input id="slider" class="inputCon background-rose" type="range" min="-5" max="50" value="0"/>
+          </div>
+          <div class="textalgin-center cont-bot">夏季气温:26~32℃</div>
+        </div>
+      </div>
+      <div class="mui-col-sm-6 mui-col-xs-6 pading">
+        <div class="border padding">
+          <div class="textalgin-center pad-img"><img class="icon-img" src="../images/img/jyl.png"/></div>
+          <div id="rainfallCont" class="textalgin-center lineHeight"></div>
+          <div class="mui-input-row mui-input-range textalgin-center ">
+            <input id="rainfall" class="inputCon background-blue" type="range" min="0" max="100" value="0"/>
+          </div>
+          <div class="textalgin-center cont-bot">降雨量:有效降雨量<75mm</div>
+        </div>
+      </div>
+      <div class="mui-col-sm-6 mui-col-xs-6 pading">
+        <div class="border padding">
+          <div class="textalgin-center pad-img"><img class="icon-img" src="../images/img/hum.png"/></div>
+          <div id="humCont" class="textalgin-center lineHeight"></div>
+          <div class="mui-input-row mui-input-range textalgin-center ">
+            <input id="humidity" class="inputCon background-orange-yelllow" type="range" min="0" max="100" value="0"/>
+          </div>
+          <div class="textalgin-center cont-bot">土壤湿度(10cm):<20%</div>
+        </div>
+      </div>
+      <div class="mui-col-sm-6 mui-col-xs-6 pading">
+        <div class="border padding">
+          <div class="textalgin-center pad-img"><img class="icon-img" src="../images/img/time.png"/></div>
+          <div id="dateCont" class="textalgin-center lineHeight"></div>
+          <div class=" textalgin-center pad-time">
+            <button type="button" class="mui-btn mui-btn-success comint">请选择时间</button>
+          </div>
+          <!-- <div class="mui-input-row mui-input-range textalgin-center ">
+            <input id="Date" class="inputCon background-green" type="range" min="0" max="24" value="0">
+          </div> -->
+          <div class="textalgin-center cont-bot">16:00 &lt; 喷灌时间 &gt;10:00 </div>
+        </div>
+		
+      </div>
+
+    </div>
+	</div>
+  </div>
+
+</div>
+	</div>
+</div>
+</div>
+<script src="../js/app.js"></script>
+<script src="../js/util.js"></script>
+<script type="text/javascript">
+/* (function($, doc) { */
+  /*获取温(湿)度滑块值*/
+  var sliderElement;
+  var humCont;
+  var rainfallCont;
+  /* 设备状态*/
+  var dstatus; 
+  /* 是否下雨*/
+  var rain=Boolean;
+  /* 视频地址*/
+  var address=null;
+  /*
+    获取设备状态
+    接口：/iPark/APIs/device/immediateDataList
+    请求方式：get
+    入参：{"deviceId" : 设备Id,多个设备时以","隔开}
+    */
+ /*  sbzt();
+   function sbzt(){
+	   let equipmentId="2975738553566208";
+	    $.ajax({
+	     	  url:'http://ipark.bplusiot.com/iPark/APIs/device/immediateDataList',
+	     	  type: 'get',
+	     	 data: {
+	     		 deviceId:equipmentId,
+	     	 },
+	     	  dataType: "json",  
+	     	 success: function(data){
+	     	   console.log("*****************获取设备状态********************");
+	     		 console.log(JSON.stringify(data));
+	     		 dstatus=data[0].status;
+				 return dstatus;
+	     	 },
+	     	  error:function(e){  
+	     	   console.log(JSON.stringify(e));  
+	     	  }  
+	    });
+   }
+   */
+
+  /* 
+   获取土壤传感器最新的状态
+   接口：/iPark/APIs/camera/getaddress/v1
+   请求方式：get
+   入参：{"deviceId" : 设备Id（土壤喷灌）：2975738553566208}
+   rain:是否有雨
+   temperature：温度
+   humidity：湿度
+   */
+  
+  	var soilId="2975738553566208";
+  	 $.ajax({
+  		 url:'http://ipark.bplusiot.com/iPark/APIs/device/immediateSoilData',
+  		 type: 'get',
+  		data: {
+  			deviceId:soilId,
+  		},
+  		 dataType: "json",  
+  		success: function(data){
+  		   console.log("******************获取土壤传感器***********************");
+  			 console.log(JSON.stringify(data));
+  			rain=data.rain;//是否有雨
+  			sliderElement=data.temperature;//温度
+  			humCont=data.humidity;//湿度
+  			  inptVal(sliderElement,humCont,rain);
+			  $("#rainfallCont").attr("rain",rain);
+			 
+  		},
+  		 error:function(e){  
+		 mui.toast("土壤传感器获取失败");	
+		 inptVal("22","0",false);
+  		  console.log(JSON.stringify(e));  
+  		 }  
+  	 }); 
+  /* 
+  处理m3u8格式的视频
+  */	
+  	var myVideo = videojs('myVideo', {
+  	    bigPlayButton: true,
+  	    textTrackDisplay: false,
+  	    posterImage: false,
+  	    errorDisplay: false,
+  	  })
+  	  myVideo.play()
+  	 function changeVideo(vdoSrc) {
+  	    if (/\.m3u8$/.test(vdoSrc)) { //判断视频源是否是m3u8的格式
+  	      myVideo.src({
+  	        src: vdoSrc,
+  	        type: 'application/x-mpegURL' //在重新添加视频源的时候需要给新的type的值
+  	      })
+  	    } else {
+  	      myVideo.src(vdoSrc);
+  	    }
+  	    myVideo.load();
+  	    myVideo.play();
+  	  }
+  /*
+  视频接口
+  */	    
+  	var videoId="3267258704404480";
+  		$.ajax({  
+  	        url:'http://ipark.bplusiot.com/iPark/APIs/camera/getaddress/v1',
+  	        type: 'get',
+  	        data: {
+  	            deviceId:videoId ,
+  	        }, 
+  	        dataType: "json",  
+  	        success: function(data){ 
+  				  console.log("**************视频******************");
+  				  console.log(JSON.stringify(data)); 
+  				 address=data.addressLive;
+				 console.log(address);
+				 changeVideo(address);
+  	         }, 
+  	        error:function(e){  
+  	        console.log(e);  
+  	        }  
+  	    });  
+	
+   /* 初始化温（湿）度的值*/
+  function inptVal(sliderElement,humCont,rain){
+	  if(sliderElement==undefined){
+		  sliderElement="22";
+	  }
+	  if(humCont==undefined){
+		 humCont=0; 
+	  }
+    document.getElementById('sliderCont').innerHTML=sliderElement+"℃";//温度文本值
+	document.getElementById('slider').value=sliderElement;//温度滑块
+    document.getElementById('humCont').innerHTML=humCont+"%";//湿度文本值
+	document.getElementById('humidity').value=humCont;//湿度滑块
+    /* 降雨量 */
+	if(rain==false){
+		//未来没有雨 不显示降雨量
+		document.getElementById('rainfallCont').innerHTML=document.getElementById('rainfall').value+"mm";
+	}else{
+		//未来有雨  显示50mm降雨量
+		 document.getElementById('rainfallCont').innerHTML="50"+"mm";
+		 document.getElementById('rainfall').value="50";
+	}
+   
+
+  }
+  /* 监听触摸温湿度的值 */
+  //防抖函数 滑块在结束滑动时执行input监听
+  function throttle(func) {
+      var timeout;
+	  return function () {
+		  var context = this;
+		  var args = arguments;
+  
+		  if (timeout) clearTimeout(timeout);
+		  
+		  timeout = setTimeout(function () {
+			  func.apply(context, args);
+		  }, 700);
+	  }
+  }
+window.addEventListener('input', throttle(function(event){
+    //通过event.detail可获得传递过来的参数内容
+    /* 温度值： */
+    sliderElement=document.getElementById('slider').value+"℃";
+    //console.log("温度："+sliderElement);
+    document.getElementById('sliderCont').innerHTML=sliderElement;
+    /* 湿度值： */
+    humCont=document.getElementById('humidity').value+"%";
+    //console.log("湿度："+humCont);
+    document.getElementById('humCont').innerHTML=humCont;
+    /* 降雨量： */
+    rainfallCont=document.getElementById('rainfall').value+"mm";
+    document.getElementById('rainfallCont').innerHTML=rainfallCont;
+	onOff();
+  }));
+     /* 获取当前时间 */
+  var setinter=setInterval(function(){
+    var hour=new Date().getHours();
+    var minute=new Date().getMinutes();
+    if(minute<10){
+      minute="0"+minute;
+    }
+    document.getElementById('dateCont').innerHTML=hour+":"+minute;
+
+  },200);
+
+  mui(".botCon").on('tap','.comint',function () {
+    window.clearInterval(setinter);
+    var picker =new mui.DtPicker({'type':'time'}); //在外面没有设置$是mui的时候直接写mui
+    picker.show(function(rs) {
+
+      document.getElementById('dateCont').innerHTML=rs.text;
+		onOff();
+      //return false;    //这是阻止对话框关闭的
+      picker.dispose();
+    });
+
+  });
+
+
+
+/* 根据当前的温（湿）度，降雨量，时间值来判断范围，
+	浇水时间要选择在早上 10 点以前和下午 16 点以后
+	温度:	sliderElement;
+	湿度:      humCont;
+	降雨量:    rainfallCont;  
+	设备状态：dstatus;
+	是否下雨：rain
+	视频地址：addressLive
+	*/	
+   
+ function onOff(){
+	var switchDeviceId="3254548284262400"; //电磁阀Id:3254548284065792
+	var selectDuration="10"; //喷灌时长
+	var slider=document.getElementById('sliderCont').innerHTML;//温度文本值
+	var hum=document.getElementById('humCont').innerHTML;//湿度文本值
+	var rainfall=document.getElementById('rainfallCont').innerHTML; //降雨量文本值
+	var time=document.getElementById('dateCont').innerHTML;//时间
+	var rain=$("#rainfallCont").attr("rain");
+	hum=parseInt(hum);//转换数字
+	slider=parseInt(slider);
+	console.log("温湿度");
+	console.log(slider);
+	console.log(hum);
+	//console.log(rainfall);  //降雨量
+	console.log(time);
+	console.log(rain);
+	var tim;//是否在时间段内
+	time_range ("10:00", "16:00",time);//判断时间是否在10点之前和16:00之后
+	console.log(tim);
+	//sbzt();
+
+	if(slider>-1 && slider<40){
+		if(hum>35 && hum<75){
+			if(rain !=true){
+					if(tim !=true ){
+						close(switchDeviceId);
+						//电磁阀状态不为(异常，打开) 湿度在35%~75%,温度在-1℃~40℃，未来24小时无雨，在有效时间段内 不开启电磁阀 
+							console.log("湿度在35%~75%,温度在-1℃~40℃，未来24小时无雨 不开启电磁阀");
+					}else{ // 时间在10点到16点的时候 关闭电磁阀
+					close(switchDeviceId);
+					}
+				}else{
+				//电磁阀状态不为(异常，打开) 湿度在35%~75%,温度在-1℃~40℃，未来24小时有雨，在有效时间段内 不开启电磁阀 
+				if(tim !=true ){
+					close(switchDeviceId);
+						console.log("湿度在35%~75%,温度在-1℃~40℃，未来24小时有雨 不开启电磁阀");
+				}else{ // 时间在10点到16点的时候 关闭电磁阀
+					close(switchDeviceId);
+				}
+			}
+		}else if(hum<35){
+				if(rain !=true){
+					if(tim !=true ){
+						//电磁阀状态不为(异常，打开) 湿度小于35%,温度在-1℃~40℃，未来24小时无雨，在有效时间段内 开启电磁阀
+							open(switchDeviceId,selectDuration);
+					}else{ // 时间在10点到16点的时候 关闭电磁阀
+					close(switchDeviceId);
+					}
+				}else{
+				//电磁阀状态不为(异常，打开) 湿度小于35%,温度在-1℃~40℃，未来24小时有雨，在有效时间段内 不开启电磁阀 
+				if(tim !=true ){
+					close(switchDeviceId);
+				}else{ // 时间在10点到16点的时候 关闭电磁阀
+					close(switchDeviceId);
+				  console.log("时间在10点到16点的时候 关闭电磁阀");
+				}
+				
+			}
+			
+		}
+	}else if(slider>-1 && slider<40 && hum<10 && tim !=true){//电磁阀状态不为(异常，打开) 湿度小于10%,在有效时间段内开启电磁阀
+			open(switchDeviceId,selectDuration);
+		}else if(slider<-1 && tim !=true){ //电磁阀状态不为(异常，打开) 温度为-1℃,在有效时间段内不开启电磁阀
+			close(switchDeviceId);
+		}else if(hum>35 && tim==true){
+			close(switchDeviceId);
+			console.log("湿度大于35% 时间在10点到16点的时候 关闭电磁阀");
+		}else if(hum>35 && tim !=true){
+			close(switchDeviceId);
+			console.log("湿度大于35% 时间不在10点到16点的时候 关闭电磁阀");
+		}else if(hum>75){//湿度高于75% 停止喷灌
+			close(switchDeviceId);
+			  console.log("湿度高于75% 停止喷灌");
+		}else{
+			mui.toast("条件不支持");
+			close(switchDeviceId);
+		}
+		//开启电磁阀
+	function open(switchDeviceId,selectDuration){
+		console.log(9999999999999999);
+		console.log(switchDeviceId);
+		console.log(selectDuration);
+		$.ajax({
+		     url:'http://ipark.bplusiot.com/iPark/APIs/idim/valve/action/open',
+		     type: 'post',
+			   data: {
+				   deviceId: switchDeviceId,
+				sprayDuration:selectDuration 
+			   },
+		     dataType: "json",  
+		    success: function(data){
+			 console.log(JSON.stringify(data));  
+		    },
+		     error:function(e){  
+		      console.log(JSON.stringify(e));  
+		     }  
+		 }); 
+	}
+	//关闭电磁阀
+	function close(switchDeviceId){
+		$.ajax({
+		     url:'http://ipark.bplusiot.com/iPark/APIs/idim/valve/action/close',
+		     type: 'post',
+			   data: {
+				   deviceId: switchDeviceId,
+			   },
+		     dataType: "json",  
+		    success: function(data){
+			 console.log(JSON.stringify(data));
+		    },
+		     error:function(e){  
+		      console.log(JSON.stringify(e));  
+		     }  
+		 }); 
+	}
+	 function time_range(beginTime, endTime, nowTime) {
+	var strb = beginTime.split (":");
+	if (strb.length != 2) {
+	return false;
+	}
+	var stre = endTime.split (":");
+	
+	if (stre.length != 2) {
+	return false;
+	}
+	var strn = nowTime.split (":");
+	if (stre.length != 2) {
+	return false;
+	}
+	var b = new Date ();
+	var e = new Date ();
+	var n = new Date ();
+	b.setHours (strb[0]);
+	b.setMinutes (strb[1]);
+	e.setHours (stre[0]);
+	e.setMinutes (stre[1]);
+	n.setHours (strn[0]);
+	n.setMinutes (strn[1]);
+	if (n.getTime () - b.getTime () > 0 && n.getTime () - e.getTime () < 0) {
+		tim=true;
+	return true;
+	} else {
+		tim=false;
+	//alert ("当前时间是：" + n.getHours () + ":" + n.getMinutes () + "，不在该时间范围内！");
+	return false;
+	}
+	}
+}
+
+/* })(mui, document); */
+</script>
+</body>
+</html>

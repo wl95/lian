@@ -1,0 +1,164 @@
+<!doctype html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>查看月报</title>
+    <meta name="viewport"
+        content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+    <link href="../css/mui.min.css" rel="stylesheet" />
+    <link href="../css/mui.picker.min.css" rel="stylesheet" />
+    <link href="../fonts/iconfont/iconfont.css" rel="stylesheet" />
+    <link rel="stylesheet" href="../fonts/pickFont/iconfont.css">
+    <link rel="stylesheet" href="../css/dayDetails.css">
+    <script type="text/javascript" src="../js/vue.min.js"></script>
+    <style>
+        html,
+        body {
+			width: 100%;
+            height: 100%;
+			overflow: hidden;
+            color: #333;
+        }
+
+   
+   .mui-bar-nav {
+   
+       background-color: #009E96
+   }
+   .monthDetail-wrap{
+	   overflow-y: initial;
+   }
+   .hidden{
+	   display: none;
+   }
+    </style>
+</head>
+
+<body>
+
+    <header class="mui-bar mui-bar-nav">
+        <a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+        <h1 class="mui-title">月报</h1>
+    </header>
+    <div class="dayDetails-wrap monthDetail-wrap" id="dayDetails-wrap">
+        <div class="picker">
+            <span class="iconfont icon--riqi- picker-icon"></span>
+            <!-- <input type="text" id="dtpicker" placeholder="选择月份" /> -->
+			<div id="dtpicker" style="width:250px;height:40px;background:#fff;border-radius: 5px;line-height: 2.5">选择月份
+			</div>
+        </div>
+        <ul class="timeList">
+			<li v-for="(item,index) in monthList" :key="index">
+				<span>{{item.createDate}}</span>
+				<button type="button" class="mui-btn mui-btn-success" v-if="item.submission=='N'" v-on:tap="poin(item.monthlyId,item.submission)">提交</button>
+				<span class="timeList-right" v-else-if="item.submission==='A'"  v-on:tap="poin(item.monthlyId,item.submission)">系统自动</span>
+				<span class="timeList-right" v-else  v-on:tap="poin(item.monthlyId,item.submission)">已提交</span>
+			</li>   
+        </ul> 
+		<div class="footer-title" :class="monthList.length==0?'hidden':''">
+        备注：请每天23:59前提交月报，超时系统自动提交便不可修改
+    </div>
+    </div>
+   
+    <script src="../js/mui.min.js"></script>
+    <script src="../js/mui.picker.min.js"></script>
+    <script type="text/javascript" src="../js/jquery-1.8.0.min.js"></script>
+    <script src="../js/app.js"></script>
+    <script type="text/javascript">
+		//console.log(localStorage.getItem("IPARK_APP_PROJECTID"));
+		var vue = new Vue({
+			    el: '#dayDetails-wrap',
+			    data: {
+			       monthList:[],
+				 //  monthList:[
+					//   {"monthlyId":"3406464887299072","createDate":"2019-08","submission":"N"},
+					//   {"monthlyId":"3406464887299072","createDate":"2019-08","submission":"A"},
+					//   {"monthlyId":"3406464887299072","createDate":"2019-08","submission":"A"}
+					
+				 //  ]
+			    },
+			    methods: {
+					poin:function (id,stat){
+						if(stat=="N"){
+							mui.openWindow({
+								url: './monthSub.html', //跳转至月报提交
+								id: 'monthSub',
+								//createNew: false,
+								extras: {  
+									monthId: id
+								} 
+							});
+							//window.localStorage.setItem("stats","3");
+						}else if(stat=="A" ||stat=="M"){
+							mui.openWindow({
+								url: './monthlyReportDetails.html', //跳转至月报详情
+								id: 'monthlyReportDetails',
+								extras: {  
+									monthId: id
+								} 
+							});
+						}
+						}
+
+			    },
+			    beforeCreate:function() {
+			      
+			    },
+			    created:function() {
+			       
+			    },
+			    beforeMount:function() {
+			     
+			    },
+			    mounted:function() {
+			
+			    },
+			    beforeUpdate:function() {
+			       
+			    },
+			    updated:function() {
+			    },
+			    beforeDestroy:function() {
+			
+			    },
+			    destroyed:function() {
+			
+			    }
+			});
+         var picker = new mui.PopPicker();
+                document.getElementById('dtpicker').onclick = function () {
+                    var dtpicker = new mui.DtPicker({
+                        type: "month",
+                    })
+                    dtpicker.show(function (e) {
+                        //console.log(e);
+        				$('#dtpicker').html(e.value);
+        				monthList(e.value);
+                    })
+                }
+				monthList(''); 
+        		function monthList(mdata){//月报列表
+        			$.ajax({
+        			    url:'http://ipark.bplusiot.com/iPark/APIs/monthly/getmonthlylist',
+        			    type: 'get',
+        			    data: {
+        					 projectId:localStorage.getItem("IPARK_APP_PROJECTID"),
+        					 month:mdata 
+        			    },
+        			    dataType: "json",
+        			    success: function (data) {
+        			        //console.log(5555555);
+        					//console.log(JSON.stringify(data.content));
+							vue.monthList=data.content;
+							//console.log(JSON.stringify(vue.monthList));
+        			    },
+        			    error: function (e) {
+        			        console.log(JSON.stringify(e));
+        			    }
+        			});
+        		}
+    </script>
+</body>
+
+</html>

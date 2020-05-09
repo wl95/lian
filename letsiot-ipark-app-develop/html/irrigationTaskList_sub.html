@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>计划列表</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <link rel="stylesheet" href="../css/mui.min.css">
+    <link rel="stylesheet" href="../css/ipark.css">
+    <style type="text/css">
+        .mui-content {
+            background-color: inherit;
+        }
+
+        .mui-table-view-cell:active {
+            background-color: #eee;
+        }
+
+        .mui-table-view-cell:after {
+            background-color: #F1F1F1;
+        }
+
+        .mui-table-view-cell {
+            color: #282828;
+        }
+
+        .mui-table-view:after,
+        .mui-table-view:before {
+            height: 0;
+        }
+
+        .mui-table-view-chevron .mui-table-view-cell {
+            padding: 15px;
+            height: 160px;
+        }
+
+        .creatTable .mui-navigate-right:after, .mui-push-right:after {
+            display: none;
+        }
+
+        .planTitle {
+            font-size: 14px;
+            overflow: hidden;
+        }
+
+        .planType {
+            color: #009E96;
+            float: left;
+        }
+
+        .planContent {
+            padding: 10px;
+            font-size: 12px;
+            margin-top: 15px;
+            background-color: #F2F9FA;
+            line-height: 25px;
+        }
+        
+        .planName {
+            display: block;
+            color: #282828;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="noDataWapper" class="mui-content" style="display: none;">
+        <div class="iot-list-nodata-wapper">
+            <div class="iot-list-nodata">
+                <span></span>
+            </div>
+            <p class="iot-list-nodata-text">当前页面暂无数据</p>
+        </div>
+    </div>
+    <div id="pullrefresh" class="mui-content mui-scroll-wrapper" style="display: block;">
+        <div class="mui-scroll">
+            <ul class="mui-table-view mui-table-view-chevron creatTable">
+                <!-- <li class="mui-table-view-cell">
+                    <div class="planTitle">
+                        <span class="planType">定时任务：</span>
+                        <span class="planName">夏季喷灌计划</span>
+                    </div>
+                    <div class="planContent">
+                        <p>2017-06-26 至 2017-09-26</p>
+                        <p>每2天的07:10开启10分钟</p>
+                        <p>最新完成时间：2017-12-26 18:47:30</p>
+                    </div>
+                </li>
+                <li class="mui-table-view-cell">
+                    <div class="planTitle">
+                        <span class="planType">定时任务：</span>
+                        <span class="planName">夏季喷灌计划</span>
+                    </div>
+                    <div class="planContent">
+                        <p>2017-06-26 至 2017-09-26</p>
+                        <p>每2天的07:10开启10分钟</p>
+                        <p>最新完成时间：2017-12-26 18:47:30</p>
+                    </div>
+                </li> -->
+            </ul>
+        </div>
+    </div>
+    <script src="../js/mui.min.js"></script>
+    <script src="../js/util.js"></script>
+    <script src="../js/app.js"></script>
+    
+    <script src="../js/jquery-1.8.0.min.js"></script>
+    <script>
+        (function ($, doc) {
+            mui.plusReady(function () {
+                $.init({
+                    pullRefresh: {
+                        container: '#pullrefresh',
+                        down: {
+                            callback: pulldownRefresh
+                        },
+                        up: {
+                            contentrefresh: '正在加载...',
+                            callback: pullupRefresh
+                        }
+                    }
+                });
+
+                var page = 0;
+                var size = 100;
+                var count = 0;
+                var self = plus.webview.currentWebview();
+                var deviceId = self.deviceId;
+                console.log(deviceId);
+                pulldownRefresh();
+                $.ready(function () {
+                    // window.addEventListener('feedbackResetPage', function (event) {
+                    //     pulldownRefresh()
+                    // });
+                    // $('body').on('tap', '.mui-table-view-cell', function () {
+                    //     var id = this.getAttribute("data-id");
+                    //     var view = plus.webview.getWebviewById("irrigationTaskList");
+                    //     if (view) {
+                    //         view.close();
+                    //         setTimeout(function () {
+                    //             $.openWindow({
+                    //                 url: './irrigationTaskList.html',
+                    //                 id: 'irrigationTaskList',
+                    //                 extras: {
+                    //                     sheetId: id
+                    //                 }
+                    //             });
+                    //         }, 200);
+                    //     } else {
+                    //         $.openWindow({
+                    //             url: './irrigationTaskList.html',
+                    //             id: 'irrigationTaskList',
+                    //             extras: {
+                    //                 sheetId: id
+                    //             }
+                    //         });
+                    //     }
+                    // });
+                })
+                function dateFtt(fmt, date) {
+                    var o = {
+                        "M+": date.getMonth() + 1,                 //月份
+                        "d+": date.getDate(),                    //日
+                        "h+": date.getHours(),                   //小时
+                        "m+": date.getMinutes(),                 //分
+                        "s+": date.getSeconds(),                 //秒
+                        "q+": Math.floor((date.getMonth() + 3) / 3), //季度
+                        "S": date.getMilliseconds()             //毫秒
+                    };
+                    if (/(y+)/.test(fmt))
+                        fmt = fmt.replace(RegExp.$1, (date.getFullYear() + "").substr(4 - RegExp.$1.length));
+                    for (var k in o)
+                        if (new RegExp("(" + k + ")").test(fmt))
+                            fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
+                    return fmt;
+                }
+                function load(flag) {
+                    Util.ajax({
+                        url: '/idim/plan/getvalveplan/v1',
+                        data: {
+                            page: page++,
+                            size: size,
+                            deviceId: deviceId
+                        },
+                        success: function (data) {
+                            var content = data.content;
+                            console.log(JSON.stringify(content));
+                            count = data.numberOfElements;
+                            var totalCount = data.totalElements;
+                            if (totalCount == 0) {
+                                document.getElementById("noDataWapper").style.display = "block";
+                                document.getElementById("pullrefresh").style.display = "none";
+                            } else {
+                                document.getElementById("noDataWapper").style.display = "none";
+                                document.getElementById("pullrefresh").style.display = "block";
+                            }
+                            var table = document.body.querySelector('.mui-table-view');
+                            for (var i = 0, len = content.length; i < len; i++) {
+
+                                
+                                var li = document.createElement('li');
+                                var lastExecute = dateFtt("yyyy-MM-dd hh:mm:ss", new Date(fmDate(content[i].lastExecute)));
+                                var executeTime = content[i].executeTime;
+                                li.className = 'mui-table-view-cell';
+                                if (content[i].lastExecute == null) {
+                                    lastExecute = '无';
+                                }
+                                li.innerHTML =  '<div class="planTitle">'+
+                                                '    <span class="planType">定时任务：</span>'+
+                                                '    <span class="planName">' + content[i].name + '</span>'+
+                                                '</div>'+
+                                                '<div class="planContent">'+
+                                                '    <p>' + dateFtt("yyyy-MM-dd", new Date(content[i].startDate)) + ' 至 ' + dateFtt("yyyy-MM-dd", new Date(content[i].endDate)) + '</p>'+
+                                                '    <p>每'+content[i].intervalDays+'天的' + executeTime + '开启' + content[i].keep + '分钟</p>'+
+                                                '    <p>最新完成时间：' + lastExecute + '</p>'+
+                                                '</div>';
+                                table.appendChild(li);
+                            }
+                            flag ?
+                                (function () {
+                                    $('#pullrefresh').pullRefresh().endPulldownToRefresh();
+                                    $('#pullrefresh').pullRefresh().endPullupToRefresh(count < size);
+                                })() :
+                                $('#pullrefresh').pullRefresh().endPullupToRefresh(count < size);
+                        }
+                    });
+                }
+
+                // 下拉刷新具体业务实现
+                function pulldownRefresh() {
+                    page = 0;
+                    count = 0;
+                    var table = document.body.querySelector('.mui-table-view');
+                    table.innerHTML = '';
+                    load(true);
+                }
+
+                // 上拉加载具体业务实现
+                function pullupRefresh() {
+                    load(false);
+                }
+
+                // 时间格式化方法
+                function addZero(num) {
+                    if (num * 1 < 10) {
+                        num = '0' + num
+                    }
+                    return num;
+                }
+
+                function fmDate(str) {
+                    return str.replace(/-/g, '/');
+                }
+            })
+        })(mui, document);
+    </script>
+</body>
+
+</html>

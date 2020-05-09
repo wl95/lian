@@ -1,0 +1,667 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8" />
+    <title>提交日报</title>
+    <meta name="viewport"
+        content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+    <link href="../css/mui.min.css" rel="stylesheet" />
+    <link href="../css/mui.picker.min.css" rel="stylesheet" />
+   <link href="../fonts/iconfont/iconfont.css" rel="stylesheet" />
+    <link rel="stylesheet" href="../css/dailySub.css" />
+   <script type="text/javascript" src="../js/vue.min.js"></script>
+    <style>
+        html,
+        body {
+            width: 100%;
+            height: 100%;
+            color: #333;
+            overflow: hidden;
+        }
+
+        .mui-bar-nav {
+
+            background-color: #009E96
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+        }
+		.color-white{
+			color:#fff ;
+		}
+        .progress .form-right {
+            position: relative;
+        }
+
+        .progress_bg {
+            height: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            overflow: hidden;
+            background-color: #f2f2f2;
+        }
+
+        .progress_bar {
+            background: #5fb878;
+            width: 0;
+            height: 10px;
+            border-radius: 5px;
+        }
+
+        .progress_btn {
+            width: 20px;
+            height: 20px;
+            background: #5fb878;
+            border-radius: 50%;
+            position: absolute;
+            left: 0px;
+            margin-left: -10px;
+            top: -5px;
+            cursor: pointer;
+            border: 1px #ddd solid;
+            box-sizing: border-box;
+        }
+
+        .progress_btn:hover {
+            border-color: #f7b824;
+        }
+
+        .off {
+            margin-top: 17px;
+        }
+
+        .dailySub-wrap select,
+        .dailySub-wrap input,
+        .dailySub-wrap textarea {
+            margin-bottom: 0;
+        }
+		.base{
+			display: none;
+		}
+		[v-cloak] {
+		    display: none !important;
+		}
+    </style>
+</head>
+
+<body>
+    <header class="mui-bar mui-bar-nav padd">
+        <a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left color-white"></a>
+        <h1 class="mui-title color-white">提交日报</h1>
+    </header>
+    <div class="dailySub-wrap " id="daily" v-cloak >
+
+        <div class="statistics" >
+			<div class="back-green">
+				<div class="totalCost-text">
+					<span>总费用</span>
+					<span>{{dayMeg.total}}</span>
+				</div>
+				<ul class="totalCost-eachItem">
+                <li>
+                    <span>用工费</span>
+                    <span>{{dayMeg.human}}</span>
+                </li>
+                <li>
+                    <span>机械费</span>
+                    <span>{{dayMeg.machine}}</span>
+                </li>
+                <li>
+                    <span>材料费</span>
+                    <span>{{dayMeg.material}}</span>
+                </li>
+            </ul>
+			</div>
+		</div>
+        <div class="mui-scroll-wrapper" style="position: initial;margin-top:13rem;">
+			<div class="mui-scroll dailySub-scroll">
+				<div class="dataStatis">
+					<div :class="labor.length==0?'base':''">
+						<div class="dataStatis-item">
+							<div class="dataStatis-item-title">用工统计</div>
+							<!-- <div v-for="(item,index) in labor" :key="index"> -->
+								<div class="dataStatis-item-content flexaj" v-for="(item,index) in labor" :key="index">
+									<div class="content-left">
+										<span class="left-title">{{item.costsName}}:{{item.amount}}{{item.unit}}</span>
+										<span class="left-s">{{item.job}}</span>
+									</div>
+									<div class="content-right">
+										<span class="right-money money-red">{{item.price}}</span>
+									</div>
+								</div>
+							<!-- </div> -->
+						<!-- 	<div class="dataStatis-item-content flexaj">
+								<div class="content-left">
+									<span class="left-title">用工13人</span>
+									<span class="left-s">南门口扫雪</span>
+								</div>
+								<div class="content-right">
+									<span class="right-money money-red">1,300.00</span>
+								</div>
+							</div> -->
+						</div>
+					</div>
+				
+					<div class="dataStatis-item" :class="overtime.length==0?'base':''">
+						<div class="dataStatis-item-title">加班统计</div>
+					<!-- 	<div v-for="(item,index) in overtime" :key="index"> -->
+							<div class="dataStatis-item-content flexaj" v-for="(item,index) in overtime" :key="index">
+								<div class="content-left">
+									<span class="left-title">{{item.costsName}}:{{item.amount}}{{item.unit}}</span>
+									<span class="left-s">{{item.job}}</span>
+								</div>
+								<div class="content-right">
+									<span class="right-money money-red">{{item.price}}</span>
+								</div>
+							</div>
+						<!-- </div> -->
+					</div>
+					
+					<div class="dataStatis-item" :class="mechanical.length==0?'base':''">
+						<div class="dataStatis-item-title">机械统计</div>
+						<!-- <div v-for="(item,index) in mechanical" :key="index"> -->
+							<div class="dataStatis-item-content" v-for="(item,index) in mechanical" :key="index">
+								<div class="content-top flexaj">
+									<span class="left-title">{{item.costsName}}:{{item.amount}}{{item.unit}}</span>
+									<span class="right-money money-red">{{item.price}}</span>
+								</div>
+								<div class="content-bottom flexaj">
+									<span class="left-title">{{item.job}}</span>
+									<!-- <span class="left-s">含油</span> -->
+								</div>
+							</div>
+						<!-- </div> -->
+					
+						<!-- <div class="dataStatis-item-content">
+							<div class="content-top flexaj">
+								<span class="left-title">小余农用机械 割草机 C30:8个小时</span>
+								<span class="right-money money-red">800.00</span>
+							</div>
+							<div class="content-bottom flexaj">
+								<span class="left-title">花园中心广场草坪</span>
+								<span class="left-s">含油</span> 
+							</div>
+						</div> -->
+					</div>
+				   <div class="dataStatis-item" :class="Material.length==0?'base':''">
+						<div class="dataStatis-item-title">材料统计</div>
+					<!-- 	<div v-for="(item,index) in Material" :key="index"> -->
+							<div class="dataStatis-item-content" v-for="(item,index) in Material" :key="index">
+								<div class="content-top flexaj">
+									<span class="left-title">{{item.costsName}}:{{item.amount}}{{item.unit}}</span>
+									<span class="right-money money-red">{{item.price}}</span>
+								</div>
+								<div class="content-bottom flexaj">
+									<span class="left-title">{{item.job}}</span>
+									<!-- <span class="left-s">易耗</span> -->
+								</div>
+							</div>
+						<!-- </div> -->
+						
+						<!-- <div class="dataStatis-item-content">
+							<div class="content-top flexaj">
+								<span class="left-title">小王五金百货 铁丝 直径0.5: 20米</span>
+								<span class="right-money money-red">800.00</span>
+							</div>
+							<div class="content-bottom flexaj">
+								<span class="left-title">固定广场树枝</span>
+								<span class="left-s">易耗</span>
+							</div>
+						</div> -->
+					</div>
+				</div>
+				<div class="banner-content" :class="imgList.length==0?'base':''">
+					<div class="content-img">
+						<div class="banner-img"  v-for="(item,index) in imgList" :key="index"><img :src="item"/></div>
+						<!-- <div class="banner-img"><img src="../images/144x144.png" /></div>
+						<div class="banner-img"><img src="../images/144x144.png" /></div>
+						<div class="banner-img"><img src="../images/144x144.png" /></div> -->
+					</div>
+				</div>
+				<div class="quality-problem">
+					<div class="quaPro-item ">
+						<div class="form-item">
+							<div class="mui-row ">
+								<div class="mui-col-xs-4 hua">
+									质量问题：
+								</div>
+								<div class="mui-col-xs-8  huh">
+									<input type="text" placeholder="请输入问题描述" class="problem"/>
+								</div>
+							</div>
+						</div>
+
+						<div class="form-item">
+							<div class="mui-row ">
+								<div class="mui-col-xs-3 hua">
+									解决进度:
+								</div>
+								<div class="mui-col-xs-9 off">
+									<div class="form-right ">
+										<div class="progress_bg">
+											<div class="progress_bar"></div>
+										</div>
+										<div class="progress_btn"></div>
+										<input type="hidden" value=""  class="prog"/>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="quality-problem-add">继续添加</div>
+					</div>
+				</div>
+
+				<div class="needsCoord">
+					<div class="needsCoord-item">
+						<div class="needsCoord-title">业主诉求及需协调事项</div>
+						<div class="form-item">
+							<div class="mui-row">
+								<div class="mui-col-xs-3 hua">
+									诉求事项:
+								</div>
+								<div class="mui-col-xs-9  huh">
+									<input class="form-right" type="text" placeholder="请输入具体事项" class="matters"/>
+								</div>
+							</div>
+						</div>
+						<div class="form-item">
+							<div class="mui-row">
+								<div class="mui-col-xs-3 hua">
+									责任人:
+								</div>
+								<div class="mui-col-xs-9  huh peoples">
+									<div class="people">
+										请选择责任人
+									</div>
+									<!-- <input class="form-right" type="text" placeholder="请选择责任人" class="people"/> -->
+								<!-- 	<select placeholder="请选择责任人" class="people">
+										<option disabled selected style="display: none;color: #8B9CAC;" value="">请选择责任人
+										</option>
+										<option value="1">1233</option>
+										<option value="2">443</option>
+										<option value="3">33</option>
+										<option value="4">1233</option>
+										<option value="5">443</option>
+										<option value="6">33</option>
+									</select> -->
+								</div>
+							</div>
+						</div>
+						<div class="form-item">
+							<div class="mui-row">
+								<div class="mui-col-xs-3 hua">
+									协助部门:
+								</div>
+								<div class="mui-col-xs-9  huh departments">
+									<div class="department">
+										请选择协助部门
+									</div>
+									<!-- <input class="form-right" type="text" placeholder="请选择协助部门" class="department"/> -->
+									<!-- <select placeholder="" class="department">
+										<option disabled selected style="display: none;color: #8B9CAC;  " value="">请选择协助部门
+										</option>
+										<option value="1">1233</option>
+										<option value="2">443</option>
+										<option value="3">33</option>
+									</select> -->
+								</div>
+							</div>
+						</div>
+						<div class="form-item">
+							<div class="mui-row">
+								<div class="mui-col-xs-3 hua">
+									解决措施:
+								</div>
+								<div class="mui-col-xs-9  huh">
+									<input type="text" placeholder="请输入解决措施" class="measures"/>
+								</div>
+							</div>
+						</div>
+						<div class="quality-problem-add">继续添加</div>
+					</div>
+				</div>
+				<div class="check-text">
+					<div class="check-title">已采取安全文明施工措施</div>
+					<!-- <input class="form-right" type="text" placeholder="请输入施工措施" class="matters"/> -->
+					<!-- <textarea rows="5" cols="20">
+					
+					</textarea> -->
+				</div>
+				<div class="check-text">
+					<div class="check-title">质量问题</div>
+					<input class="form-right" type="text" placeholder="请输入质量问题" class="matters"/>
+				</div>
+				<div class="dailySub-sublime">提交</div>
+			</div>
+		</div>
+		
+    </div>
+    <script src="../js/mui.min.js"></script>
+    <script src="../js/mui.picker.min.js"></script>
+    <script type="text/javascript" src="../js/jquery-1.8.0.min.js"></script>
+    <!-- <script src="../js/app.js"></script> -->
+    <!-- <script src="../js/progressbar.js"></script> -->
+    <script type="text/javascript">
+		console.log(localStorage.getItem("IPARK_APP_PROJECTID"));
+		mui.plusReady(function () {//提交 'N'
+		       	var view = plus.webview.getWebviewById("dailySub");
+				var id = view.dayId;//获得参数
+				//console.log(id);
+				var vue = new Vue({
+					    el: '#daily',
+					    data: {
+							dayMeg:{},
+							labor:[],//用工统计
+							overtime:[],//加班统计
+							mechanical:[],//机械统计
+							Material:[],//材料统计 
+							imgList:[],//图片
+					    },
+					    methods: {
+						
+					    },
+					    beforeCreate:function() {
+					      
+					    },
+					    created:function() {
+					       
+					    },
+					    beforeMount:function() {
+					     
+					    },
+					    mounted:function() {
+					
+					    },
+					    beforeUpdate:function() {
+					       
+					    },
+					    updated:function() {
+					    },
+					    beforeDestroy:function() {
+					
+					    },
+					    destroyed:function() {
+					
+					    }
+					});
+				daliy();
+				function daliy(){ //日报详情
+					$.ajax({
+					    url:'http://ipark.bplusiot.com/iPark/APIs/daily/getdailyinfoWo',
+					    type: 'get',
+					    data: {
+							projectId:localStorage.getItem("IPARK_APP_PROJECTID"),
+					    },
+					    dataType: "json",
+					    success: function (data) {
+					        console.log(77777);
+							console.log(JSON.stringify(data));
+							vue.dayMeg=data.daily;
+							vue.imgList=data.images;
+							var data =data.costs;
+							for(var i=0;i<data.length;i++){
+								console.log(JSON.stringify(data[i]))
+							if(data[i].type==0){
+								//用工
+								vue.labor.push(data[i])	
+								console.log(console.log(JSON.stringify(vue.labor)))
+							}else if(data[i].type==4){
+								//加班
+								vue.overtime.push(data[i])
+							}else if(data[i].type==2){
+								//机械
+								vue.mechanical.push(data[i])	
+							}else{
+								//材料
+								vue.Material.push(data[i])
+							}
+							}
+					    },
+					    error: function (e) {
+					        console.log(JSON.stringify(e));
+					    }
+					});
+				}
+				mui('.mui-scroll-wrapper').scroll({
+					deceleration: 0.0005 //flick 减速系数，系数越大，滚动速度越慢，滚动距离越小，默认值0.0006
+				   });
+				var qualityProblem = document.getElementsByClassName("quality-problem")[0];
+				//var count = 0;
+				var str = '';
+				var obj = {};
+				$('.quality-problem').on('tap', '.quaPro-item:last .quality-problem-add', function () {
+				    str =
+				        '<div class="quaPro-item ">' +
+				        '<div class="form-item">' +
+				        '<div class="mui-row ">' +
+				        '<div class="mui-col-xs-4 hua">' +
+				        '质量问题：' +
+				        '</div>' +
+				        '<div class="mui-col-xs-8  huh">' +
+				        '<input  type="text" placeholder="请输入问题描述" class="problem"/>' +
+				        '</div>' +
+				        '</div>' +
+				        '</div>' +
+				        '<div class="form-item">' +
+				        '<div class="mui-row ">' +
+				        '<div class="mui-col-xs-3 hua">' +
+				        '解决进度:' +
+				        '</div>' +
+				        '<div class="mui-col-xs-9 off">' +
+				        '<div class="form-right ">' +
+				        '<div class="progress_bg">' +
+				        '<div class="progress_bar"></div>' +
+				        '</div>' +
+				        '<div class="progress_btn"></div>' +
+						'<input type="hidden" value=""  class="prog"/>'+
+				        '</div>' +
+				        '</div>' +
+				        '</div>' +
+				        '</div>' +
+				        '<div class="quality-problem-add">继续添加</div>' +
+				        '</div>' +
+				        '</div>';
+				    $('.quality-problem').append(str)
+				    progress()
+				})
+				progress()	
+				function progress() {
+				    var quaProItem = $(".quality-problem .quaPro-item");
+				    var formRight = null;
+				    var dataIndex = 0;
+				    for (var i = 0; i < quaProItem.length; i++) {
+				        obj[i] = {
+				            tag: false,
+				            ox: 0,
+				            left: 0,
+				            bgleft: 0
+				        };
+				        var progress_btn = $(
+				            ".quality-problem .quaPro-item:nth-child(" +
+				            (Number(i) + 1) +
+				            ") .form-item:eq(1) .progress_btn"
+				        );
+				        progress_btn.attr("data-index", i);
+				
+				        $('.quality-problem').on("touchstart", ".quaPro-item:nth-child(" +
+				            (Number(i) + 1) +
+				            ") .form-item:eq(1) .progress_btn",
+				            function (e) {
+				                var originalEvent = e.originalEvent;
+				                var touches = originalEvent.touches[0];
+				                dataIndex = $(this).attr("data-index");
+				                console.log(dataIndex)
+				                obj[dataIndex].ox = touches.pageX - obj[dataIndex].left;
+				                obj[dataIndex].tag = true;
+				            });
+				        $(document).on("touchend", function (e) {
+				            obj[dataIndex].tag = false;
+				        });
+				        $('.quality-problem').on("touchmove", ".quaPro-item:nth-child(" +
+				            (Number(i) + 1) +
+				            ") .form-item:eq(1) .form-right",
+				            function (e) {
+				                var originalEvent = e.originalEvent;
+				                var touches = originalEvent.touches[0];
+				                //鼠标移动
+				                if (obj[dataIndex].tag) {
+				                    obj[dataIndex].left = touches.pageX - obj[dataIndex].ox;
+				                    if (obj[dataIndex].left <= 0) { // 判断拖拽到达左边的位置将圆点设置为0
+				                        obj[dataIndex].left = 0;
+				                    } else if (
+				                        obj[dataIndex].left >
+				                        $(this).width()
+				                    ) { // 判断拖拽到达右边的位置将圆点设置为form-right-$(this)的宽度
+				                        obj[dataIndex].left = $(this).width();
+				                    }
+				                    $(this)
+				                        .children(".progress_btn")
+				                        .css("left", obj[dataIndex].left);
+				                    $(this)
+				                        .find(".progress_bar")
+				                        .width(obj[dataIndex].left);
+									obj[dataIndex].percen =(obj[dataIndex].left / $(".progress_bg").width()) * 100;	 
+									$(this)
+									  .find(".prog")
+									  .val(parseInt(obj[dataIndex].percen));
+									  //console.log($('.prog').val())
+				                    //console.log(parseInt((left / progress_bg.width()) * 100) + "%") // 当前解决进度条 百分比
+				                    // $(".text").html(parseInt((left / progress_bg.width()) * 100) + "%");
+				                }
+				            });
+				
+				        $('.quality-problem').on("tap", ".quaPro-item:nth-child(" +
+				            (Number(i) + 1) +
+				            ") .form-item:eq(1) .progress_bg",
+				            function (e) {
+				                //鼠标点击
+				                if (!obj[dataIndex].tag) {
+				                    obj[dataIndex].bgleft = $(this).offset().left;
+				                    obj[dataIndex].left = e.pageX - obj[dataIndex].bgleft;
+				                    if (obj[dataIndex].left <= 0) {
+				                        obj[dataIndex].left = 0;
+				                    } else if (obj[dataIndex].left > $(this).width()) {
+				                        obj[dataIndex].left = $(this).width();
+				                    }
+				                    $(this)
+				                        .siblings(".progress_btn")
+				                        .css("left", obj[dataIndex].left);
+				                    $(this)
+				                        .find(".progress_bar")
+				                        .animate({
+				                            width: obj[dataIndex].left
+				                        }, $(this).width());
+										obj[dataIndex].percen =(obj[dataIndex].left / $(".progress_bg").width()) * 100;
+												 
+										$(this)
+										  .find(".prog")
+										  .val(parseInt(obj[dataIndex].percen));
+				                    //$(".text").html(parseInt((left / progress_bg.width()) * 100) + "%");
+									//$(".prog").val(parseInt((obj[dataIndex].left / $(".progress_bg").width()) * 100))
+									
+				                }
+				            });
+				    }
+				}
+			mui(".peoples").on('tap','.people',function () {
+			console.log(($('.peoples')))
+			        var arr=[{value:'1',text:'董事长 叶文洁'},{value:'2',text:'总经理 艾AA'},{value:'3',text:'云天明'},{value:'4',text:'章北海'},{value:'5',text:'关一帆'}];
+			       var picker=new mui.PopPicker();
+			       picker.setData(arr);
+			       picker.show(function (success) {
+			           var item=success[0].text;
+			           alert(item);
+			
+			           picker.dispose();
+			       });
+			});
+			mui(".departments").on('tap','.department',function () {
+			        var arr=[{value:'1',text:'董事长 叶文洁'},{value:'2',text:'总经理 艾AA'},{value:'3',text:'云天明'},{value:'4',text:'章北海'},{value:'5',text:'关一帆'}];
+			       var picker=new mui.PopPicker();
+			       picker.setData(arr);
+			       picker.show(function (success) {
+			           var item=success[0].text;
+			           alert(item);
+			
+			           picker.dispose();
+			       });
+			});
+				
+				$('.needsCoord').on('tap', '.needsCoord-item:last .quality-problem-add', function () {
+				    str =
+				        '<div class="needsCoord-item">' +
+				        '<div class="needsCoord-title">业主诉求及需协调事项</div>' +
+				        '<div class="form-item">' +
+				        '<div class="mui-row">' +
+				        '<div class="mui-col-xs-3 hua">' +
+				        '诉求事项:' +
+				        '</div>' +
+				        '<div class="mui-col-xs-9  huh">' +
+				        '<input class="form-right" type="text" placeholder="请输入具体事项" class="matters"/>' +
+				        '</div>' +
+				        '</div>' +
+				        '</div>' +
+				        '<div class="form-item">' +
+				        '<div class="mui-row">' +
+				        '<div class="mui-col-xs-3 hua">' +
+				        '责任人:' +
+				        '</div>' +
+				        '<div class="mui-col-xs-9  huh peoples">' +
+				        '<div class="people">请选择责任人'+
+						'</div>'+
+				        '</div>' +
+				        '</div>' +
+				        '</div>' +
+				        '<div class="form-item">' +
+				        '<div class="mui-row">' +
+				        '<div class="mui-col-xs-3 hua ">' +
+				        '协助部门:' +
+				        '</div>' +
+				        '<div class="mui-col-xs-9 huh departments">' +
+				       '<div class="department">请选择协助部门'+
+					   '</div>'+
+				        '</div>' +
+				        '</div> ' +
+				        '</div>' +
+				        '<div class="form-item">' +
+				        '<div class="mui-row">' +
+				        '<div class="mui-col-xs-3 hua">' +
+				        '解决措施:' +
+				        '</div>' +
+				        '<div class="mui-col-xs-9  huh">' +
+				        '<input  type="text" placeholder="请输入解决措施" class="measures"/>' +
+				        '</div>' +
+				        '</div> ' +
+				        '</div>' +
+				        '<div class="quality-problem-add">继续添加</div>' +
+				        '</div>'
+				    // console.log($('.needsCoord'))
+				    $('.needsCoord').append(str)
+				})
+				mui(document.body).on('tap', '.dailySub-sublime', function (e) {
+					console.log(23456);
+				})
+				function submitDaily(){//保存日报
+					$.ajax({
+					    url:'http://ipark.bplusiot.com/iPark/APIs/daily/savedailyinfo',
+					    type: 'post',
+					    data: {
+							projectId:localStorage.getItem("IPARK_APP_PROJECTID"),
+					    },
+					    dataType: "json",
+					    success: function (data) {
+					        console.log(8888);
+							console.log(JSON.stringify(data));
+					    },
+					    error: function (e) {
+					        console.log(JSON.stringify(e));
+					    }
+					});
+				}
+				})
+    </script>
+</body>
+
+</html>

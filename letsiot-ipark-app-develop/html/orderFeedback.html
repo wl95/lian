@@ -1,0 +1,1060 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<title>班组长待反馈工单</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+	<meta name="apple-mobile-web-app-capable" content="yes">
+	<meta name="apple-mobile-web-app-status-bar-style" content="black">
+	<link rel="stylesheet" href="../fonts/iconfont/iconfont.css" />
+	<link rel="stylesheet" href="../css/mui.min.css" />
+	<link rel="stylesheet" href="../css/ipark.css" />
+	<link rel="stylesheet" href="../css/base.css">
+	<link rel="stylesheet" href="../fonts/laba/iconfont.css">
+	<link rel="stylesheet" href="../fonts/del/iconfont.css">
+	<script type="text/javascript" src="../js/vue.min.js"></script>
+
+	<link href="../css/mui.picker.min.css" rel="stylesheet" />
+	<script src="../js/mui.min.js"></script>
+	<script type="text/javascript" src="../js/jquery-1.8.0.min.js"></script>
+	<style type="text/css">
+		html,
+		body {
+			width: 100%;
+			height: 100%;
+			overflow: hidden;
+		}
+
+		.mui-content {
+			background: #E6F1F2;
+		}
+
+		.mui-navigate-right:after,
+		.mui-push-right:after {
+			right: 0;
+		}
+
+		.mui-checkbox input[type=checkbox]:before {
+			content: "\2610";
+		}
+
+		.mui-checkbox input[type=checkbox]:checked:before {
+			content: "\2611";
+
+		}
+
+
+		.mui-input-row label {
+
+			padding: 4px 15px;
+		}
+
+
+		.mui-col-xs-6 {
+			float: left;
+		}
+
+		.mui-pull-top-pocket {
+			top: 54px !important;
+		}
+
+		.mui-icon.emptyFilter {
+			position: absolute;
+			right: 0;
+			font-size: 20px;
+			padding: 0 10px;
+		}
+
+		#cont {
+			width: 100%;
+			height: auto;
+		}
+
+		.mui-bar-nav~.mui-content .mui-slider.mui-fullscreen {
+			top: 65px;
+		}
+
+		.padd-search {
+			padding: 10px;
+		}
+
+		/* .heightAbsolutely,
+		.allocatedList {
+			height: 100%;
+		} */
+
+		/*灰色底*/
+		.background-gray {
+			background-color: #e9ecf1;
+		}
+
+		.allocated-item,
+		.userProcess-item,
+		.garbageBags-item,
+		.lawnMower-item {
+			padding: 10px;
+			font-size: 18px;
+			margin-top: 20px;
+			background: #FFF;
+
+		}
+
+		.mui-segmented-control.mui-segmented-control-inverted .mui-control-item.mui-active {
+			color: #009e96;
+		}
+
+		.background-green {
+			background-color: #009e96 !important;
+		}
+
+		.workersSinglerow {
+			font-size: 14px;
+			color: #cccccc;
+			list-style: none;
+			padding: 0;
+		}
+
+		.assignedPersonnel {
+			padding: 20px;
+			background-color: #FFF;
+		}
+
+		.allocated-sublime,
+		.allocated-del {
+			margin: 30px auto;
+			width: 50%;
+			text-align: center;
+			color: #ffffff;
+			background: rgba(0, 204, 153, 1);
+			line-height: 45px;
+			border-radius: 4px;
+			font-size: 18px;
+		}
+
+		.allocated-del {
+			color: rgba(0, 204, 153, 1);
+			background: #ffffff;
+		}
+
+		.allocated-item .people {
+			padding: 0;
+			color: rgba(0, 204, 153, 1);
+		}
+
+		.mui-navigate-right {
+			padding: 0 !important;
+			line-height: 2;
+		}
+
+		.mui-navigate-right:after,
+		.mui-push-right:after {
+			color: #ccc !important;
+		}
+
+		/* 工单详情  时间线*/
+		.timeBar {
+			padding: 5vw 0 2vw 9vw;
+
+		}
+
+		.timeBar .line {
+			width: 100%;
+			height: 1px;
+			margin-top: 10px;
+			margin-left: 5px;
+			background-color: #cccccc;
+		}
+
+		.timeBar .title {
+			padding-top: 10px;
+
+		}
+
+		.timeBar .circular {
+			color: #ccc;
+			font-size: 80px;
+		}
+
+		#scroll2,
+		#scroll1 {
+			overflow-y: scroll;
+			overflow-x: hidden;
+		}
+
+		/* .allocated-item .mui-row {
+			margin-bottom: 20px;
+		} */
+		.itemContent {
+			color: #404040;
+		}
+
+		/* .hua {
+			line-height: 2;
+		} */
+
+		.huh>div {
+			/* margin-left: 123px; */
+			float: right;
+		}
+
+		/* .hu>div{
+			margin-left: 50px;
+		} */
+		.itemContent .allocated-item .mui-row:nth-child(1) {
+			margin-bottom: 10px;
+		}
+
+		.itemContent .allocated-item .model {
+
+			padding-bottom: 24px;
+			border-bottom: 1px solid #CCCCCC;
+			/* margin-bottom: 20px; */
+		}
+
+		.allocated-item .money,
+		.userProcess-item .money,
+		.garbageBags-item .money,
+		.lawnMower-item .money {
+			color: #F59732;
+		}
+
+		.add {
+			line-height: 2;
+			text-align: center;
+			color: cadetblue;
+			font-size: 14px;
+		}
+
+		.allocated-item input,
+		.userProcess-item input,
+		.garbageBags-item input,
+		.lawnMower-item input {
+			outline: none;
+			border: none;
+			padding: 0;
+			margin: 0;
+		}
+
+		/* 进度 */
+		.progress {
+			margin-top: 40px;
+		}
+
+		.progress .form-right {
+			position: relative;
+		}
+
+		.progress_bg {
+			height: 10px;
+			border: 1px solid #ddd;
+			border-radius: 5px;
+			overflow: hidden;
+			background-color: #f2f2f2;
+		}
+
+		.progress_bar {
+			background: #5fb878;
+			width: 0;
+			height: 10px;
+			border-radius: 5px;
+		}
+
+		.progress_btn {
+			width: 20px;
+			height: 20px;
+			background: #5fb878;
+			border-radius: 50%;
+			position: absolute;
+			left: 0px;
+			margin-left: -10px;
+			top: -5px;
+			cursor: pointer;
+			border: 1px #ddd solid;
+			box-sizing: border-box;
+		}
+
+		.progress_btn:hover {
+			border-color: #f7b824;
+		}
+
+		.mui-img-list a {
+			display: inline-block;
+			position: relative;
+			line-height: 0;
+			width: 28%;
+			height: 69px;
+			margin: 0 8px 8px 0;
+		}
+
+		.mui-img-list img {
+			display: inline-block;
+			width: 100%;
+			height: 100%;
+		}
+
+		.wan {
+			margin-bottom: 10px;
+		}
+
+		/* 工单详情  时间线*/
+		.timeBar {
+			padding: 5vw 0 2vw 9vw;
+
+		}
+
+		.timeBar .line {
+			width: 100%;
+			height: 1px;
+			margin-top: 10px;
+			margin-left: 5px;
+			background-color: #cccccc;
+		}
+
+		.timeBar .title {
+			padding-top: 10px;
+
+		}
+
+		.timeBar .circular {
+			color: #ccc;
+			font-size: 80px;
+		}
+
+		#scroll2 {
+			overflow-y: scroll;
+			overflow-x: hidden;
+		}
+
+
+
+		/* .allocated-item .mui-row {
+			margin-bottom: 20px;
+		} */
+
+		/* 自适应ipark */
+		@media screen and (min-width: 1280px) {
+			.yu {
+				width: 2%;
+			}
+
+			.foot {
+				width: 3%;
+			}
+
+
+		}
+
+		@media screen and (min-width:768px) and (max-width:1204px) {
+			.yu {
+				width: 3%;
+			}
+
+			.foot {
+				width: 6%;
+			}
+
+		}
+
+		.defined-numbox .mui-numbox {
+			border: none;
+			width: 80px;
+			height: 25px;
+			padding: 0 22px;
+		}
+
+		.defined-numbox .mui-numbox-btn-minus,
+		.defined-numbox .mui-numbox-btn-plus {
+			font-size: 23px;
+			width: 22px;
+
+		}
+
+		.defined-numbox .mui-numbox-btn-minus:focus,
+		.defined-numbox .mui-numbox-btn-plus:focus {
+			background: #FFFFFF;
+			color: #555;
+			outline: none;
+			-webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+		}
+
+		.defined-numbox .mui-numbox-input {
+			border: none !important;
+
+		}
+
+		.userProcess .userProcess-item .add,
+		.lawnMower .lawnMower-item .add,
+		.garbageBags .garbageBags-item .add {
+			display: none;
+		}
+
+		.userProcess .userProcess-item:last-child .add,
+		.lawnMower .lawnMower-item:last-child .add,
+		.garbageBags .garbageBags-item:last-child .add {
+			display: block;
+		}
+	/* 	.mui-bar-nav~.mui-content .mui-slider.mui-fullscreen {
+		    top: 0;
+		} */
+		.mui-slider-indicator.mui-segmented-control{
+			background-color: #fff;
+		}
+
+		.user {
+			border-bottom: 1px solid #ccc;
+		}
+
+		.divider {
+			margin: 10px 0px;
+		}
+
+		.spacing {
+			padding-bottom: 57px;
+		}
+
+		.offset {
+			float: right;
+		}
+
+		.itemContent .list .mui-row {
+			margin-bottom: 25px;
+		}
+	</style>
+</head>
+
+<body style="position:relative;z-index:100000">
+	<header class="mui-bar mui-bar-nav">
+		<input type="hidden" name="typeValue" value="" />
+		<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+		<h1 id="title" class="mui-title"><span id="typeText"></span>工单</h1>
+	</header>
+	<div id="conts" class="mui-content">
+		<div id="slider" class="mui-slider mui-fullscreen heightAbsolutely ">
+			<div id="sliderSegmentedControl" class="mui-slider-indicator mui-segmented-control mui-segmented-control-inverted">
+				<a class="mui-control-item tabStyle mui-active" href="#item1mobile">
+					工单反馈
+				</a>
+				<a class="mui-control-item tabStyle" href="#item2mobile">
+					工单详情
+				</a>
+			</div>
+			<div id="sliderProgressBar" class="mui-slider-progress-bar mui-col-xs-6 background-green">
+				<div class="bottomStrip"></div>
+			</div>
+			<div class="mui-slider-group bottomStyle">
+				<div id="item1mobile" class="mui-slider-item mui-control-content mui-active">
+					<div id="scroll1" class="mui-content mui-scroll-wrapper">
+						<div class="mui-scroll content1 list-content heightAbsolutely">
+							<div class="itemContent">
+								<div class="allocatedList">
+									<div class="allocated-item">
+										<span style="color: #000000;">工单主题</span>
+										<ul class="workersSinglerow">
+											<li>
+												<span>开始时间:</span>
+												<span>2018-08-24 07:00</span>
+											</li>
+											<li>
+												<span>结束时间:</span>
+												<span>2018-08-24 07:00</span>
+											</li>
+										</ul>
+										<div class="mui-row">
+											<div class="mui-col-xs-1 yu">
+												<span class="iconfont icon-weibiaoti1" style="color: #ccc;"></span>
+											</div>
+											<div class="mui-col-xs-8" style="color: #ccc;">
+												语音描述
+											</div>
+										</div>
+
+										<div class="banner-content">
+											<div class="content-img">
+												<div class="banner-img"><img src="../images/144x144.png" /></div>
+												<div class="banner-img"><img src="../images/144x144.png" /></div>
+												<div class="banner-img"><img src="../images/144x144.png" /></div>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="userProcess">
+									<div class="userProcess-item">
+										<div class="user">
+											<div class="mui-row">
+												<div class="mui-col-xs-4">
+													用工
+												</div>
+												<div class="mui-col-xs-8  ">
+													<!-- <span class="iconfont icon-shanchu offset"></span> -->
+													<div class="mui-navigate-right" style="height: 21px;"></div>
+												</div>
+											</div>
+
+											<div class="mui-row divider">
+												<div class="mui-col-xs-4 hua money">
+													133
+												</div>
+												<div class="mui-col-xs-8  huh defined-numbox">
+													<div class="mui-numbox " data-numbox-step='1' data-numbox-min='0'
+														data-numbox-max='100'>
+														<button class="mui-btn mui-numbox-btn-minus"
+															type="button">-</button>
+														<input class="mui-numbox-input" type="number" />
+														<button class="mui-btn mui-numbox-btn-plus"
+															type="button">+</button>
+													</div>
+												</div>
+											</div>
+											<div class="add labor">
+												继续添加用工
+											</div>
+										</div>
+
+										<div class="mui-row">
+											<div class="mui-col-xs-4">
+												<input type="text" name="" id="" value="" placeholder="作业区域" />
+											</div>
+											<div class="mui-col-xs-8 ">
+												<div class="mui-navigate-right" style="height: 21px;"></div>
+											</div>
+										</div>
+									</div>
+
+
+								</div>
+
+
+
+								<div class="allocated-item">
+									<div class="mui-row">
+										<div class="mui-col-xs-4">
+											加班
+										</div>
+										<div class="mui-col-xs-8 ">
+											<div class="mui-navigate-right" style="height: 21px;"></div>
+										</div>
+									</div>
+
+									<div class="mui-row model">
+										<div class="mui-col-xs-4 hua money">
+											133
+										</div>
+										<div class="mui-col-xs-8  huh defined-numbox">
+											<div class="mui-numbox " data-numbox-step='1' data-numbox-min='0'
+												data-numbox-max='100'>
+												<button class="mui-btn mui-numbox-btn-minus" type="button">-</button>
+												<input class="mui-numbox-input" type="number" />
+												<button class="mui-btn mui-numbox-btn-plus" type="button">+</button>
+											</div>
+										</div>
+									</div>
+									<div class="mui-row">
+										<div class="mui-col-xs-4">
+											<input type="text" name="" id="" value="" placeholder="作业区域" />
+										</div>
+										<div class="mui-col-xs-8 ">
+											<div class="mui-navigate-right" style="height: 21px;"></div>
+										</div>
+									</div>
+								</div>
+
+								<div class=" lawnMower">
+									<div class="lawnMower-item">
+										<div class="user">
+											<div class="mui-row">
+												<div class="mui-col-xs-4">
+													割草机 s30
+												</div>
+												<div class="mui-col-xs-8 ">
+													<span class="iconfont icon-shanchu offset"></span>
+												</div>
+											</div>
+
+											<div class="mui-row divider">
+												<div class="mui-col-xs-2 money">
+													133
+												</div>
+												<div class="mui-col-xs-4 ">
+
+													<div class="mui-input-row mui-checkbox mui-left">
+														<label>含油</label>
+														<input name="checkbox" value="Item 1" type="checkbox">
+													</div>
+												</div>
+												<div class="mui-col-xs-6  huh defined-numbox">
+													<div class="mui-numbox " data-numbox-step='1' data-numbox-min='0'
+														data-numbox-max='100'>
+														<button class="mui-btn mui-numbox-btn-minus"
+															type="button">-</button>
+														<input class="mui-numbox-input" type="number" />
+														<button class="mui-btn mui-numbox-btn-plus"
+															type="button">+</button>
+													</div>
+												</div>
+											</div>
+											<div class="add tool">
+												继续添加工具
+											</div>
+										</div>
+										<div class="mui-row">
+											<div class="mui-col-xs-4">
+												<input type="text" name="" id="" value="" placeholder="作业区域" />
+											</div>
+											<div class="mui-col-xs-8 ">
+												<div class="mui-navigate-right" style="height: 21px;"></div>
+											</div>
+										</div>
+									</div>
+
+
+								</div>
+
+								<div class=" garbageBags">
+									<div class="garbageBags-item">
+										<div class="user">
+											<div class="mui-row">
+
+												<div class="mui-col-xs-4">
+													垃圾袋
+												</div>
+												<div class="mui-col-xs-8 ">
+													<span class="iconfont icon-shanchu offset"></span>
+												</div>
+											</div>
+
+											<div class="mui-row divider">
+												<div class="mui-col-xs-4 hua money">
+													133
+												</div>
+												<div class="mui-col-xs-8  huh defined-numbox">
+													<div class="mui-numbox " data-numbox-step='1' data-numbox-min='0'
+														data-numbox-max='100'>
+														<button class="mui-btn mui-numbox-btn-minus"
+															type="button">-</button>
+														<input class="mui-numbox-input" type="number" />
+														<button class="mui-btn mui-numbox-btn-plus"
+															type="button">+</button>
+													</div>
+												</div>
+											</div>
+											<div class="add material">
+												继续添加材料
+											</div>
+										</div>
+										<div class="mui-row">
+											<div class="mui-col-xs-4">
+												<input type="text" name="" id="" value="" placeholder="作业区域" />
+											</div>
+											<div class="mui-col-xs-8 ">
+												<div class="mui-navigate-right" style="height: 21px;"></div>
+											</div>
+										</div>
+									</div>
+
+
+								</div>
+
+								<div class="allocated-item">
+									<div class="mui-row">
+										<div class="mui-col-xs-2 foot">
+											<label class="title-label text-algin-center">
+												照片
+											</label>
+										</div>
+										<div class="mui-col-xs-10">
+
+											<div id="imgList" class="mui-img-list">
+												<a href="javascript:;" class="imageup">
+													<img src="../images/upload.png" />
+												</a>
+											</div>
+										</div>
+
+									</div>
+
+
+								</div>
+
+								<div class="allocated-item spacing">
+									<div class="mui-row">
+										<div class="mui-col-xs-3 hua">
+											完成说明
+										</div>
+										<div class="mui-col-xs-9  huh">
+											<input class="form-right" type="text" />
+										</div>
+									</div>
+								</div>
+
+								<div class="allocated-item allocat-progress spacing">
+									<div class="wan">
+										完成进度
+									</div>
+									<div class="progress">
+										<div class="form-right">
+											<div class="progress_bg">
+												<div class="progress_bar"></div>
+												<div class="progress_btn"></div>
+											</div>
+										</div>
+									</div>
+
+								</div>
+							</div>
+
+							<div class="allocated-sublime" @click="mesg">提交</div>
+							<div class="allocated-del" @click="mesg">拒绝</div>
+
+						</div>
+					</div>
+				</div>
+				<div id="item2mobile" class="mui-slider-item mui-control-content">
+					<div id="scroll2" class="mui-content  mui-scroll-wrapper">
+						<div class="mui-scroll content2 list-content heightAbsolutely">
+							<div class="itemContent">
+								<div class="timeBar">
+									<div class="mui-row">
+										<div class="mui-col-xs-3">
+											<div class="mui-row">
+												<div class="mui-col-xs-1 circular">&bull;</div>
+												<div class="mui-col-xs-11">
+													<div class="line"></div>
+												</div>
+											</div>
+											<div class="title">待分配</div>
+
+										</div>
+										<div class="mui-col-xs-3">
+											<div class="mui-row">
+												<div class="mui-col-xs-1 circular">&bull;</div>
+												<div class="mui-col-xs-11">
+													<div class="line"></div>
+												</div>
+											</div>
+											<div class="title">待处理</div>
+
+										</div>
+										<div class="mui-col-xs-3">
+											<div class="mui-row">
+												<div class="mui-col-xs-1 circular">&bull;</div>
+												<div class="mui-col-xs-11">
+													<div class="line"></div>
+												</div>
+											</div>
+											<div class="title">待反馈</div>
+										</div>
+										<div class="mui-col-xs-3">
+											<div class="circular">&bull;</div>
+											<div class="title">待确认</div>
+										</div>
+									</div>
+								</div>
+								<div class="allocated-item  list">
+									<div class="mui-row">
+										<div class="mui-col-xs-4 hua">
+											养护动作:
+										</div>
+										<div class="mui-col-xs-8  huh">
+											除雪
+										</div>
+									</div>
+									<div class="mui-row">
+										<div class="mui-col-xs-4 hua">
+											养护类别:
+										</div>
+										<div class="mui-col-xs-8  huh">
+											全区域
+										</div>
+									</div>
+									<div class="mui-row">
+										<div class="mui-col-xs-4 hua">
+											任务详情:
+										</div>
+										<div class="mui-col-xs-8  huh">
+											大雪过后，及时做好常绿树及防寒棚顶的扫雪工作。并将雪堆积在绿地及树干周围，严禁融盐积雪进入绿地
+										</div>
+									</div>
+									<div class="mui-row">
+										<div class="mui-col-xs-4 hua">
+											养护区域:
+										</div>
+										<div class="mui-col-xs-8  huh">
+											全区域
+										</div>
+									</div>
+									<div class="mui-row">
+										<div class="mui-col-xs-4 hua">
+											作业指导书:
+										</div>
+										<div class="mui-col-xs-8  huh">
+											<a href="">点击查看</a>
+										</div>
+									</div>
+									<div class="mui-row">
+										<div class="mui-col-xs-4 hua">
+											任务状态:
+										</div>
+										<div class="mui-col-xs-8  huh">
+											待处理
+										</div>
+									</div>
+									<div class="mui-row">
+										<div class="mui-col-xs-4 hua">
+											开始时间:
+										</div>
+										<div class="mui-col-xs-8  huh">
+											2019-08-26 07:50
+										</div>
+									</div>
+									<div class="mui-row">
+										<div class="mui-col-xs-4 hua">
+											结束时间:
+										</div>
+										<div class="mui-col-xs-8  huh">
+											2019-08-30 18:50
+										</div>
+									</div>
+								</div>
+
+							</div>
+						</div>
+					</div>
+
+					<!-- <script src="../js/app.js"></script> -->
+					<script src="../js/mui.picker.min.js"></script>
+
+					<script>
+						progress()
+
+						function progress() {
+
+							var formRight = null;
+							var ox = 0
+							var left = 0
+							var tag = false
+							$('.allocat-progress').on("touchstart", ".progress .progress_btn",
+								function (e) {
+									var originalEvent = e.originalEvent;
+									var touches = originalEvent.touches[0];
+									ox = touches.pageX - left;
+									tag = true;
+									return false
+								});
+							$(document).on("touchend", function (e) {
+								tag = false;
+							});
+							$('.allocat-progress').on("touchmove", ".progress",
+								function (e) {
+									var originalEvent = e.originalEvent;
+									var touches = originalEvent.touches[0];
+									//鼠标移动
+									if (tag) {
+										left = touches.pageX - ox;
+										if (left <= 0) { // 判断拖拽到达左边的位置将圆点设置为0
+											left = 0;
+										} else if (
+											left >
+											$(this).width()
+										) { // 判断拖拽到达右边的位置将圆点设置为form-right-$(this)的宽度
+											left = $(this).width();
+										}
+										$(this)
+											.find(".progress_btn")
+											.css("left", left);
+										$(this)
+											.find(".progress_bar")
+											.width(left);
+										//console.log(parseInt((left / progress_bg.width()) * 100) + "%") // 当前解决进度条 百分比
+										// $(".text").html(parseInt((left / progress_bg.width()) * 100) + "%");
+									}
+								});
+
+							$('.allocat-progress').on("tap", ".progress .progress_bg",
+								function (e) {
+									//鼠标点击
+									if (!tag) {
+										bgleft = $(this).offset().left;
+										left = e.pageX - bgleft;
+										if (left <= 0) {
+											left = 0;
+										} else if (left > $(this).width()) {
+											left = $(this).width();
+										}
+										$(this)
+											.siblings(".progress_btn")
+											.css("left", left);
+										$(this)
+											.find(".progress_bar")
+											.animate({
+												width: left
+											}, $(this).width());
+										//$(".text").html(parseInt((left / progress_bg.width()) * 100) + "%");
+									}
+								});
+						}
+						let str = ''
+
+						$('.userProcess').on('click', '.userProcess-item:last .add', function () {
+							str = `
+							<div class="userProcess-item">
+										<div class="user">
+											<div class="mui-row">
+												<div class="mui-col-xs-4">
+													用工
+												</div>
+												<div class="mui-col-xs-8 ">
+														<span class="iconfont icon-shanchu offset"></span>
+												</div>
+											</div>
+
+											<div class="mui-row">
+												<div class="mui-col-xs-4 hua money">
+													133
+												</div>
+												<div class="mui-col-xs-8  huh defined-numbox">
+													<div class="mui-numbox " data-numbox-step='1' data-numbox-min='0'
+														data-numbox-max='100'>
+														<button class="mui-btn mui-numbox-btn-minus"
+															type="button">-</button>
+														<input class="mui-numbox-input" type="number" />
+														<button class="mui-btn mui-numbox-btn-plus"
+															type="button">+</button>
+													</div>
+												</div>
+											</div>
+											<div class="add labor">
+												继续添加用工
+											</div>
+										</div>
+
+										<div class="mui-row">
+											<div class="mui-col-xs-4">
+												<input type="text" name="" id="" value="" placeholder="作业区域" />
+											</div>
+											<div class="mui-col-xs-8 ">
+												 <div class="mui-navigate-right" style="height: 21px;"></div>
+											</div>
+										</div>
+									</div>`
+
+							$('.userProcess .userProcess-item:last').after(str)
+							setTimeout(function () {
+								var num=mui($('.userProcess .userProcess-item:last .defined-numbox')).numbox()
+								num.setOption('min',0)//解决计数器出现负数情况
+							})
+
+						})
+						$('.lawnMower').on('click', '.lawnMower-item:last .add', function () {
+							str = `
+							<div class="lawnMower-item">
+										<div class="user">
+											<div class="mui-row">
+												<div class="mui-col-xs-4">
+													割草机 s30
+												</div>
+												<div class="mui-col-xs-8 ">
+														<span class="iconfont icon-shanchu offset"></span>
+												</div>
+											</div>
+
+											<div class="mui-row divider">
+												<div class="mui-col-xs-2 money">
+													133
+												</div>
+												<div class="mui-col-xs-4 ">
+
+													<div class="mui-input-row mui-checkbox mui-left">
+														<label>含油</label>
+														<input name="checkbox" value="Item 1" type="checkbox">
+													</div>
+												</div>
+												<div class="mui-col-xs-6  huh defined-numbox">
+													<div class="mui-numbox " data-numbox-step='1' data-numbox-min='0'
+														data-numbox-max='100'>
+														<button class="mui-btn mui-numbox-btn-minus"
+															type="button">-</button>
+														<input class="mui-numbox-input" type="number" />
+														<button class="mui-btn mui-numbox-btn-plus"
+															type="button">+</button>
+													</div>
+												</div>
+											</div>
+											<div class="add tool">
+												继续添加工具
+											</div>
+										</div>
+										<div class="mui-row">
+											<div class="mui-col-xs-4">
+												<input type="text" name="" id="" value="" placeholder="作业区域" />
+											</div>
+											<div class="mui-col-xs-8 ">
+												<div class="mui-navigate-right" style="height: 21px;"></div>
+											</div>
+										</div>
+									</div>`
+
+							$('.lawnMower .lawnMower-item:last').after(str)
+							setTimeout(function () {
+								var num=mui($('.lawnMower .lawnMower-item:last .defined-numbox')).numbox()
+								num.setOption('min',0)//解决计数器出现负数情况
+							})
+
+						})
+
+						$('.garbageBags').on('click', '.garbageBags-item:last .add', function () {
+							str = `
+							<div class="garbageBags-item">
+										<div class="user">
+											<div class="mui-row">
+
+												<div class="mui-col-xs-4">
+													垃圾袋
+												</div>
+												<div class="mui-col-xs-8 ">
+														<span class="iconfont icon-shanchu offset"></span>
+												</div>
+											</div>
+
+											<div class="mui-row divider">
+												<div class="mui-col-xs-4 hua money">
+													133
+												</div>
+												<div class="mui-col-xs-8  huh defined-numbox">
+													<div class="mui-numbox " data-numbox-step='1' data-numbox-min='0'
+														data-numbox-max='100'>
+														<button class="mui-btn mui-numbox-btn-minus"
+															type="button">-</button>
+														<input class="mui-numbox-input" type="number" />
+														<button class="mui-btn mui-numbox-btn-plus"
+															type="button">+</button>
+													</div>
+												</div>
+											</div>
+											<div class="add material">
+												继续添加材料
+											</div>
+										</div>
+										<div class="mui-row">
+											<div class="mui-col-xs-4">
+												<input type="text" name="" id="" value="" placeholder="作业区域" />
+											</div>
+											<div class="mui-col-xs-8 ">
+												 <div class="mui-navigate-right" style="height: 21px;"></div>
+											</div>
+										</div>
+									</div>`
+
+							$('.garbageBags .garbageBags-item:last').after(str)
+							setTimeout(function () {
+								var num=mui($('.garbageBags .garbageBags-item:last .defined-numbox')).numbox()
+								num.setOption('min',0)//解决计数器出现负数情况
+							})
+
+						})
+
+						mui(".mui-slider").slider(); // 激活滑动事件
+					</script>
+</body>
+
+</html>

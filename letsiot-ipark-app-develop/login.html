@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<title>珀安智慧园林</title>
+		<link href="css/mui.min.css" rel="stylesheet" />
+		<link rel="stylesheet" type="text/css" href="./css/icons-extra.css" />
+		<link href="css/ipark.css" rel="stylesheet" />
+		<link href="fonts/iconfont/iconfont.css" rel="stylesheet" />
+		<style>
+			html,
+			body,
+			.mui-content {
+				margin: 0;
+				padding: 0;
+				background: #ffffff;
+			}
+
+			.mui-content-padded {
+				text-align: center;
+				margin-top: 10px;
+			}
+			.logo{
+				margin:90px 0 60px;
+				text-align: center;
+			}
+			.logo img{
+				width: 50%;
+			}
+			.identify-img{
+				position: absolute;
+				width: 100px;
+				height: 48px;
+				top: 1px;
+				right: 23px;
+			}
+			.mui-progressbar{
+				height: 2px;
+				background: #4cd964;
+			}
+			.mui-progressbar span{
+				background: #ffffff;
+			}
+			.iconfont{
+				position: absolute;
+    			bottom: 31px;
+    			left: 9px;
+    			color: #009E96;
+    			font-size: 22px;	
+			}
+			/*  喷灌互动 */
+			.sprink{
+				width:100%;
+				height:auto;
+				padding:10px;
+				padding-left: 15px;
+				}
+		</style>
+	</head>
+
+	<body>
+		<div class="mui-content">
+			<div class='logo'>
+				<img src='images/logo.png'/>
+			</div>
+			<form id='login-form' class="iot-login-from">
+				<div class="mui-input-row">
+					<span class="iconfont">&#xe681;</span>
+					<input id='account' type="text" value="" class="mui-input-clear mui-input" placeholder="请输入用户名">
+				</div>
+				<div class="mui-input-row">
+					<span class="iconfont">&#xe682;</span>
+					<input id='password' type="password" value="" class="mui-input-clear mui-input" placeholder="请输入密码">
+				</div>
+				<div class="mui-input-row" style="position: relative;display: none;">
+					<span class="iot-icon iconfont ipark-key"></span>
+					<input id='identifyCode' type="text" value="codecode" class="mui-input-clear mui-input" placeholder="请输入验证码">
+					<img id="identifyImg" class="identify-img" src=""/>
+				</div>
+			</form>
+			<div class="mui-content-padded">
+				<button id='login' class="mui-btn mui-btn-block mui-btn-primary newBtn unactive">登 录</button>
+			</div>
+			<!-- <div class="sprink"><a href="html/gisation.html">喷灌互动</a></div> -->
+		</div>
+		<script src="js/mui.min.js"></script>
+		<script src="js/jquery-1.8.0.min.js"></script>
+		<script src="js/jquery-3.1.1.min.js"></script>
+		<script src="js/mui.enterfocus.js"></script>
+		<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+		<script src="js/app.js"></script>
+		<script>
+			(function($, doc) {
+			mui.init();
+				var veriosnFlage = true;
+				//检查 "登录状态/锁屏状态" 结束
+				var loginButton = doc.getElementById('login');
+				var accountBox = doc.getElementById('account');
+				var passwordBox = doc.getElementById('password');
+				var identifyCodeBox = doc.getElementById('identifyCode');
+				$.plusReady(function() {
+					function autoLogin() { 
+						accountBox.value = window.localStorage.getItem("APP_USER"); 
+						passwordBox.value = window.localStorage.getItem("APP_PASSWORD"); 
+						if(accountBox.value != '') { 
+							checkVersion();
+						} 
+					} 
+					
+					var wgtVer=plus.runtime.version;
+					plus.runtime.getProperty(plus.runtime.appid,function(inf){
+				        wgtVer=inf.version;
+				    });
+				    var versionType = "ios";
+
+                    function checkVersion(){
+                    	plus.nativeUI.showWaiting( "检测更新" );
+						if(mui.os.ios){//判断是否为IOS
+							versionType = "ios";
+						}else{
+							versionType = "android";
+						}
+						var versionUrl = app.configures.URL+'/iPark/APIs/app/checkVersion?type='+versionType;
+						$.ajax(versionUrl,{
+							dataType:'json',//服务器返回json格式数据
+							type:'get',//HTTP请求类型
+							timeout:10000,//超时时间设置为10秒；
+							headers:{'Content-Type':'application/json'},	              
+							success:function(data){
+								plus.nativeUI.closeWaiting();
+								if(data ==null){
+									mui.toast("获取版本信息失败，请稍后重试！");
+								}else{
+									console.log('version'+data.version+'wgtVer'+wgtVer);
+									if(data.version==wgtVer){
+										veriosnFlage = true;
+										//autoLogin();
+										appLoign();
+									}else{
+										if(wgtVer==null){
+											mui.toast("正在加载");
+										}else{
+											var thisversion = data.version.split('.');
+											var thiswgtVer = wgtVer.split('.');
+											if(thisversion[1]-thiswgtVer[1]>0){
+												veriosnFlage = false;
+												mui.alert('有新版本啦,即将进行升级！', null, function() {
+													versionload();
+												});
+											}else{
+												appLoign();
+											}
+										}
+									}
+								}
+							},
+							error:function(xhr,type,errorThrown){
+								plus.nativeUI.closeWaiting();
+								veriosnFlage = false;
+								mui.toast("网络异常，请稍后重试！");
+							}
+						});
+					}
+					function versionload(){
+                    	if(versionType=="ios"){
+                    		document.location.href="itms-services://?action=download-manifest&url=https://gitee.com/lijuapp/app/raw/master/ipark.plist";
+		                    }else{
+			                    var dtask = plus.downloader.createDownload('http://101.132.42.153:18081/app/android/ipark.apk', {}, function(d, status) {
+                                if (status == 200) {
+                                    clearInterval(i);
+                                    mui('body').progressbar().hide();
+                                    plus.nativeUI.closeWaiting();
+                                    mui.toast("正在准备环境，请稍后！");
+                                    sleep(1000);
+                                    var path = d.filename;//_downloads yijietong.apk
+                                    console.log(d.filename);
+                                    plus.runtime.install(path); // 安装下载的apk文件
+                                } else {
+                                    mui.toast('Download failed:' + status);
+                                }
+                            });
+                            dtask.start();
+                            var w = plus.nativeUI.showWaiting( "正下载安装包..." );
+                            mui('body').progressbar({progress:0}).show();
+                            var i = setInterval(function() {
+                                var totalSize = dtask.totalSize;
+                                var downloadedSize = dtask.downloadedSize;
+                                if(downloadedSize !=0){
+                                	var progress =  parseInt(downloadedSize/totalSize*100);
+                                	mui('body').progressbar().setProgress(progress);
+                                    console.log(progress);
+                                }
+                            }, 100); //1000为1秒钟
+		                }
+					}
+					
+					function sleep(numberMillis) {
+					    var now = new Date();
+					    var exitTime = now.getTime() + numberMillis;
+					    while (true) {
+					        now = new Date();
+					        if (now.getTime() > exitTime)
+					            return;
+					    }
+					}
+										
+					function appLoign(){
+						// 获取客户端标识信息
+				    	var info = plus.push.getClientInfo();
+						var iosFalge = mui.os.ios;//判断是否为IOS
+					    var identifyCode = identifyCodeBox.value+info.clientid+"_"+iosFalge;
+						var loginInfo = {
+							account: accountBox.value,
+							password: passwordBox.value,
+							identifyCode: identifyCode
+						};
+						var nwaiting = plus.nativeUI.showWaiting();
+						app.login(loginInfo, function(err) {
+							nwaiting.close(); 
+							if(err) {
+								plus.nativeUI.toast(err);
+								return;
+							}
+
+							localStorage.setItem("APP_USER",accountBox.value); 
+						    localStorage.setItem("APP_PASSWORD",passwordBox.value); 
+							var userInfo = app.getState();
+							var url = app.configures.URL+'/iPark/APIs/project/selectByAll?page=0&size=1000';
+								$.ajax(url,{
+									dataType:'json',//服务器返回json格式数据
+									type:'get',//HTTP请求类型
+									timeout:10000,//超时时间设置为10秒；
+									headers:{'Content-Type':'application/json'},	              
+									success:function(data){
+										if(data.totalElements ==0){
+											mui.toast("该用户还没有所属项目！");
+										}else{
+											localStorage.setItem("IPARK_APP_PROJECTID_NUMBER", data.totalElements);
+								 			if(data.totalElements == 1){
+								 				var projectName = "";
+								 				if(data.content[0].projectName.length > 8){
+								 					projectName = data.content[0].projectName.substring(0,8)+"...";
+								 				}else{
+								 					projectName = data.content[0].projectName;
+								 				}
+								 				localStorage.setItem("IPARK_APP_PROJECTNAME", projectName);
+												localStorage.setItem("IPARK_APP_PROJECTID", data.content[0].id);
+											}
+											if(userInfo.role == "5"){
+												localStorage.setItem("IPARK_APP_INDEX_PAGE","managerIndex");
+									 			if(data.totalElements ==1){
+													$.openWindow({
+													    url: '/html/manager-index.html', 
+														id:'managerIndex'
+													});
+												}else{
+													$.openWindow({
+													    url: '/html/manager-main.html', 
+													    id:'managerMainPage'
+													});
+												}
+											}else if(userInfo.role == "1" || userInfo.role == "2" || userInfo.role == "3" || userInfo.role == "4"
+											|| userInfo.role == "9"){
+												// 除项目经理、班组长、小队长 之外所有角色
+												localStorage.setItem("IPARK_APP_INDEX_PAGE","adminIndex");
+												if(data.totalElements ==1){
+													$.openWindow({
+													    url: '/html/admin-index.html', 
+														id:'adminIndex'
+													});
+												}else{
+													$.openWindow({
+													    url: '/html/manager-main.html', 
+													    id:'managerMainPage'
+													});
+												}
+											} else if(userInfo.role == "6"){
+												// 班组长
+												localStorage.setItem("IPARK_APP_INDEX_PAGE","groupIndex");
+												$.openWindow({
+												    url: '/html/group-index.html', 
+												    id:'groupIndex'
+												});
+											}else if(userInfo.role == "7"){
+												// 小队长
+												localStorage.setItem("IPARK_APP_INDEX_PAGE","teamIndex");
+												$.openWindow({
+												    url: '/html/team-index.html', 
+												    id:'teamIndex'
+												});
+											}else{
+												mui.toast("暂不支持该角色使用！");
+											}
+										}
+										//将登陆的账号的角色等级写入本地
+										localStorage.setItem("APP_USERROLE",userInfo.role);
+										localStorage.setItem("APP_USERID",userInfo.userId);
+									},
+									error:function(xhr,type,errorThrown){
+										mui.toast("获取登陆信息失败，请稍后重试！");
+									}
+								});
+						});
+					}
+					
+					plus.screen.lockOrientation("portrait-primary");
+					var state = app.getState();
+					//检查 "登录状态/锁屏状态" 开始
+					if(state.token) {
+						//toMain();
+					}
+
+					setTimeout(function() {
+						//关闭 splash
+						plus.navigator.closeSplashscreen();
+					}, 600);
+					loginButton.addEventListener('tap', function(event) {
+						checkVersion();
+					});
+					$.enterfocus('#login-form input', function() {
+						$.trigger(loginButton, 'tap');
+					});
+					var backButtonPress = 0;
+					$.back = function(event) {
+						backButtonPress++;
+						if(backButtonPress > 1) {
+							plus.runtime.quit();
+						} else {
+							plus.nativeUI.toast('再按一次退出应用');
+						}
+						setTimeout(function() {
+							backButtonPress = 0;
+						}, 1000);
+						return false;
+					};
+					autoLogin();
+				});
+				
+			}(mui, document));
+		</script>
+	</body>
+
+</html>
